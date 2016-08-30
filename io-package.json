@@ -1,0 +1,45 @@
+{
+    "common": {
+        "name":                     "owntracks",
+        "version":                  "0.1.0",
+        "title":                    "Javascript/Node.js based OwnTracks adapter",
+        "desc":                     {
+           "en": "ioBroker OwnTracks Adapter",
+           "de": "ioBroker OwnTracks Adapter",
+           "ru": "ioBroker OwnTracks драйвер"
+	    },
+        "news": {
+		  "0.1.0" :{
+            "en": "initial checkin",
+            "de": "initial checkin",
+            "ru": "первая версия"
+          }
+        },
+        "platform":                 "Javascript/Node.js",
+        "mode":                     "daemon",
+        "icon":                     "owntracks.png",
+        "enabled":                  true,
+	    "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.owntracks/master/admin/owntracks.png",
+	    "keywords":                 ["owntracks", "REST"],
+        "readme":                   "https://github.com/ioBroker/ioBroker.owntracks/blob/master/README.md",
+	    "loglevel":                 "info",
+        "type":                     "communication"
+    },
+    "native": {
+      "port":                     9090,
+      "user":                     "iobroker",
+      "pass":                     "",
+      "secure":                   true,
+      "bind":                     "0.0.0.0",
+      "certPublic":               "defaultPublic",
+      "certPrivate":              "defaultPrivate",
+      "certChained":              "",
+
+      "leEnabled":                false,
+      "leUpdate":                 false,
+      "leCheckPort":              80
+    },
+    "objects": [
+
+    ]
+}
