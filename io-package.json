@@ -2,7 +2,7 @@
     "common": {
         "name":                     "owntracks",
         "version":                  "0.1.0",
-        "title":                    "Javascript/Node.js based OwnTracks adapter",
+        "title":                    "OwnTracks adapter",
         "desc":                     {
            "en": "ioBroker OwnTracks Adapter",
            "de": "ioBroker OwnTracks Adapter",
@@ -11,25 +11,24 @@
         "news": {
 		  "0.1.0" :{
             "en": "initial checkin",
-            "de": "initial checkin",
+            "de": "Erste version",
             "ru": "первая версия"
           }
         },
         "platform":                 "Javascript/Node.js",
         "mode":                     "daemon",
         "icon":                     "owntracks.png",
-        "enabled":                  true,
 	    "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.owntracks/master/admin/owntracks.png",
-	    "keywords":                 ["owntracks", "REST"],
+	    "keywords":                 ["owntracks", "position", "gps", "geo"],
         "readme":                   "https://github.com/ioBroker/ioBroker.owntracks/blob/master/README.md",
 	    "loglevel":                 "info",
         "type":                     "communication"
     },
     "native": {
-      "port":                     9090,
+      "port":                     1883,
       "user":                     "iobroker",
       "pass":                     "",
-      "secure":                   true,
+      "secure":                   false,
       "bind":                     "0.0.0.0",
       "certPublic":               "defaultPublic",
       "certPrivate":              "defaultPrivate",
@@ -41,5 +40,16 @@
     },
     "objects": [
 
-    ]
+    ],
+  "instanceObjects": [
+    {
+      "_id":  "users",
+      "type": "channel",
+      "common": {
+        "role": "users",
+        "name": "List of users"
+      },
+      "native": {}
+    }
+  ]
 }

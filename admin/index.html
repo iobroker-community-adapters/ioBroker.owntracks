@@ -1,53 +1,45 @@
 <html>
-
-<!-- these 4 files always have to be included -->
 <link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
 <script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
 <script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
 
-
-<!-- optional: use jqGrid
-<link rel="stylesheet" type="text/css" href="../../lib/css/jqGrid/ui.jqgrid-4.5.4.css"/>
-<script type="text/javascript" src="../../lib/js/jqGrid/jquery.jqGrid-4.5.4.min.js"></script>
-<script type="text/javascript" src="../../lib/js/jqGrid/i18n/grid.locale-all.js"></script>
--->
-
-<!-- optional: use multiselect
-<link rel="stylesheet" type="text/css" href="../../lib/css/jquery.multiselect-1.13.css"/>
-<script type="text/javascript" src="../../lib/js/jquery.multiselect-1.13.min.js"></script>
--->
-
-<!-- these two file always have to be included -->
 <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
 <script type="text/javascript" src="../../js/translate.js"></script>
 <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
-
-<!-- you have to define 2 functions in the global scope: -->
 <script type="text/javascript">
 
-    // Dictionary (systemDictionary is global variable from adapter-settings.js)
     systemDictionary = {
-        "owntracks adapter settings": {"de": "Beispiel", "ru": "Пример"},
-        "test1":                     {"en": "Test 1", "de": "Test 1", "ru": "Тест 1"},
-        "test2":                     {"en": "Test 2", "de": "Test 2", "ru": "Тест 2"},
-
-        "Run as:":                   {"de": "Laufen unter Anwender:", "ru": "Запустить от пользователя:"},
-        "IP:":                       {"de": "IP:",                     "ru": "IP:"},
-        "Port:":                     {"de": "Port:",                   "ru": "Порт:"},
-        "Secure(HTTPS):":            {"de": "Verschlüsselung(HTTPS):", "ru": "Шифрование(HTTPS):"},
-        "Authentication:":           {"de": "Authentifikation:",       "ru": "Аутентификация:"},
-        "Listen on all IPs":         {"en": "Listen on all IPs",       "de": "An allen IP Adressen hören", "ru": "Открыть сокет на всех IP адресах"},
-        "help_tip":                  {
+        "OwnTracks adapter settings": {
+            "en": "OwnTracks adapter settings",
+            "de": "OwnTracks adapter settings",
+            "ru": "Настройки драйвера OwnTracks"
+        },
+        "Server settings":          {"en": "Server settings",           "de": "Server settings",        "ru": "Настройки сервера settings"},
+        "User:":                    {"en": "User:",                     "de": "Anwender:",              "ru": "Пользователь:"},
+        "Password:":                {"en": "Password:",                 "de": "Kennwort:",              "ru": "Пароль:"},
+        "Password repeat:":         {"en": "Password repeat:",          "de": "Kennwort-Wiederholung:", "ru": "Повтор пароля:"},
+        "Empty name not allowed!":  {
+            "en": "Empty name not allowed!",
+            "de": "Ohne Namen ist nicht erlaubt!",
+            "ru": "Пустое имя пользователя не разрешено!"
+        },
+        "Ok":                       {"en": "Ok",                        "de": "Ok",                     "ru": "Ok"},
+        "IP:":                      {"de": "IP:",                       "ru": "IP:"},
+        "Port:":                    {"de": "Port:",                     "ru": "Порт:"},
+        "Secure(HTTPS):":           {"de": "Verschlüsselung(HTTPS):",   "ru": "Шифрование(HTTPS):"},
+        "Authentication:":          {"de": "Authentifikation:",         "ru": "Аутентификация:"},
+        "Listen on all IPs":        {"en": "Listen on all IPs",         "de": "An allen IP Adressen hören", "ru": "Открыть сокет на всех IP адресах"},
+        "help_tip":                 {
             "en": "On save the adapter restarts with new configuration immediately",
             "de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
             "ru": "Сразу после сохранения настроек драйвер перезапуститься с новыми значениями"
         },
-        "Public certificate:":    {"en": "Public certificate:",     "de": "Publikzertifikat:",       "ru": "'Public' сертификат:"},
-        "Private certificate:":   {"en": "Private certificate:",    "de": "Privatzertifikat:",       "ru": "'Private' сертификат:"},
-        "Chained certificate:":   {"en": "Chained certificate:",    "de": "Kettenzertifikat:",       "ru": "'Chained' сертификат:"},
-        "Let's Encrypt settings": {
+        "Public certificate:":      {"en": "Public certificate:",     "de": "Publikzertifikat:",       "ru": "'Public' сертификат:"},
+        "Private certificate:":     {"en": "Private certificate:",    "de": "Privatzertifikat:",       "ru": "'Private' сертификат:"},
+        "Chained certificate:":     {"en": "Chained certificate:",    "de": "Kettenzertifikat:",       "ru": "'Chained' сертификат:"},
+        "Let's Encrypt settings":   {
             "en": "Let's Encrypt settings",
             "de": "Einstellungen Let's Encrypt",
             "ru": "Настройкт Let's Encrypt"
@@ -68,6 +60,22 @@
             "ru": "Порт для проверки доменного имени:"
         }
     };
+
+    function encrypt(key, value) {
+        var result = '';
+        for(var i = 0; i < value.length; i++) {
+            result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+        }
+        return result;
+    }
+
+    function decrypt(key, value) {
+        var result = '';
+        for(var i = 0; i < value.length; i++) {
+            result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+        }
+        return result;
+    }
 
     function showHideSettings() {
         if ($('#secure').prop('checked')) {
@@ -106,8 +114,6 @@
             $('#bind.value').val(settings.bind);
         });
 
-
-        // example: select elements with id=key and class=value and insert value
         $('.value').each(function () {
             var key = $(this).attr('id');
             // example: select elements with id=key and class=value and insert value
@@ -116,6 +122,8 @@
                     onChange();
                 });
             } else {
+                if (key === 'pass') settings[key] = decrypt('Zgfr56gFe87jJOM', settings[key]);
+
                 $('#' + key + '.value').val(settings[key]).change(function() {
                     onChange();
                 }).keyup(function() {
@@ -123,6 +131,7 @@
                 });
             }
         });
+        $('#passRepeat').val($('#pass').val());
         // Signal to admin, that no changes yet
         onChange(false);
 
@@ -132,9 +141,8 @@
         fillSelectCertificates('#certChained', 'chained', settings.certChained);
         fillUsers('#defaultUser', settings.defaultUser);
 
-        $('#secure').change(function () {
-            showHideSettings();
-        });
+        $('#secure').change(showHideSettings);
+
         showHideSettings();
     }
 
@@ -142,12 +150,22 @@
         var obj = {};
         $('.value').each(function () {
             var $this = $(this);
+            var key = $this.attr('id');
             if ($this.attr('type') === 'checkbox') {
-                obj[$this.attr('id')] = $this.prop('checked');
+                obj[key] = $this.prop('checked');
             } else {
-                obj[$this.attr('id')] = $this.val();
+                if (key === 'pass') {
+                    obj[key] = encrypt('Zgfr56gFe87jJOM', $this.val());
+                } else {
+                    obj[key] = $this.val()
+                }
             }
         });
+        if (!obj.user) {
+            showMessage(_('Empty name not allowed!'));
+            return;
+        }
+
         callback(obj);
     }
 </script>
@@ -166,6 +184,7 @@
         <tr><td><label class="translate" for="pass">Password:</label></td><td>      <input  class="value" id="pass" type="password"/></td></tr>
         <tr><td><label class="translate" for="passRepeat">Password repeat:</label></td><td><input  id="passRepeat"  type="password"/></td></tr>
 
+        <!--
         <tr><td><label class="translate" for="secure">Secure(HTTPS):</label></td><td> <input  class="value" id="secure" type="checkbox" /></td></tr>
         <tr id="_certPublic">
             <td><label class="translate" for="certPublic">Public certificate:</label></td>
@@ -184,6 +203,7 @@
         <tr class="le-settings"><td><label for="leEnabled" class="translate">Use Lets Encrypt certificates:</label></td><td><input  class="value" id="leEnabled"   type="checkbox" /></td></tr>
         <tr class="le-settings le-sub-settings"><td><label for="leUpdate" class="translate">Use this instance for automatic update:</label></td><td><input  class="value" id="leUpdate" type="checkbox" /></td></tr>
         <tr class="le-settings le-sub-settings le-sub-settings-update"><td><label for="lePort" class="translate">Port to check the domain:</label></td><td><input class="value number" id="lePort" type="number" size="5" maxlength="5" /></td></tr>
+        -->
     </table>
 </div>
 
