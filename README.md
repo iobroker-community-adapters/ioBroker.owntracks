@@ -1,65 +1,41 @@
 ![Logo](admin/owntracks.png)
 # ioBroker.owntracks
 =================
+[![NPM version](http://img.shields.io/npm/v/iobroker.owntracks.svg)](https://www.npmjs.com/package/iobroker.owntracks)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.owntracks.svg)](https://www.npmjs.com/package/iobroker.owntracks)
 
-This adapter is a template for the creation of an ioBroker adapter. You do not need it, at least that you plan developing your own adapter.
+[![NPM](https://nodei.co/npm/iobroker.owntracks.png?downloads=true)](https://nodei.co/npm/iobroker.owntracks/)
 
-This is extension of [ioBroker.template](https://github.com/ioBroker/ioBroker.template) adapter with REST service.
-By default the WEB server will be started to serve HTTP GET/POST requests. It can be started as secure(https) or unsecure(http) and with authentication or without.
 
-Additionally is shown how to poll some other URL for JSON data and parse them.
+[OwnTracks](http://owntracks.org/) is an app for android and iOS.
 
-##Steps 
-1. download and unpack this packet from github ```https://github.com/ioBroker/ioBroker.template/archive/master.zip```
-  or clone git repository ```git clone https://github.com/ioBroker/ioBroker.template.git```
+Link for:
+- Andorid - [https://play.google.com/store/apps/details?id=org.owntracks.android](https://play.google.com/store/apps/details?id=org.owntracks.android)
+- iOS - [https://itunes.apple.com/de/app/owntracks/id692424691?mt=8](https://itunes.apple.com/de/app/owntracks/id692424691?mt=8)
 
-2. download required npm packets. Write in ioBroker.template directory:
+App sends continuously your position (position of device) to some specific server. In our case it will be ioBroker server.
 
-  ```npm install```
-  
-3. set name of this template. Call
-  
-  ```grunt rename --name=mynewname --email=email@mail.com --author="Author Name"```
-  
-  *mynewname* must be **lower** case and with no spaces.
+The MQTT protocol will be used for communication.
 
-  If grunt is not available, install grunt globally:
-  
-  ```npm install -g grunt-cli```
- 
-4. rename directory from *ioBroker.template* (can be *ioBroker.template-master*) to *iobroker.mynewname*
+##Usage
+OwnTracks Adapter starts on port 1883 (configurable) a MQTT server to receive the messages from devices with coordinates.
+The problem is that this server must be reachable from internet. 
+Normally there is a router or firewall, that must be configured to forward traffic. 
 
-5. to use this template you should copy it into *.../iobroker/node_modules* directory and then create an instance for it with iobroker.admin
+Settings in App:
+- Connection/Mode                       - MQTT private
+- Connection/Host/Host                  - IP address of your system or DynDNS domain. E.g. http://www.noip.com/ lets use domain name instead of IP address.
+- Connection/Host/Port                  - 1883 or your port on your router
+- Connection/Host/WebSockets            - false
+- Connection/Identification/Username    - iobroker
+- Connection/Identification/Password    - from adapter settings
+- Connection/Identification/DeviceID    - Name of device or person. For this device the states will be created. E.g. if deviceID is "Mark", following states will be created after first contact: 
 
-6. create your adapter:
-
-  * you might want to start with main.js (code running within iobroker) and admin/index.html (the adapter settings page).
-
-  * [Adapter-Development-Documentation](https://github.com/ioBroker/ioBroker/wiki/Adapter-Development-Documentation),
-  
-  * [Installation, setup and first steps with an ioBroker Development Environment](https://github.com/ioBroker/ioBroker/wiki/Installation,-setup-and-first-steps-with-an-ioBroker-Development-Environment)
-  
-  * [Write and debug vis widgets](https://github.com/ioBroker/ioBroker/wiki/How-to-debug-vis-and-to-write-own-widget-set)
-  
-  * files under the www folders are made available under http://&lt;iobrokerIP&gt;:8082/&lt;adapter-name&gt;/
-    * for this to work the iobroker.vis adapter has to be installed
-    * delete this folder if you do not plan to export any files this way
-    * call ```iobroker upload <adapter-name>``` after you change files in the www folder to get the new files uploaded to vis
-  * the widget folder contains an example of a vis widget
-    * you might want to start with *widget/<adapter-name>.html* and *widget/js/<adapter-name>.js*
-    * call ```iobroker visdebug <adapter-name>``` to enable debugging and upload widget to "vis". (This works only from V0.7.15 of js-controller)
-    * If you do not plan to export any widget then delete the whole widget folder and remove the ```"restartAdapters": ["vis"]``` statement from *io-package.json*
-    * After admin/index.html is changed you must execute ```iobroker upload mynewname``` to see changes in admin console. The same is valid for any files in *admin* and *www* directory  
-
-7. change version: edit package.json and then call ```grunt p``` in your adapter directory.
-  
-8. share it with the community
-
-## Usage
-After the adapter is started, you can check following requests:
-
-http://ip:9090/api/system.adapter.admin.0.memHeapTotal
-http://ip:9090/api/plain/system.adapter.admin.0.memHeapTotal
+    - owntracks.0.users.Mark.longitude
+    - owntracks.0.users.Mark.latitude   
+    
+- Connection/Identification/TrackerID   - Short name of user (up to 2 letters) to write it on map.
+- Connection/Security/TLS               - off
 
 ## Changelog
 
