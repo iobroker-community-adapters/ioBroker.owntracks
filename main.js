@@ -3,9 +3,9 @@
 'use strict';
 var utils   = require(__dirname + '/lib/utils'); // Get common adapter utils
 var adapter = utils.adapter('owntracks');
-var LE      = require(utils.controllerDir + '/lib/letsencrypt.js');
+//var LE      = require(utils.controllerDir + '/lib/letsencrypt.js');
 var createStreamServer = require('create-stream-server');
-var mqtt               = require('mqtt-connection');
+var mqtt    = require('mqtt-connection');
 
 var server;
 var clients = {};
@@ -222,6 +222,22 @@ var cltFunction = function (client) {
         //Subscribe on owntracks/iobroker/denis/cmd
         //Subscribe on owntracks/+/+/event
         //Subscribe on owntracks/+/+/waypoint
+
+        // send to client all images
+        if (adapter.config.pictures && adapter.config.pictures.length) {
+            setTimeout(function () {
+                for (var p = 0; p < adapter.config.pictures.length; p++) {
+                    var text = adapter.config.pictures[p].base64.split(',')[1]; // string has form data:;base64,TEXT==
+                    sendState2Client(client, 'owntracks/' + adapter.config.user + '/' + adapter.config.pictures[p].name + '/info',
+                        JSON.stringify({
+                            _type: 'card',
+                            name: adapter.config.pictures[p].name,
+                            face: text
+                        })
+                    );
+                }
+            }, 200);
+        }
     });
 
     client.on('pingreq', function (packet) {

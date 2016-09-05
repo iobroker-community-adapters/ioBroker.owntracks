@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "owntracks",
-        "version":                  "0.1.0",
+        "version":                  "0.1.1",
         "title":                    "OwnTracks adapter",
         "desc":                     {
            "en": "ioBroker OwnTracks Adapter",
@@ -9,6 +9,11 @@
            "ru": "ioBroker OwnTracks драйвер"
 	    },
         "news": {
+          "0.1.1" :{
+            "en": "add pictures",
+            "de": "Unterstützung von Bildern",
+            "ru": "Возможность добавить иконки"
+          },
 		  "0.1.0" :{
             "en": "initial checkin",
             "de": "Erste version",
@@ -29,6 +34,7 @@
       "user":                     "iobroker",
       "pass":                     "",
       "secure":                   false,
+      "pictures":                 [],
       "bind":                     "0.0.0.0",
       "certPublic":               "defaultPublic",
       "certPrivate":              "defaultPrivate",

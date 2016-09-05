@@ -37,9 +37,19 @@ Settings in App:
 - Connection/Identification/TrackerID   - Short name of user (up to 2 letters) to write it on map.
 - Connection/Security/TLS               - off
 
+### Icons
+You can define for every user an icon. Just upload per drag&drop or with mouse click you image. It will be automatically scaled to 64x64.
+
+The name must be equal to DeviceID in OwnTracks app.
+
+![Settings](img/settings1.png)
+
 ## Changelog
 
-#### 0.1.0
+#### 0.1.1 (2016-09-05)
+* (bluefox) add pictures
+
+#### 0.1.0 (2016-09-04)
 * (bluefox) initial release
 
 ## License
