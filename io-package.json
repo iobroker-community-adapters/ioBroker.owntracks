@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "owntracks",
-        "version":                  "0.1.1",
+        "version":                  "0.2.0",
         "title":                    "OwnTracks adapter",
         "desc":                     {
            "en": "ioBroker OwnTracks Adapter",
@@ -9,6 +9,11 @@
            "ru": "ioBroker OwnTracks драйвер"
 	    },
         "news": {
+		  "0.2.0" :{
+            "en": "added two properties timestamp and datetime",
+            "de": "Timestamp und datetime sind hinzugefügt",
+            "ru": "Добавлены время последнего сообщения в разных форматах"
+          },
           "0.1.1" :{
             "en": "add pictures",
             "de": "Unterstützung von Bildern",

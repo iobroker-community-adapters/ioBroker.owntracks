@@ -1,6 +1,6 @@
 {
   "name": "iobroker.owntracks",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "ioBroker OwnTracks Adapter",
   "author": {
     "name": "bluefox",
