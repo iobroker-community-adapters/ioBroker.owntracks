@@ -83,7 +83,7 @@ function createUser(user) {
         if (!obj) {
             adapter.setForeignObject(id + '.accuracy', {
                 common: {
-                    name:   'Longitude for ' + user,
+                    name:   'Accuracy for ' + user,
                     role:   'state',
                     unit:   'm',
                     type:   'number'
@@ -93,6 +93,32 @@ function createUser(user) {
             });
         }
     });
+    adapter.getForeignObject(id + '.timestamp',  function (err, obj) {                    
+        if (!obj) {                                                                      
+            adapter.setForeignObject(id + '.timestamp', {                 
+                common: {                                                
+                    name:   'Timestamp for ' + user,                     
+                    role:   'state',                                     
+                    type:   'number'                                     
+                },                                                       
+                type: 'state',                                           
+                native: {}                                               
+            });                                                          
+        }                                                                
+    });                              
+    adapter.getForeignObject(id + '.datetime',  function (err, obj) {                   
+        if (!obj) {                                                                      
+            adapter.setForeignObject(id + '.datetime', {                                
+                common: {                                                
+                    name:   'Datetime for ' + user,                     
+                    role:   'state',                                  
+                    type:   'string'                                     
+                },                                                       
+                type: 'state',                                           
+                native: {}                                               
+            });                                                          
+        }                                                                
+    });                        
 }
 
 function sendState2Client(client, topic, payload) {
@@ -180,6 +206,20 @@ var cltFunction = function (client) {
                 if (obj.lat !== undefined) {
                     adapter.setState('users.' + parts[2] + '.latitude',     {val: obj.lat,  ts: obj.tst * 1000, ack: true});
                 }
+		if (obj.tst !== undefined) {                                                                                
+                    adapter.setState('users.' + parts[2] + '.timestamp',     {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+			var date = new Date(obj.tst*1000);
+			var day = "0"+date.getDate();
+			var month =  "0"+(date.getMonth() + 1);
+			var year = date.getFullYear();
+			var hours = "0" + date.getHours();
+			var minutes = "0" + date.getMinutes();
+			var seconds = "0" + date.getSeconds();
+			var formattedTime = day.substr(-2) + '.'+ month.substr(-2)+ '.' + year + ' ' +hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+		   adapter.setState('users.' + parts[2] + '.datetime',     {val: formattedTime,  ts: obj.tst * 1000, ack: true});
+                }              
+
             }
         } catch (e) {
             adapter.log.error('Cannot parse payload: ' + message);
