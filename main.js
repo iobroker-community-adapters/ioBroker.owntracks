@@ -195,29 +195,29 @@ var cltFunction = function (client) {
             var obj = JSON.parse(message);
             if (obj._type === 'location') {
                 if (obj.acc !== undefined) {
-                    adapter.setState('users.' + parts[2] + '.accuracy',     {val: obj.acc,  ts: obj.tst * 1000, ack: true});
+                    adapter.setState('users.' + parts[2] + '.accuracy',  {val: obj.acc,  ts: obj.tst * 1000, ack: true});
                 }
                 if (obj.batt !== undefined) {
-                    adapter.setState('users.' + parts[2] + '.battery',      {val: obj.batt, ts: obj.tst * 1000, ack: true});
+                    adapter.setState('users.' + parts[2] + '.battery',   {val: obj.batt, ts: obj.tst * 1000, ack: true});
                 }
                 if (obj.lon !== undefined) {
-                    adapter.setState('users.' + parts[2] + '.longitude',    {val: obj.lon,  ts: obj.tst * 1000, ack: true});
+                    adapter.setState('users.' + parts[2] + '.longitude', {val: obj.lon,  ts: obj.tst * 1000, ack: true});
                 }
                 if (obj.lat !== undefined) {
-                    adapter.setState('users.' + parts[2] + '.latitude',     {val: obj.lat,  ts: obj.tst * 1000, ack: true});
+                    adapter.setState('users.' + parts[2] + '.latitude',  {val: obj.lat,  ts: obj.tst * 1000, ack: true});
                 }
 		if (obj.tst !== undefined) {                                                                                
-                    adapter.setState('users.' + parts[2] + '.timestamp',     {val: obj.tst,  ts: obj.tst * 1000, ack: true});
-			var date = new Date(obj.tst*1000);
-			var day = "0"+date.getDate();
-			var month =  "0"+(date.getMonth() + 1);
-			var year = date.getFullYear();
-			var hours = "0" + date.getHours();
-			var minutes = "0" + date.getMinutes();
-			var seconds = "0" + date.getSeconds();
-			var formattedTime = day.substr(-2) + '.'+ month.substr(-2)+ '.' + year + ' ' +hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                    adapter.setState('users.' + parts[2] + '.timestamp', {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+			var date    = new Date(obj.tst * 1000);
+			var day     = '0' + date.getDate();
+			var month   = '0' + (date.getMonth() + 1);
+			var year    = date.getFullYear();
+			var hours   = '0' + date.getHours();
+			var minutes = '0' + date.getMinutes();
+			var seconds = '0' + date.getSeconds();
+			var formattedTime = day.substr(-2) + '.' + month.substr(-2) + '.' + year + ' ' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
-		   adapter.setState('users.' + parts[2] + '.datetime',     {val: formattedTime,  ts: obj.tst * 1000, ack: true});
+		   adapter.setState('users.' + parts[2] + '.datetime', {val: formattedTime,  ts: obj.tst * 1000, ack: true});
                 }              
 
             }
