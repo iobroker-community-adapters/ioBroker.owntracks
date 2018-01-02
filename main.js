@@ -2,7 +2,7 @@
 /*jslint node: true */
 'use strict';
 var utils   = require(__dirname + '/lib/utils'); // Get common adapter utils
-var adapter = utils.adapter('owntracks');
+var adapter = utils.Adapter('owntracks');
 //var LE      = require(utils.controllerDir + '/lib/letsencrypt.js');
 var createStreamServer = require('create-stream-server');
 var mqtt    = require('mqtt-connection');
