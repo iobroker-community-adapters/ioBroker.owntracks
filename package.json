@@ -1,6 +1,6 @@
 {
   "name": "iobroker.owntracks",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "ioBroker OwnTracks Adapter",
   "author": {
     "name": "bluefox",
@@ -10,6 +10,10 @@
     {
       "name": "bluefox",
       "email": "dogafox@gmail.com"
+    },
+    {
+      "name": "matspi",
+      "email": "matthias.spiller@fari.software"
     }
   ],
   "homepage": "https://github.com/ioBroker/ioBroker.owntracks",
