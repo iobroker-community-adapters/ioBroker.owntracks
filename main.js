@@ -170,6 +170,13 @@ var cltFunction = function (client) {
         var topic   = packet.topic;
         var message = packet.payload;
         adapter.log.debug('publish "' + topic + '": ' + message);
+
+        if (packet.qos == 1) {
+            client.puback({ messageId: packet.messageId});
+        }
+        else if (packet.qos == 2) {
+            client.pubrec({ messageId: packet.messageId});
+        }
         // "owntracks/iobroker/klte":
         // {
         //      "_type":"location", // location, lwt, transition, configuration, beacon, cmd, steps, card, waypoint
