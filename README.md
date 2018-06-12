@@ -46,6 +46,9 @@ The name must be equal to DeviceID in OwnTracks app.
 
 ## Changelog
 
+#### 0.3.0 (2018-06-05)
+* (matspi) Fix handling of publish messages
+
 #### 0.2.0 (2017-01-03)
 * (jp112sdl) added two properties timestamp and datetime
 
