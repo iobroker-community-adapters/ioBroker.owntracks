@@ -401,7 +401,7 @@
             if ($this.attr('type') === 'checkbox') {
                 obj[key] = $this.prop('checked');
             } else {
-                if (key === 'pass') {
+                if (key === 'pass' || key === 'encryptionKey') {
                     obj[key] = encrypt('Zgfr56gFe87jJOM', $this.val());
                 } else {
                     obj[key] = $this.val()
@@ -436,6 +436,7 @@
             <tr><td><label class="translate" for="user">User:</label></td><td>          <input  class="value" id="user"/></td></tr>
             <tr><td><label class="translate" for="pass">Password:</label></td><td>      <input  class="value" id="pass" type="password"/></td></tr>
             <tr><td><label class="translate" for="passRepeat">Password repeat:</label></td><td><input  id="passRepeat"  type="password"/></td></tr>
+            <tr><td><label class="translate" for="encryptionKey">Encryption key:</label></td><td><input  id="encryptionKey"  type="password"/></td></tr>
 
             <!--
             <tr><td><label class="translate" for="secure">Secure(HTTPS):</label></td><td> <input  class="value" id="secure" type="checkbox" /></td></tr>
