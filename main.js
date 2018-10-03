@@ -200,6 +200,10 @@ var cltFunction = function (client) {
         processTopic(topic, message);
         try {
             var obj = JSON.parse(message);
+		
+		adapter.log.warn(message);
+		
+		
             if (obj._type === 'location') {
                 if (obj.acc !== undefined) {
                     adapter.setState('users.' + parts[2] + '.accuracy',  {val: obj.acc,  ts: obj.tst * 1000, ack: true});
@@ -354,6 +358,7 @@ function initMqttServer(config) {
 function main() {
     //noinspection JSUnresolvedVariable
     adapter.config.pass = decrypt('Zgfr56gFe87jJOM', adapter.config.pass);
+    adapter.config.encryptionKey = decrypt('Zgfr56gFe87jJOM', adapter.config.encryptionKey);
 
     if (!adapter.config.user) {
         adapter.log.error('Empty user name not allowed!');
