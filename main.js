@@ -199,11 +199,13 @@ var cltFunction = function (client) {
         }
         processTopic(topic, message);
         try {
+		// format without encryption key
+		//  {"_type":"location","tid":"XX","acc":00,"batt":00,"conn":"w","lat":00.0000000,"lon":00.0000000,"t":"u","tst":0000000000}
+		//
+		// format WITH encryption key
+		// {"_type":"encrypted","data":"..."}
+		//
             var obj = JSON.parse(message);
-		
-		adapter.log.warn(message);
-		
-		
             if (obj._type === 'location') {
                 if (obj.acc !== undefined) {
                     adapter.setState('users.' + parts[2] + '.accuracy',  {val: obj.acc,  ts: obj.tst * 1000, ack: true});
@@ -232,6 +234,14 @@ var cltFunction = function (client) {
                 }              
 
             }
+		else if (obj._type === 'encrypted') {
+			const _sodium = require('libsodium-wrappers');
+			
+			// decrypt message.data using adapter.config.encryptionKey
+			
+			
+			
+		}
         } catch (e) {
             adapter.log.error('Cannot parse payload: ' + message);
         }
