@@ -353,7 +353,7 @@
                     _onChange();
                 });
             } else {
-                if (key === 'pass') settings[key] = decrypt('Zgfr56gFe87jJOM', settings[key]);
+                if (key === 'pass' || key === 'encryptionKey') settings[key] = decrypt('Zgfr56gFe87jJOM', settings[key]);
 
                 $('#' + key + '.value').val(settings[key]).change(function() {
                     _onChange();
@@ -436,7 +436,7 @@
             <tr><td><label class="translate" for="user">User:</label></td><td>          <input  class="value" id="user"/></td></tr>
             <tr><td><label class="translate" for="pass">Password:</label></td><td>      <input  class="value" id="pass" type="password"/></td></tr>
             <tr><td><label class="translate" for="passRepeat">Password repeat:</label></td><td><input  id="passRepeat"  type="password"/></td></tr>
-            <tr><td><label class="translate" for="encryptionKey">Encryption key:</label></td><td><input  id="encryptionKey"  type="password"/></td></tr>
+            <tr><td><label class="translate" for="encryptionKey">Encryption key:</label></td><td><input class="value" id="encryptionKey"  type="password"/></td></tr>
 
             <!--
             <tr><td><label class="translate" for="secure">Secure(HTTPS):</label></td><td> <input  class="value" id="secure" type="checkbox" /></td></tr>
