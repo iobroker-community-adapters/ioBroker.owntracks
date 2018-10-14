@@ -47,6 +47,9 @@ The name must be equal to DeviceID in OwnTracks app.
 
 ## Changelog
 
+#### 0.5.0 (2018-10-14)
+* (zefau) Added support for locations
+
 #### 0.4.0 (2018-10-14)
 * (zefau) Added support for encryption key
 
