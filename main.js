@@ -94,6 +94,19 @@ function createUser(user) {
             });
         }
     });
+    adapter.getForeignObject(id + '.encryption',  function (err, obj) {
+        if (!obj) {
+            adapter.setForeignObject(id + '.encryption', {
+                common: {
+                    name:   'Encryption for ' + user,
+                    role:   'state',
+                    type:   'boolean'
+                },
+                type: 'state',
+                native: {}
+            });
+        }
+    });
     adapter.getForeignObject(id + '.timestamp',  function (err, obj) {                    
         if (!obj) {                                                                      
             adapter.setForeignObject(id + '.timestamp', {                 
@@ -248,6 +261,8 @@ var cltFunction = function (client) {
 		// message sent unencrypted or has been decrypted
 		if (obj._type === 'location')
 		{
+			adapter.setState('users.' + parts[2] + '.encryption',  {val: obj.encryption,  ts: obj.tst * 1000, ack: true});
+			
 			if (obj.acc !== undefined)
 				adapter.setState('users.' + parts[2] + '.accuracy',  {val: obj.acc,  ts: obj.tst * 1000, ack: true});
 			
