@@ -19,7 +19,7 @@ function getValue(node) {
 	try {return adapter.getState(node).val}
 	catch(e)
 	{
-		adapter.log.info(e);
+		adapter.log.debug('Failed reading node '+node+' with error: '+e);
 		return '';
 	}
 }
@@ -63,6 +63,19 @@ function createLocation(id, name) {
                     name:   'Present users in location ' + name,
                     role:   'state',
                     type:   'string'
+                },
+                type: 'state',
+                native: {}
+            });
+        }
+    });
+    adapter.getForeignObject(node + '.timestamp',   function (err, obj) {
+        if (!obj) {
+            adapter.setForeignObject(node + '.timestamp', {
+                common: {
+                    name:   'Last change within the location ' + name,
+                    role:   'state',
+                    type:   'number'
                 },
                 type: 'state',
                 native: {}
@@ -348,7 +361,10 @@ var cltFunction = function (client) {
 				// update location (add user if not present yet for some reason)
 				var users = getValue('locations.' + location + '.users');
 				if (users.indexOf(parts[2]) === -1)
+				{
 					adapter.setState('locations.' + location + '.users',  {val: users + parts[2] + ',',  ts: obj.tst * 1000, ack: true});
+					adapter.setState('locations.' + location + '.timestamp',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+				}
 			}
 			
 			// user has left location
@@ -361,7 +377,10 @@ var cltFunction = function (client) {
 				// update location (remove user if present)
 				var users = getValue('locations.' + location + '.users');
 				if (users.indexOf(parts[2]) > -1)
+				{
 					adapter.setState('locations.' + location + '.users',  {val: users.replace(parts[2] + ',', ''),  ts: obj.tst * 1000, ack: true});
+					adapter.setState('locations.' + location + '.timestamp',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+				}
 			}
 		}
 		
