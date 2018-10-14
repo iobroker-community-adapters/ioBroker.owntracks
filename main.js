@@ -5,7 +5,8 @@ var utils   = require(__dirname + '/lib/utils'); // Get common adapter utils
 var adapter = utils.Adapter('owntracks');
 //var LE      = require(utils.controllerDir + '/lib/letsencrypt.js');
 var createStreamServer = require('create-stream-server');
-var mqtt    = require('mqtt-connection');
+var mqtt = require('mqtt-connection');
+var sodium = require('libsodium-wrappers');
 
 var server;
 var clients = {};
@@ -208,13 +209,12 @@ var cltFunction = function (client) {
 		// {"_type":"encrypted","data":"..."}
 		//
 		var obj = JSON.parse(message);
+		obj.encryption = false;
 		var decrypted = false;
 		
 		// decrypt message.data using adapter.config.encryptionKey
 		if (obj._type === 'encrypted')
 		{
-			const _sodium = require('libsodium-wrappers');
-			
 			// no key set
 			if (!adapter.config.encryptionKey)
 				adapter.log.warn('No encryption key defined in settings! Please go to settings and set a key!');
@@ -222,6 +222,7 @@ var cltFunction = function (client) {
 			else
 			{
 				var cypherText = new Buffer(obj.data, 'base64');
+				var cipher = null;
 				var nonce = cypherText.slice(0,24);
 				var key = new Buffer(32);
 				key.fill(0);
@@ -230,13 +231,19 @@ var cltFunction = function (client) {
 				// try to encrypt message and catch error in case key is wrong
 				try
 				{
-					obj = sodium.crypto_secretbox_open_easy(cypherText.slice(24), nonce, key, "text");
+					cipher = sodium.crypto_secretbox_open_easy(cypherText.slice(24), nonce, key, "text");
 					decrypted = true;
 				}
 				catch(e) {adapter.log.warn(e)}
+				
+				obj = JSON.parse(cipher);
+				obj.encryption = true;
 			}
 
 		}
+		
+		// log
+		adapter.log.info('Received '+(obj.encryption ? 'encrypted' : 'unencrypted')+' payload: '+JSON.stringify(obj));
 		
 		// message sent unencrypted or has been decrypted
 		if (obj._type === 'location')
