@@ -10,7 +10,7 @@ var sodium = require('libsodium-wrappers');
 
 var server;
 var clients = {};
-var objects = {};
+var namespaces = {users: {}, locations: {}};
 
 function decrypt(key, value) {
     var result = '';
@@ -255,10 +255,11 @@ var cltFunction = function (client) {
             adapter.log.warn('publish "' + topic + '": invalid user name - "' + parts[1] + '"');
             return;
         }
-        if (!objects[parts[2]]) {
-            // create object
+	
+	// create user node / namespace
+        if (!namespaces.users[parts[2]]) {
             createUser(parts[2]);
-            objects[parts[2]] = true;
+            namespaces.users[parts[2]] = true;
         }
         processTopic(topic, message);
 	    
@@ -317,7 +318,10 @@ var cltFunction = function (client) {
 			var location = obj.desc.replace(/\s|\./g, '_').toLowerCase();
 			
 			// create location node in case of new location
-			createLocation(location, obj.desc);
+			if (!namespaces.locations[location]) {
+				createLocation(location, obj.desc);
+				namespaces.locations[location] = true;
+			}
 			
 			// user has entered location
 			if (obj.event === 'enter')
