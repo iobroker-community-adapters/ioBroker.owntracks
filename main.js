@@ -12,6 +12,21 @@ var server;
 var clients = {};
 var namespaces = {users: {}, locations: {}};
 
+/*
+ * Return value of a node if given, other returns empty string.
+ */
+function getValue(node) {
+	try {return adapter.getState(node).val}
+	catch(e)
+	{
+		adapter.log.info(e);
+		return '';
+	}
+}
+
+/*
+ *
+ */
 function decrypt(key, value) {
     var result = '';
     for (var i = 0; i < value.length; ++i) {
@@ -40,10 +55,10 @@ adapter.on('ready', main);
  *
  */
 function createLocation(id, name) {
-    var id = adapter.namespace + '.locations.' + id;
-    adapter.getForeignObject(id + '.users',   function (err, obj) {
+    var node = adapter.namespace + '.locations.' + id;
+    adapter.getForeignObject(node + '.users',   function (err, obj) {
         if (!obj) {
-            adapter.setForeignObject(id + '.users', {
+            adapter.setForeignObject(node + '.users', {
                 common: {
                     name:   'Present users in location ' + name,
                     role:   'state',
@@ -331,7 +346,7 @@ var cltFunction = function (client) {
 				adapter.setState('users.' + parts[2] + '.location.entered',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
 				
 				// update location (add user if not present yet for some reason)
-				var users = adapter.getState('locations.' + location + '.users').val;
+				var users = getValue('locations.' + location + '.users');
 				if (users.indexOf(parts[2]) === -1)
 					adapter.setState('locations.' + location + '.users',  {val: users + parts[2] + ',',  ts: obj.tst * 1000, ack: true});
 			}
@@ -344,7 +359,7 @@ var cltFunction = function (client) {
 				adapter.setState('users.' + parts[2] + '.location.entered',  {val: '',  ts: obj.tst * 1000, ack: true});
 				
 				// update location (remove user if present)
-				var users = adapter.getState('locations.' + location + '.users').val;
+				var users = getValue('locations.' + location + '.users');
 				if (users.indexOf(parts[2]) > -1)
 					adapter.setState('locations.' + location + '.users',  {val: users.replace(parts[2] + ',', ''),  ts: obj.tst * 1000, ack: true});
 			}
@@ -384,7 +399,7 @@ var cltFunction = function (client) {
 			}
 		}
 	}
-	catch (e){
+	catch (e) {
 		adapter.log.error('Cannot parse payload: ' + message);
 	}
 	    
