@@ -36,6 +36,29 @@ adapter.on('unload', function (callback) {
 
 adapter.on('ready', main);
 
+/*
+ *
+ */
+function createLocation(id, name) {
+    var id = adapter.namespace + '.locations.' + id;
+    adapter.getForeignObject(id + '.users',   function (err, obj) {
+        if (!obj) {
+            adapter.setForeignObject(id + '.users', {
+                common: {
+                    name:   'Present users in location ' + name,
+                    role:   'state',
+                    type:   'string'
+                },
+                type: 'state',
+                native: {}
+            });
+        }
+    });
+}
+
+/*
+ *
+ */
 function createUser(user) {
     var id = adapter.namespace + '.users.' + user.replace(/\s|\./g, '_');
     adapter.getForeignObject(id + '.battery',   function (err, obj) {
@@ -73,6 +96,32 @@ function createUser(user) {
                 common: {
                     name:   'Longitude for ' + user,
                     role:   'gps.longitude',
+                    type:   'number'
+                },
+                type: 'state',
+                native: {}
+            });
+        }
+    });
+    adapter.getForeignObject(id + '.location.name',  function (err, obj) {
+        if (!obj) {
+            adapter.setForeignObject(id + '.location.name', {
+                common: {
+                    name:   'Location of the ' + user,
+                    role:   'state',
+                    type:   'string'
+                },
+                type: 'state',
+                native: {}
+            });
+        }
+    });
+    adapter.getForeignObject(id + '.location.entered',  function (err, obj) {
+        if (!obj) {
+            adapter.setForeignObject(id + '.location.entered', {
+                common: {
+                    name:   'Timestamp the user has entered the location',
+                    role:   'state',
                     type:   'number'
                 },
                 type: 'state',
@@ -215,6 +264,8 @@ var cltFunction = function (client) {
 	    
 	try
 	{
+		// https://owntracks.org/booklet/tech/json/
+		//
 		// format without encryption key
 		//  {"_type":"location","tid":"XX","acc":00,"batt":00,"conn":"w","lat":00.0000000,"lon":00.0000000,"t":"u","tst":0000000000}
 		//
@@ -225,6 +276,7 @@ var cltFunction = function (client) {
 		obj.encryption = false;
 		var decrypted = false;
 		
+		// TYPE: encrypted
 		// decrypt message.data using adapter.config.encryptionKey
 		if (obj._type === 'encrypted')
 		{
@@ -258,6 +310,43 @@ var cltFunction = function (client) {
 		// log
 		adapter.log.info('Received '+(obj.encryption ? 'encrypted' : 'unencrypted')+' payload: '+JSON.stringify(obj));
 		
+		// TYPE: transition
+		// User has entered or left a region
+		if (obj._type === 'transition')
+		{
+			var location = obj.desc.replace(/\s|\./g, '_').toLowerCase();
+			
+			// create location node in case of new location
+			createLocation(location, obj.desc);
+			
+			// user has entered location
+			if (obj.event === 'enter')
+			{
+				// update user
+				adapter.setState('users.' + parts[2] + '.location.name',  {val: obj.desc,  ts: obj.tst * 1000, ack: true});
+				adapter.setState('users.' + parts[2] + '.location.entered',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+				
+				// update location (add user if not present yet for some reason)
+				var users = adapter.getState('locations.' + location + '.users').val;
+				if (users.indexOf(parts[2]) === -1)
+					adapter.setState('locations.' + location + '.users',  {val: users + parts[2] + ',',  ts: obj.tst * 1000, ack: true});
+			}
+			
+			// user has left location
+			else if (obj.event === 'leave')
+			{
+				// update user
+				adapter.setState('users.' + parts[2] + '.location.name',  {val: '',  ts: obj.tst * 1000, ack: true});
+				adapter.setState('users.' + parts[2] + '.location.entered',  {val: '',  ts: obj.tst * 1000, ack: true});
+				
+				// update location (remove user if present)
+				var users = adapter.getState('locations.' + location + '.users').val;
+				if (users.indexOf(parts[2]) > -1)
+					adapter.setState('locations.' + location + '.users',  {val: users.replace(parts[2] + ',', ''),  ts: obj.tst * 1000, ack: true});
+			}
+		}
+		
+		// TYPE: location
 		// message sent unencrypted or has been decrypted
 		if (obj._type === 'location')
 		{
