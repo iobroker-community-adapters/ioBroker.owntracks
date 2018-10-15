@@ -24,6 +24,21 @@ function getValue(node) {
 	}
 }
 
+
+/*
+ *
+ */
+function getDateTime(timestamp) {
+	var date    = new Date(timestamp * 1000);
+	var day     = '0' + date.getDate();
+	var month   = '0' + (date.getMonth() + 1);
+	var year    = date.getFullYear();
+	var hours   = '0' + date.getHours();
+	var minutes = '0' + date.getMinutes();
+	var seconds = '0' + date.getSeconds();
+	return day.substr(-2) + '.' + month.substr(-2) + '.' + year + ' ' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+}
+
 /*
  *
  */
@@ -73,9 +88,22 @@ function createLocation(id, name) {
         if (!obj) {
             adapter.setForeignObject(node + '.timestamp', {
                 common: {
-                    name:   'Last change within the location ' + name,
+                    name:   'Timestamp of last change of the location ' + name,
                     role:   'state',
                     type:   'number'
+                },
+                type: 'state',
+                native: {}
+            });
+        }
+    });
+    adapter.getForeignObject(node + '.datetime',   function (err, obj) {
+        if (!obj) {
+            adapter.setForeignObject(node + '.datetime', {
+                common: {
+                    name:   'Datetime  last change of the location ' + name,
+                    role:   'state',
+                    type:   'string'
                 },
                 type: 'state',
                 native: {}
@@ -364,6 +392,7 @@ var cltFunction = function (client) {
 				{
 					adapter.setState('locations.' + location + '.users',  {val: users + parts[2] + ',',  ts: obj.tst * 1000, ack: true});
 					adapter.setState('locations.' + location + '.timestamp',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+					adapter.setState('locations.' + location + '.datetime',  {val: getDateTime(obj.tst * 1000),  ts: obj.tst * 1000, ack: true});
 				}
 			}
 			
@@ -380,6 +409,7 @@ var cltFunction = function (client) {
 				{
 					adapter.setState('locations.' + location + '.users',  {val: users.replace(parts[2] + ',', ''),  ts: obj.tst * 1000, ack: true});
 					adapter.setState('locations.' + location + '.timestamp',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+					adapter.setState('locations.' + location + '.datetime',  {val: getDateTime(obj.tst * 1000),  ts: obj.tst * 1000, ack: true});
 				}
 			}
 		}
@@ -405,16 +435,7 @@ var cltFunction = function (client) {
 			if (obj.tst !== undefined)
 			{
 				adapter.setState('users.' + parts[2] + '.timestamp', {val: obj.tst,  ts: obj.tst * 1000, ack: true});
-				var date    = new Date(obj.tst * 1000);
-				var day     = '0' + date.getDate();
-				var month   = '0' + (date.getMonth() + 1);
-				var year    = date.getFullYear();
-				var hours   = '0' + date.getHours();
-				var minutes = '0' + date.getMinutes();
-				var seconds = '0' + date.getSeconds();
-				var formattedTime = day.substr(-2) + '.' + month.substr(-2) + '.' + year + ' ' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-				
-				adapter.setState('users.' + parts[2] + '.datetime', {val: formattedTime,  ts: obj.tst * 1000, ack: true});
+				adapter.setState('users.' + parts[2] + '.datetime', {val: getDateTime(obj.tst * 1000),  ts: obj.tst * 1000, ack: true});
 			}
 		}
 	}
