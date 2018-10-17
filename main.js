@@ -417,8 +417,8 @@ function initMqttServer(config) {
 
 function main() {
     //noinspection JSUnresolvedVariable
-    adapter.config.pass = decrypt('Zgfr56gFe87jJOM', adapter.config.pass);
-    adapter.config.encryptionKey = decrypt('Zgfr56gFe87jJOM', adapter.config.encryptionKey);
+    adapter.config.pass = decrypt('Zgfr56gFe87jJOM', adapter.config.pass || "");
+    adapter.config.encryptionKey = decrypt('Zgfr56gFe87jJOM', adapter.config.encryptionKey || "");
 
     if (!adapter.config.user) {
         adapter.log.error('Empty user name not allowed!');
