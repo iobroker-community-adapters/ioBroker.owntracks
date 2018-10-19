@@ -36,6 +36,7 @@ Settings in App:
     
 - Connection/Identification/TrackerID   - Short name of user (up to 2 letters) to write it on map.
 - Connection/Security/TLS               - off
+- Advanced/Encryption Key               - optional: Add passphrase for encryption
 
 ### Icons
 You can define for every user an icon. Just upload per drag&drop or with mouse click you image. It will be automatically scaled to 64x64.
@@ -45,6 +46,9 @@ The name must be equal to DeviceID in OwnTracks app.
 ![Settings](img/settings1.png)
 
 ## Changelog
+
+#### 0.4.0 (2018-10-14)
+* (zefau) Added support for encryption key
 
 #### 0.3.0 (2018-06-05)
 * (matspi) Fix handling of publish messages

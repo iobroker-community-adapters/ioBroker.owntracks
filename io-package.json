@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "title": "OwnTracks adapter",
         "desc": {
             "en": "ioBroker OwnTracks Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker OwnTracks драйвер"
         },
         "news": {
+            "0.4.0": {
+                "en": "Added support for encryption key (on Android see Preferences -> Advanced -> Encryption Key)",
+                "de": "Unterstützung zur Verschlüsselung hinzugefügt (auf Android unter Preferences -> Advanced -> Encryption Key)"
+            },
             "0.3.0": {
                 "en": "Fix handling of publish messages",
                 "de": "Problem in der Abarbeitung von publish-Nachrichten behoben"

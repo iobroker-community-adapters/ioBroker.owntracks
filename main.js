@@ -5,7 +5,8 @@ var utils   = require(__dirname + '/lib/utils'); // Get common adapter utils
 var adapter = utils.Adapter('owntracks');
 //var LE      = require(utils.controllerDir + '/lib/letsencrypt.js');
 var createStreamServer = require('create-stream-server');
-var mqtt    = require('mqtt-connection');
+var mqtt = require('mqtt-connection');
+var sodium = require('libsodium-wrappers');
 
 var server;
 var clients = {};
@@ -87,6 +88,19 @@ function createUser(user) {
                     role:   'state',
                     unit:   'm',
                     type:   'number'
+                },
+                type: 'state',
+                native: {}
+            });
+        }
+    });
+    adapter.getForeignObject(id + '.encryption',  function (err, obj) {
+        if (!obj) {
+            adapter.setForeignObject(id + '.encryption', {
+                common: {
+                    name:   'Encryption for ' + user,
+                    role:   'state',
+                    type:   'boolean'
                 },
                 type: 'state',
                 native: {}
@@ -198,39 +212,89 @@ var cltFunction = function (client) {
             objects[parts[2]] = true;
         }
         processTopic(topic, message);
-        try {
-            var obj = JSON.parse(message);
-            if (obj._type === 'location') {
-                if (obj.acc !== undefined) {
-                    adapter.setState('users.' + parts[2] + '.accuracy',  {val: obj.acc,  ts: obj.tst * 1000, ack: true});
-                }
-                if (obj.batt !== undefined) {
-                    adapter.setState('users.' + parts[2] + '.battery',   {val: obj.batt, ts: obj.tst * 1000, ack: true});
-                }
-                if (obj.lon !== undefined) {
-                    adapter.setState('users.' + parts[2] + '.longitude', {val: obj.lon,  ts: obj.tst * 1000, ack: true});
-                }
-                if (obj.lat !== undefined) {
-                    adapter.setState('users.' + parts[2] + '.latitude',  {val: obj.lat,  ts: obj.tst * 1000, ack: true});
-                }
-		if (obj.tst !== undefined) {                                                                                
-                    adapter.setState('users.' + parts[2] + '.timestamp', {val: obj.tst,  ts: obj.tst * 1000, ack: true});
-			var date    = new Date(obj.tst * 1000);
-			var day     = '0' + date.getDate();
-			var month   = '0' + (date.getMonth() + 1);
-			var year    = date.getFullYear();
-			var hours   = '0' + date.getHours();
-			var minutes = '0' + date.getMinutes();
-			var seconds = '0' + date.getSeconds();
-			var formattedTime = day.substr(-2) + '.' + month.substr(-2) + '.' + year + ' ' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+	    
+	try
+	{
+		// format without encryption key
+		//  {"_type":"location","tid":"XX","acc":00,"batt":00,"conn":"w","lat":00.0000000,"lon":00.0000000,"t":"u","tst":0000000000}
+		//
+		// format WITH encryption key
+		// {"_type":"encrypted","data":"..."}
+		//
+		var obj = JSON.parse(message);
+		obj.encryption = false;
+		var decrypted = false;
+		
+		// decrypt message.data using adapter.config.encryptionKey
+		if (obj._type === 'encrypted')
+		{
+			// no key set
+			if (!adapter.config.encryptionKey)
+				adapter.log.warn('No encryption key defined in settings! Please go to settings and set a key!');
+			
+			else
+			{
+				var cypherText = new Buffer(obj.data, 'base64');
+				var cipher = null;
+				var nonce = cypherText.slice(0,24);
+				var key = new Buffer(32);
+				key.fill(0);
+				key.write(adapter.config.encryptionKey);
+				
+				// try to encrypt message and catch error in case key is wrong
+				try
+				{
+					cipher = sodium.crypto_secretbox_open_easy(cypherText.slice(24), nonce, key, "text");
+					decrypted = true;
+				}
+				catch(e) {adapter.log.warn(e)}
+				
+				obj = JSON.parse(cipher);
+				obj.encryption = true;
+			}
 
-		   adapter.setState('users.' + parts[2] + '.datetime', {val: formattedTime,  ts: obj.tst * 1000, ack: true});
-                }              
-
-            }
-        } catch (e) {
-            adapter.log.error('Cannot parse payload: ' + message);
-        }
+		}
+		
+		// log
+		adapter.log.info('Received '+(obj.encryption ? 'encrypted' : 'unencrypted')+' payload: '+JSON.stringify(obj));
+		
+		// message sent unencrypted or has been decrypted
+		if (obj._type === 'location')
+		{
+			adapter.setState('users.' + parts[2] + '.encryption',  {val: obj.encryption,  ts: obj.tst * 1000, ack: true});
+			
+			if (obj.acc !== undefined)
+				adapter.setState('users.' + parts[2] + '.accuracy',  {val: obj.acc,  ts: obj.tst * 1000, ack: true});
+			
+			if (obj.batt !== undefined)
+				adapter.setState('users.' + parts[2] + '.battery',   {val: obj.batt, ts: obj.tst * 1000, ack: true});
+			
+			if (obj.lon !== undefined)
+				adapter.setState('users.' + parts[2] + '.longitude', {val: obj.lon,  ts: obj.tst * 1000, ack: true});
+			
+			if (obj.lat !== undefined)
+				adapter.setState('users.' + parts[2] + '.latitude',  {val: obj.lat,  ts: obj.tst * 1000, ack: true});
+			
+			if (obj.tst !== undefined)
+			{
+				adapter.setState('users.' + parts[2] + '.timestamp', {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+				var date    = new Date(obj.tst * 1000);
+				var day     = '0' + date.getDate();
+				var month   = '0' + (date.getMonth() + 1);
+				var year    = date.getFullYear();
+				var hours   = '0' + date.getHours();
+				var minutes = '0' + date.getMinutes();
+				var seconds = '0' + date.getSeconds();
+				var formattedTime = day.substr(-2) + '.' + month.substr(-2) + '.' + year + ' ' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+				
+				adapter.setState('users.' + parts[2] + '.datetime', {val: formattedTime,  ts: obj.tst * 1000, ack: true});
+			}
+		}
+	}
+	catch (e){
+		adapter.log.error('Cannot parse payload: ' + message);
+	}
+	    
     });
 
     client.on('subscribe', function (packet) {
@@ -353,7 +417,8 @@ function initMqttServer(config) {
 
 function main() {
     //noinspection JSUnresolvedVariable
-    adapter.config.pass = decrypt('Zgfr56gFe87jJOM', adapter.config.pass);
+    adapter.config.pass = decrypt('Zgfr56gFe87jJOM', adapter.config.pass || "");
+    adapter.config.encryptionKey = decrypt('Zgfr56gFe87jJOM', adapter.config.encryptionKey || "");
 
     if (!adapter.config.user) {
         adapter.log.error('Empty user name not allowed!');
