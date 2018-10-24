@@ -3,6 +3,7 @@
 'use strict';
 var utils   = require(__dirname + '/lib/utils'); // Get common adapter utils
 var adapter = utils.Adapter('owntracks');
+
 //var LE      = require(utils.controllerDir + '/lib/letsencrypt.js');
 var createStreamServer = require('create-stream-server');
 var mqtt = require('mqtt-connection');
@@ -10,47 +11,48 @@ var sodium = require('libsodium-wrappers');
 
 var server;
 var clients = {};
-var namespaces = {users: {}, locations: {}};
 
-/*
- * Return value of a node if given, other returns empty string.
- */
-function getValue(node) {
-	try {return adapter.getState(node).val}
-	catch(e)
-	{
-		adapter.log.debug('Failed reading node '+node+' with error: '+e);
-		return '';
+var users = '';
+
+var nodes = {
+	/*
+	 * FORMAT
+	 * tree {string} ID / Name within tree
+	 * description {string} Description within the tree. You may use %name% to use current value
+	 * common {object} Common settings
+	 * common.type {string} Typ (default is string)
+	 * common.role {string} Role (default is state)
+	 * native {object} Native settings
+	 */
+	'users': {
+		'battery': {'tree': 'users.%id%.battery', 'description': 'Device battery level for %name%', 'common': {'type': 'number', 'role': 'battery', 'unit': '%', 'min': 0, 'max': 100}},
+		'latitude': {'tree': 'users.%id%.latitude', 'description': 'Latitude for %name%', 'common': {'type': 'number', 'role': 'gps.latitude'}},
+		'longitude': {'tree': 'users.%id%.longitude', 'description': 'Longitude for %name%', 'common': {'type': 'number', 'role': 'gps.longitude'}},
+		'accuracy': {'tree': 'users.%id%.accuracy', 'description': 'Accuracy for %name%', 'common': {'type': 'number', 'uni': 'm'}},
+		'encryption': {'tree': 'users.%id%.encryption', 'description': 'Encryption status for %name%', 'common': {'type': 'boolean'}},
+		'timestamp': {'tree': 'users.%id%.timestamp', 'description': 'Timestamp of last refresh for %name%', 'common': {'type': 'number'}},
+		'datetime': {'tree': 'users.%id%.datetime', 'description': 'Datetime of last refresh for %name%'},
+		'location':
+		{
+			'current': {'tree': 'users.%id%.location.current', 'description': 'Current location of the %name%'},
+			'entered': {'tree': 'users.%id%.location.entered', 'description': 'Timestamp the user has entered the current location', 'common': {'type': 'number'}},
+			'last': {'tree': 'users.%id%.location.last', 'description': 'Last location of the %name%'},
+			'left': {'tree': 'users.%id%.location.left', 'description': 'Timestamp the user has left the last location', 'common': {'type': 'number'}},
+			'history': {'tree': 'users.%id%.location.history', 'description': 'History of the user entering / leaving locations'}
+		}
+	},
+	'locations': {
+		'users': {'tree': 'locations.%id%.users', 'description': 'Present users in location %name%'},
+		'history': {'tree': 'locations.%id%.history', 'description': 'History of users entering / leaving location %name%'},
+		'timestamp': {'tree': 'locations.%id%.timestamp', 'description': 'Timestamp of last change within the location %name%', 'common': {'type': 'number'}},
+		'datetime': {'tree': 'locations.%id%.datetime', 'description': 'Datetime of last change within the location %name%'}
 	}
-}
-
-
-/*
- *
- */
-function getDateTime(timestamp) {
-	var date    = new Date(timestamp * 1000);
-	var day     = '0' + date.getDate();
-	var month   = '0' + (date.getMonth() + 1);
-	var year    = date.getFullYear();
-	var hours   = '0' + date.getHours();
-	var minutes = '0' + date.getMinutes();
-	var seconds = '0' + date.getSeconds();
-	return day.substr(-2) + '.' + month.substr(-2) + '.' + year + ' ' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-}
+};
 
 /*
+ * ADAPTER UNLOAD
  *
  */
-function decrypt(key, value) {
-    var result = '';
-    for (var i = 0; i < value.length; ++i) {
-        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-    }
-    return result;
-}
-
-// is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
     try {
         adapter.log.info('cleaned everything up...');
@@ -64,182 +66,91 @@ adapter.on('unload', function (callback) {
     }
 });
 
+/*
+ * ADAPTER LOAD
+ *
+ */
 adapter.on('ready', main);
 
+
+
 /*
- *
+ * Decode
  */
-function createLocation(id, name) {
-    var node = adapter.namespace + '.locations.' + id;
-    adapter.getForeignObject(node + '.users',   function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(node + '.users', {
-                common: {
-                    name:   'Present users in location ' + name,
-                    role:   'state',
-                    type:   'string'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(node + '.timestamp',   function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(node + '.timestamp', {
-                common: {
-                    name:   'Timestamp of last change of the location ' + name,
-                    role:   'state',
-                    type:   'number'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(node + '.datetime',   function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(node + '.datetime', {
-                common: {
-                    name:   'Datetime  last change of the location ' + name,
-                    role:   'state',
-                    type:   'string'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
+function decode(key, value) {
+    var result = '';
+    for (var i = 0; i < value.length; ++i) {
+        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+    }
+    return result;
+}
+
+/*
+ * Convert a timestamp to datetime
+ */
+function getDateTime(timestamp)
+{
+	if (timestamp === undefined)
+		return '';
+	
+	var date    = new Date(timestamp);
+	var day     = '0' + date.getDate();
+	var month   = '0' + (date.getMonth() + 1);
+	var year    = date.getFullYear();
+	var hours   = '0' + date.getHours();
+	var minutes = '0' + date.getMinutes();
+	var seconds = '0' + date.getSeconds();
+	return day.substr(-2) + '.' + month.substr(-2) + '.' + year + ' ' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+}
+
+/*
+ * Creates a node
+ */
+function createNode(node, state)
+{
+	adapter.setObject(
+		node.node,
+		{
+			common: Object.assign(node.common || {}, {
+				name: node.description.replace(/%name%/gi, state.name) || '',
+				role: node.common !== undefined && node.common.role ? node.common.role : 'state',
+				type: node.common !== undefined && node.common.type ? node.common.type : 'string'
+			}),
+			type: 'state',
+			native: node.native || {}
+		},
+		set(node.node, state.val)
+	);
+}
+
+/*
+ * Sets a value of a node (and creates it in case of non-existence)
+ */
+function set(node, value) {if (value !== undefined) adapter.setState(node, {val: value, ts: Date.now(), ack: true}, function(err) {if (err) adapter.log.error(err);})}
+function setValue(node, state)
+{
+	node.node = node.tree.replace(/%id%/gi, state.id);
+	adapter.getObject(node.node, function(err, obj)
+	{
+		// catch error
+		if (err)
+			adapter.log.error(err);
+		
+		// create node if non-existent
+		if (err || !obj) {
+			adapter.log.debug('Creating node ' + node.node);
+			createNode(node, state);
+		}
+		
+		// set value
+		else
+			set(node.node, state.val)
+	});
 }
 
 /*
  *
  */
-function createUser(user) {
-    var id = adapter.namespace + '.users.' + user.replace(/\s|\./g, '_');
-    adapter.getForeignObject(id + '.battery',   function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(id + '.battery', {
-                common: {
-                    name:   'Device battery level for ' + user,
-                    min:    0,
-                    max:    100,
-                    unit:   '%',
-                    role:   'battery',
-                    type:   'number'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(id + '.latitude',  function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(id + '.latitude', {
-                common: {
-                    name:   'Latitude for ' + user,
-                    role:   'gps.latitude',
-                    type:   'number'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(id + '.longitude', function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(id + '.longitude', {
-                common: {
-                    name:   'Longitude for ' + user,
-                    role:   'gps.longitude',
-                    type:   'number'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(id + '.location.name',  function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(id + '.location.name', {
-                common: {
-                    name:   'Location of the ' + user,
-                    role:   'state',
-                    type:   'string'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(id + '.location.entered',  function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(id + '.location.entered', {
-                common: {
-                    name:   'Timestamp the user has entered the location',
-                    role:   'state',
-                    type:   'number'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(id + '.accuracy',  function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(id + '.accuracy', {
-                common: {
-                    name:   'Accuracy for ' + user,
-                    role:   'state',
-                    unit:   'm',
-                    type:   'number'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(id + '.encryption',  function (err, obj) {
-        if (!obj) {
-            adapter.setForeignObject(id + '.encryption', {
-                common: {
-                    name:   'Encryption for ' + user,
-                    role:   'state',
-                    type:   'boolean'
-                },
-                type: 'state',
-                native: {}
-            });
-        }
-    });
-    adapter.getForeignObject(id + '.timestamp',  function (err, obj) {                    
-        if (!obj) {                                                                      
-            adapter.setForeignObject(id + '.timestamp', {                 
-                common: {                                                
-                    name:   'Timestamp for ' + user,                     
-                    role:   'state',                                     
-                    type:   'number'                                     
-                },                                                       
-                type: 'state',                                           
-                native: {}                                               
-            });                                                          
-        }                                                                
-    });                              
-    adapter.getForeignObject(id + '.datetime',  function (err, obj) {                   
-        if (!obj) {                                                                      
-            adapter.setForeignObject(id + '.datetime', {                                
-                common: {                                                
-                    name:   'Datetime for ' + user,                     
-                    role:   'state',                                  
-                    type:   'string'                                     
-                },                                                       
-                type: 'state',                                           
-                native: {}                                               
-            });                                                          
-        }                                                                
-    });                        
-}
-
 function sendState2Client(client, topic, payload) {
     // client has subscription for this ID
     if (client._subsID && client._subsID[topic]) {
@@ -257,6 +168,9 @@ function sendState2Client(client, topic, payload) {
     }
 }
 
+/*
+ *
+ */
 function processTopic(topic, payload, ignoreClient) {
     for (var k in clients) {
         // if get and set have different topic names, send state to issuing client too.
@@ -265,6 +179,9 @@ function processTopic(topic, payload, ignoreClient) {
     }
 }
 
+/*
+ *
+ */
 var cltFunction = function (client) {
     client.on('connect', function (packet) {
         client.id = packet.clientId;
@@ -311,12 +228,9 @@ var cltFunction = function (client) {
             adapter.log.warn('publish "' + topic + '": invalid user name - "' + parts[1] + '"');
             return;
         }
-	
-	// create user node / namespace
-        if (!namespaces.users[parts[2]]) {
-            createUser(parts[2]);
-            namespaces.users[parts[2]] = true;
-        }
+		
+		var userId = parts[2].replace(/\s|\./g, '_').toLowerCase();
+		var userName = parts[2];
         processTopic(topic, message);
 	    
 	try
@@ -371,46 +285,87 @@ var cltFunction = function (client) {
 		// User has entered or left a region
 		if (obj._type === 'transition')
 		{
-			var location = obj.desc.replace(/\s|\./g, '_').toLowerCase();
-			
-			// create location node in case of new location
-			if (!namespaces.locations[location]) {
-				createLocation(location, obj.desc);
-				namespaces.locations[location] = true;
-			}
+			// create location node
+			var locationId = obj.desc.replace(/\s|\./g, '_').toLowerCase();
+			var locationName = obj.desc;
 			
 			// user has entered location
 			if (obj.event === 'enter')
 			{
+				adapter.log.debug('User ' + userName + ' entered location ' + locationName + '.');
+				
 				// update user
-				adapter.setState('users.' + parts[2] + '.location.name',  {val: obj.desc,  ts: obj.tst * 1000, ack: true});
-				adapter.setState('users.' + parts[2] + '.location.entered',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
+				setValue(nodes.users.location.current, {id: userId, name: userName, val: locationName});
+				setValue(nodes.users.location.entered, {id: userId, name: userName, val: obj.tst});
+				
+				// write to history of user
+				adapter.getState(nodes.users.location.history.tree.replace('%id%', userId), function(err, state)
+				{
+					setValue(nodes.users.location.history, {id: userId, name: userName, val: state === null ? '' : (state.val + JSON.stringify(obj) + ';')});
+				});
 				
 				// update location (add user if not present yet for some reason)
-				var users = getValue('locations.' + location + '.users');
-				if (users.indexOf(parts[2]) === -1)
+				adapter.getState(nodes.locations.users.tree.replace('%id%', locationId), function(err, state)
 				{
-					adapter.setState('locations.' + location + '.users',  {val: users + parts[2] + ',',  ts: obj.tst * 1000, ack: true});
-					adapter.setState('locations.' + location + '.timestamp',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
-					adapter.setState('locations.' + location + '.datetime',  {val: getDateTime(obj.tst * 1000),  ts: obj.tst * 1000, ack: true});
-				}
+					users = (state === null ? '' : state.val);
+					adapter.log.debug(users === '' ? 'No users are currently in location ' + locationName + '.' : 'Users currently in location ' + locationName + ': ' + users);
+					
+					if (users.indexOf(userId) === -1)
+					{
+						setValue(nodes.locations.users, {id: locationId, name: locationName, val: users + userId + ','});
+						setValue(nodes.locations.timestamp, {id: locationId, name: locationName, val: obj.tst});
+						setValue(nodes.locations.datetime, {id: locationId, name: locationName, val: getDateTime(obj.tst*1000)});
+						
+						// write to history
+						adapter.getState(nodes.locations.history.tree.replace('%id%', locationId), function(err, state)
+						{
+							setValue(nodes.locations.history, {id: locationId, name: locationName, val: state === null ? '' : (state.val + JSON.stringify(obj) + ';')});
+						});
+					}
+				});
 			}
 			
 			// user has left location
 			else if (obj.event === 'leave')
 			{
+				adapter.log.debug('User ' + userName + ' left location ' + locationName + '.');
+				
+				// update last location of user
+				adapter.getState(nodes.users.location.current.replace('%id%', userId), function(err, state)
+				{
+					setValue(nodes.users.location.last, {id: userId, name: userName, val: state === null ? '' : state.val});
+					setValue(nodes.users.location.left, {id: userId, name: userName, val: obj.tst});
+				});
+				
 				// update user
-				adapter.setState('users.' + parts[2] + '.location.name',  {val: '',  ts: obj.tst * 1000, ack: true});
-				adapter.setState('users.' + parts[2] + '.location.entered',  {val: '',  ts: obj.tst * 1000, ack: true});
+				setValue(nodes.users.location.current, {id: userId, name: userName, val: ''});
+				setValue(nodes.users.location.entered, {id: userId, name: userName, val: ''});
+				
+				// write to history of user
+				adapter.getState(nodes.users.location.history.tree.replace('%id%', userId), function(err, state)
+				{
+					setValue(nodes.users.location.history, {id: userId, name: userName, val: state === null ? '' : (state.val + JSON.stringify(obj) + ';')});
+				});
 				
 				// update location (remove user if present)
-				var users = getValue('locations.' + location + '.users');
-				if (users.indexOf(parts[2]) > -1)
+				adapter.getState(nodes.locations.users.tree.replace('%id%', locationId), function(err, state)
 				{
-					adapter.setState('locations.' + location + '.users',  {val: users.replace(parts[2] + ',', ''),  ts: obj.tst * 1000, ack: true});
-					adapter.setState('locations.' + location + '.timestamp',  {val: obj.tst,  ts: obj.tst * 1000, ack: true});
-					adapter.setState('locations.' + location + '.datetime',  {val: getDateTime(obj.tst * 1000),  ts: obj.tst * 1000, ack: true});
-				}
+					users = (state === null ? '' : state.val);
+					adapter.log.debug(users === '' ? 'No users are currently in location ' + locationName + '.' : 'Users currently in location ' + locationName + ': ' + users);
+					
+					if (users.indexOf(userId) > -1)
+					{
+						setValue(nodes.locations.users, {id: locationId, name: locationName, val: users.replace(userId + ',', '')});
+						setValue(nodes.locations.timestamp, {id: locationId, name: locationName, val: obj.tst});
+						setValue(nodes.locations.datetime, {id: locationId, name: locationName, val: getDateTime(obj.tst*1000)});
+						
+						// write to history
+						adapter.getState(nodes.locations.history.tree.replace('%id%', locationId), function(err, state)
+						{
+							setValue(nodes.locations.history, {id: locationId, name: locationName, val: state === null ? '' : (state.val + JSON.stringify(obj) + ';')});
+						});
+					}
+				});
 			}
 		}
 		
@@ -418,29 +373,18 @@ var cltFunction = function (client) {
 		// message sent unencrypted or has been decrypted
 		if (obj._type === 'location')
 		{
-			adapter.setState('users.' + parts[2] + '.encryption',  {val: obj.encryption,  ts: obj.tst * 1000, ack: true});
-			
-			if (obj.acc !== undefined)
-				adapter.setState('users.' + parts[2] + '.accuracy',  {val: obj.acc,  ts: obj.tst * 1000, ack: true});
-			
-			if (obj.batt !== undefined)
-				adapter.setState('users.' + parts[2] + '.battery',   {val: obj.batt, ts: obj.tst * 1000, ack: true});
-			
-			if (obj.lon !== undefined)
-				adapter.setState('users.' + parts[2] + '.longitude', {val: obj.lon,  ts: obj.tst * 1000, ack: true});
-			
-			if (obj.lat !== undefined)
-				adapter.setState('users.' + parts[2] + '.latitude',  {val: obj.lat,  ts: obj.tst * 1000, ack: true});
-			
-			if (obj.tst !== undefined)
-			{
-				adapter.setState('users.' + parts[2] + '.timestamp', {val: obj.tst,  ts: obj.tst * 1000, ack: true});
-				adapter.setState('users.' + parts[2] + '.datetime', {val: getDateTime(obj.tst * 1000),  ts: obj.tst * 1000, ack: true});
-			}
+			setValue(nodes.users.encryption, {id: userId, name: userName, val: obj.encryption});
+			setValue(nodes.users.accuracy, {id: userId, name: userName, val: obj.acc});
+			setValue(nodes.users.battery, {id: userId, name: userName, val: obj.batt});
+			setValue(nodes.users.longitude, {id: userId, name: userName, val: obj.lon});
+			setValue(nodes.users.latitude, {id: userId, name: userName, val: obj.lat});
+			setValue(nodes.users.timestamp, {id: userId, name: userName, val: obj.tst});
+			setValue(nodes.users.datetime, {id: userId, name: userName, val: getDateTime(obj.tst*1000)});
 		}
 	}
-	catch (e) {
+	catch(e) {
 		adapter.log.error('Cannot parse payload: ' + message);
+		adapter.log.error(e);
 	}
 	    
     });
@@ -565,8 +509,8 @@ function initMqttServer(config) {
 
 function main() {
     //noinspection JSUnresolvedVariable
-    adapter.config.pass = decrypt('Zgfr56gFe87jJOM', adapter.config.pass);
-    adapter.config.encryptionKey = decrypt('Zgfr56gFe87jJOM', adapter.config.encryptionKey);
+    adapter.config.pass = decode('Zgfr56gFe87jJOM', adapter.config.pass);
+    adapter.config.encryptionKey = decode('Zgfr56gFe87jJOM', adapter.config.encryptionKey);
 
     if (!adapter.config.user) {
         adapter.log.error('Empty user name not allowed!');
