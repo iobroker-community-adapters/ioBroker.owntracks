@@ -41,12 +41,15 @@ The following preferences have to be set in the Android / iOS app respectively i
 ### Regions configuration
 To setup locations within the owntracks adapter, you have to create regions in the owntracks Android / iOS app.
 To do so, go to "Regions" in the drawer
+
 ![Settings](img/regions1.jpg)
 
 Create a new region by clicking the plus (+) in the top right corner
+
 ![Settings](img/regions2.jpg)
 
 Use the location button in the top right corner to retrieve current location or type them in Latitude and Longitude yourself. Furthermore, specify a radius for the location. If you share the location, your Friends (see in the drawer of the Android / iOS app) get a notification when you enter / leave a location. 
+
 ![Settings](img/regions3.jpg)
 
 
