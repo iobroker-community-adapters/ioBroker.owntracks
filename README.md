@@ -12,9 +12,7 @@ Link for:
 - Andorid - [https://play.google.com/store/apps/details?id=org.owntracks.android](https://play.google.com/store/apps/details?id=org.owntracks.android)
 - iOS - [https://itunes.apple.com/de/app/owntracks/id692424691?mt=8](https://itunes.apple.com/de/app/owntracks/id692424691?mt=8)
 
-App sends continuously your position (position of device) to some specific server. In our case it will be ioBroker server.
-
-The MQTT protocol will be used for communication.
+App sends continuously your position (position of device) to some specific server. In our case it will be ioBroker server. The MQTT protocol will be used for communication.
 
 ## Setup instructions
 
@@ -40,7 +38,7 @@ The following preferences have to be set in the Android / iOS app respectively i
 - Advanced/Encryption Key               - optional, but recommended: Add passphrase for encryption
 
 
-## Regions configuration
+### Regions configuration
 To setup locations within the owntracks adapter, you have to create regions in the owntracks Android / iOS app.
 To do so, go to "Regions" in the drawer
 ![Settings](img/regions1.jpg)
