@@ -25,6 +25,10 @@ var nodes = {
 	 * native {object} Native settings
 	 */
 	'users': {
+		'id': {'tree': 'users.%id%.id', 'description': 'User ID of user %name%'},
+		'name': {'tree': 'users.%id%.name', 'description': 'User name of user %name%'},
+		'connected': {'tree': 'users.%id%.connected', 'description': 'Connection status of user %name%', 'common': {'type': 'boolean'}},
+		
 		'battery': {'tree': 'users.%id%.battery', 'description': 'Device battery level for %name%', 'common': {'type': 'number', 'role': 'battery', 'unit': '%', 'min': 0, 'max': 100}},
 		'latitude': {'tree': 'users.%id%.latitude', 'description': 'Latitude for %name%', 'common': {'type': 'number', 'role': 'gps.latitude'}},
 		'longitude': {'tree': 'users.%id%.longitude', 'description': 'Longitude for %name%', 'common': {'type': 'number', 'role': 'gps.longitude'}},
@@ -42,7 +46,10 @@ var nodes = {
 		}
 	},
 	'locations': {
+		'id': {'tree': 'locations.%id%.id', 'description': 'Location ID of location %name%'},
+		'name': {'tree': 'locations.%id%.name', 'description': 'Location name of location %name%'},
 		'users': {'tree': 'locations.%id%.users', 'description': 'Present users in location %name%'},
+		'presence': {'tree': 'locations.%id%.presence', 'description': 'Indicator whether any user is present in location %name%', 'common': {'type': 'boolean'}},
 		'history': {'tree': 'locations.%id%.history', 'description': 'History of users entering / leaving location %name%'},
 		'timestamp': {'tree': 'locations.%id%.timestamp', 'description': 'Timestamp of last change within the location %name%', 'common': {'type': 'number'}},
 		'datetime': {'tree': 'locations.%id%.datetime', 'description': 'Datetime of last change within the location %name%'}
@@ -61,7 +68,7 @@ adapter.on('unload', function (callback) {
             server = null;
         }
         callback();
-    } catch (e) {
+    } catch(e) {
         callback();
     }
 });
@@ -149,6 +156,19 @@ function setValue(node, state)
 }
 
 /*
+ * Extracts user credentials
+ */
+function getUser(data)
+{
+	return {
+		namespace: data[0] || false,
+		ident: data[1] || false,
+		userName: data[2] || false,
+		userId: data[2].replace(/\s|\./g, '_').toLowerCase() || false
+	};
+}
+
+/*
  *
  */
 function sendState2Client(client, topic, payload) {
@@ -182,13 +202,17 @@ function processTopic(topic, payload, ignoreClient) {
 /*
  *
  */
-var cltFunction = function (client) {
-    client.on('connect', function (packet) {
+var cltFunction = function(client)
+{
+	/*
+	 * EVENT: connect
+	 */
+    client.on('connect', function(packet) {
         client.id = packet.clientId;
         if (adapter.config.user) {
             if (adapter.config.user != packet.username ||
                 adapter.config.pass != packet.password) {
-                adapter.log.warn('Client [' + packet.clientId + '] has invalid password(' + packet.password + ') or username(' + packet.username + ')');
+                adapter.log.warn('Client [' + packet.clientId + '] has invalid password (' + packet.password + ') or username (' + packet.username + ')');
                 client.connack({returnCode: 4});
                 if (clients[client.id]) delete clients[client.id];
                 client.stream.end();
@@ -199,9 +223,16 @@ var cltFunction = function (client) {
         adapter.log.info('Client [' + packet.clientId + '] connected');
         client.connack({returnCode: 0});
         clients[client.id] = client;
+		
+		// set user connected
+		var u = getUser(packet.will.topic.split('/'));
+		if (u.ident !== false) setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: true});
     });
-
-    client.on('publish', function (packet) {
+	
+	/*
+	 * EVENT: publish
+	 */
+    client.on('publish', function(packet) {
         var isAck = true;
         var topic   = packet.topic;
         var message = packet.payload;
@@ -223,14 +254,12 @@ var cltFunction = function (client) {
         //      "tid":"te",         // is a configurable tracker-ID - ignored
         //      "tst":1472987109    // UNIX timestamp in seconds
         // }
-        var parts = topic.split('/');
-        if (parts[1] !== adapter.config.user) {
+		var u = getUser(topic.split('/'));
+		if (u.ident !== adapter.config.user) {
             adapter.log.warn('publish "' + topic + '": invalid user name - "' + parts[1] + '"');
             return;
         }
 		
-		var userId = parts[2].replace(/\s|\./g, '_').toLowerCase();
-		var userName = parts[2];
         processTopic(topic, message);
 	    
 	try
@@ -292,16 +321,17 @@ var cltFunction = function (client) {
 			// user has entered location
 			if (obj.event === 'enter')
 			{
-				adapter.log.debug('User ' + userName + ' entered location ' + locationName + '.');
+				adapter.log.debug('User ' + u.userName + ' entered location ' + locationName + '.');
 				
 				// update user
-				setValue(nodes.users.location.current, {id: userId, name: userName, val: locationName});
-				setValue(nodes.users.location.entered, {id: userId, name: userName, val: obj.tst});
+				setValue(nodes.users.location.current, {id: u.userId, name: u.userName, val: locationName});
+				setValue(nodes.users.location.entered, {id: u.userId, name: u.userName, val: obj.tst});
 				
 				// write to history of user
-				adapter.getState(nodes.users.location.history.tree.replace('%id%', userId), function(err, state)
+				adapter.getState(nodes.users.location.history.tree.replace('%id%', u.userId), function(err, state)
 				{
-					setValue(nodes.users.location.history, {id: userId, name: userName, val: state === null ? '' : (state.val + JSON.stringify(obj) + ';')});
+					var history = state === null ? [] : JSON.parse(state.val);
+					setValue(nodes.users.location.history, {id: u.userId, name: u.userName, val: JSON.stringify(history.concat([obj]))});
 				});
 				
 				// update location (add user if not present yet for some reason)
@@ -310,16 +340,20 @@ var cltFunction = function (client) {
 					users = (state === null ? '' : state.val);
 					adapter.log.debug(users === '' ? 'No users are currently in location ' + locationName + '.' : 'Users currently in location ' + locationName + ': ' + users);
 					
-					if (users.indexOf(userId) === -1)
+					if (users.indexOf(u.userId) === -1)
 					{
-						setValue(nodes.locations.users, {id: locationId, name: locationName, val: users + userId + ','});
+						setValue(nodes.locations.id, {id: locationId, name: locationName, val: locationId});
+						setValue(nodes.locations.name, {id: locationId, name: locationName, val: locationName});
+						setValue(nodes.locations.users, {id: locationId, name: locationName, val: users + u.userId + ','});
+						setValue(nodes.locations.presence, {id: locationId, name: locationName, val: true});
 						setValue(nodes.locations.timestamp, {id: locationId, name: locationName, val: obj.tst});
 						setValue(nodes.locations.datetime, {id: locationId, name: locationName, val: getDateTime(obj.tst*1000)});
 						
 						// write to history
 						adapter.getState(nodes.locations.history.tree.replace('%id%', locationId), function(err, state)
 						{
-							setValue(nodes.locations.history, {id: locationId, name: locationName, val: state === null ? '' : (state.val + JSON.stringify(obj) + ';')});
+							var history = state === null ? [] : JSON.parse(state.val);
+							setValue(nodes.locations.history, {id: locationId, name: locationName, val: JSON.stringify(history.concat([obj]))});
 						});
 					}
 				});
@@ -328,23 +362,24 @@ var cltFunction = function (client) {
 			// user has left location
 			else if (obj.event === 'leave')
 			{
-				adapter.log.debug('User ' + userName + ' left location ' + locationName + '.');
+				adapter.log.debug('User ' + u.userName + ' left location ' + locationName + '.');
 				
 				// update last location of user
-				adapter.getState(nodes.users.location.current.replace('%id%', userId), function(err, state)
+				adapter.getState(nodes.users.location.current.tree.replace('%id%', u.userId), function(err, state)
 				{
-					setValue(nodes.users.location.last, {id: userId, name: userName, val: state === null ? '' : state.val});
-					setValue(nodes.users.location.left, {id: userId, name: userName, val: obj.tst});
+					setValue(nodes.users.location.last, {id: u.userId, name: u.userName, val: state === null ? '' : state.val});
+					setValue(nodes.users.location.left, {id: u.userId, name: u.userName, val: obj.tst});
 				});
 				
 				// update user
-				setValue(nodes.users.location.current, {id: userId, name: userName, val: ''});
-				setValue(nodes.users.location.entered, {id: userId, name: userName, val: ''});
+				setValue(nodes.users.location.current, {id: u.userId, name: u.userName, val: ''});
+				setValue(nodes.users.location.entered, {id: u.userId, name: u.userName, val: ''});
 				
 				// write to history of user
-				adapter.getState(nodes.users.location.history.tree.replace('%id%', userId), function(err, state)
+				adapter.getState(nodes.users.location.history.tree.replace('%id%', u.userId), function(err, state)
 				{
-					setValue(nodes.users.location.history, {id: userId, name: userName, val: state === null ? '' : (state.val + JSON.stringify(obj) + ';')});
+					var history = state === null ? [] : JSON.parse(state.val);
+					setValue(nodes.users.location.history, {id: u.userId, name: u.userName, val: JSON.stringify(history.concat([obj]))});
 				});
 				
 				// update location (remove user if present)
@@ -353,16 +388,19 @@ var cltFunction = function (client) {
 					users = (state === null ? '' : state.val);
 					adapter.log.debug(users === '' ? 'No users are currently in location ' + locationName + '.' : 'Users currently in location ' + locationName + ': ' + users);
 					
-					if (users.indexOf(userId) > -1)
+					if (users.indexOf(u.userId) > -1)
 					{
-						setValue(nodes.locations.users, {id: locationId, name: locationName, val: users.replace(userId + ',', '')});
+						users = users.replace(u.userId + ',', '');
+						setValue(nodes.locations.presence, {id: locationId, name: locationName, val: !users ? false : true});
+						setValue(nodes.locations.users, {id: locationId, name: locationName, val: users});
 						setValue(nodes.locations.timestamp, {id: locationId, name: locationName, val: obj.tst});
 						setValue(nodes.locations.datetime, {id: locationId, name: locationName, val: getDateTime(obj.tst*1000)});
 						
 						// write to history
 						adapter.getState(nodes.locations.history.tree.replace('%id%', locationId), function(err, state)
 						{
-							setValue(nodes.locations.history, {id: locationId, name: locationName, val: state === null ? '' : (state.val + JSON.stringify(obj) + ';')});
+							var history = state === null ? [] : JSON.parse(state.val);
+							setValue(nodes.locations.history, {id: locationId, name: locationName, val: JSON.stringify(history.concat([obj]))});
 						});
 					}
 				});
@@ -373,13 +411,17 @@ var cltFunction = function (client) {
 		// message sent unencrypted or has been decrypted
 		if (obj._type === 'location')
 		{
-			setValue(nodes.users.encryption, {id: userId, name: userName, val: obj.encryption});
-			setValue(nodes.users.accuracy, {id: userId, name: userName, val: obj.acc});
-			setValue(nodes.users.battery, {id: userId, name: userName, val: obj.batt});
-			setValue(nodes.users.longitude, {id: userId, name: userName, val: obj.lon});
-			setValue(nodes.users.latitude, {id: userId, name: userName, val: obj.lat});
-			setValue(nodes.users.timestamp, {id: userId, name: userName, val: obj.tst});
-			setValue(nodes.users.datetime, {id: userId, name: userName, val: getDateTime(obj.tst*1000)});
+			setValue(nodes.users.id, {id: u.userId, name: u.userName, val: u.userId});
+			setValue(nodes.users.name, {id: u.userId, name: u.userName, val: u.userName});
+			setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: true});
+			
+			setValue(nodes.users.encryption, {id: u.userId, name: u.userName, val: obj.encryption});
+			setValue(nodes.users.accuracy, {id: u.userId, name: u.userName, val: obj.acc});
+			setValue(nodes.users.battery, {id: u.userId, name: u.userName, val: obj.batt});
+			setValue(nodes.users.longitude, {id: u.userId, name: u.userName, val: obj.lon});
+			setValue(nodes.users.latitude, {id: u.userId, name: u.userName, val: obj.lat});
+			setValue(nodes.users.timestamp, {id: u.userId, name: u.userName, val: obj.tst});
+			setValue(nodes.users.datetime, {id: u.userId, name: u.userName, val: getDateTime(obj.tst*1000)});
 		}
 	}
 	catch(e) {
@@ -388,7 +430,10 @@ var cltFunction = function (client) {
 	}
 	    
     });
-
+	
+	/*
+	 * EVENT: subscribe
+	 */
     client.on('subscribe', function (packet) {
         var granted = [];
         if (!client._subsID) client._subsID = {};
@@ -443,22 +488,41 @@ var cltFunction = function (client) {
         }
     });
 
-    client.on('pingreq', function (packet) {
+	/*
+	 * EVENT: pingreq
+	 */
+    client.on('pingreq', function(packet) {
         adapter.log.debug('Client [' + client.id + '] pingreq');
         client.pingresp();
     });
 
-    client.on('disconnect', function (packet) {
+	/*
+	 * EVENT: disconnect
+	 */
+    client.on('disconnect', function(packet) {
         adapter.log.info('Client [' + client.id + '] disconnected');
+		
+		// set user disconnected
+		var u = getUser(Object.keys(client._subsID).toString().split('/'));
+		if (u.ident !== false) setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
+		
+		// disconnect
         client.stream.end();
     });
 
-    client.on('close', function (err) {
+	/*
+	 * EVENT: close
+	 */
+    client.on('close', function(err) {
         adapter.log.info('Client [' + client.id + '] closed');
         delete clients[client.id];
+		
+		// set user disconnected
+		var u = getUser(Object.keys(client._subsID).toString().split('/'));
+		if (u.ident !== false) setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
     });
 
-    client.on('error', function (err) {
+    client.on('error', function(err) {
         adapter.log.warn('[' + client.id + '] ' + err);
     });
 };
@@ -511,13 +575,18 @@ function main() {
     //noinspection JSUnresolvedVariable
     adapter.config.pass = decode('Zgfr56gFe87jJOM', adapter.config.pass);
     adapter.config.encryptionKey = decode('Zgfr56gFe87jJOM', adapter.config.encryptionKey);
-
+	
+	//
     if (!adapter.config.user) {
         adapter.log.error('Empty user name not allowed!');
         process.stop(-1);
         return;
     }
-
+	
+	// create default nodes
+	// ..
+	
+	//
     if (adapter.config.secure) {
         // Load certificates
         adapter.getCertificates(function (err, certificates, leConfig) {
