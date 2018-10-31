@@ -37,6 +37,13 @@ The following preferences have to be set in the Android / iOS app respectively i
 - Connection/Security/TLS               - off
 - Advanced/Encryption Key               - optional, but recommended: Add passphrase for encryption
 
+### Note
+**The states within ioBroker will be generated when the specific payload is received! This means the locations in ioBroker will be generated the first time the user leaves or enters the location.**
+Below you will see the target structure
+
+![Settings](img/structure.png)
+
+
 
 ### Regions configuration
 To setup locations within the owntracks adapter, you have to create regions in the owntracks Android / iOS app.
