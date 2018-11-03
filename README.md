@@ -42,8 +42,8 @@ Please verify owntracks is connected to iobroker instance via the "Status" entry
 ![Settings](img/connection.jpg)
 
 
-### Note
-**The states within ioBroker will be generated when the specific payload is received! This means the locations in ioBroker will be generated the first time the user leaves or enters the location.**
+### IMPORTANT NOTE!
+**The states within ioBroker will be generated when the specific payload is received!! This means the locations in ioBroker will be generated the first time the user leaves or enters the location.**
 Below you will see the target structure
 
 ![Settings](img/structure.png)
