@@ -129,6 +129,8 @@ class AvatarEditor
 	getAvatars()
 	{
 		var that = this;
+		that.avatars = [];
+		
 		$(this.domId + ' .avatar').not(this.templateId).each(function(i, avatar)
 		{
 			that.avatars.push({
