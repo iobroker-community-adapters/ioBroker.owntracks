@@ -68,11 +68,12 @@ systemDictionary = {
 	
 	
 	
-	"key_info": {
-		"en": "Payload Encryption",
-		"de": "Verschlüsselung der Benachrichtigungen"
+	"other_info": {
+		"en": "Other Settings",
+		"de": "Weitere Einstellungen"
 	},
-	"encryptionKey":	{"en": "Encryption Key",	"de": "Verschlüsselung Passphrase"},
+	"encryptionKey":	{"en": "Encryption Key for Payload Encryption",	"de": "Passphrase zur Verschlüsselung der Benachrichtigungen"},
+	"webSocket":	{"en": "Use Websockets",	"de": "Websockets aktivieren"},
 	
 	
 	

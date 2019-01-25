@@ -12,8 +12,9 @@ class AvatarEditor
 	 * Constructor.
 	 *
 	 */
-    constructor(domId, templateId, errorId)
+    constructor(cb, domId, templateId, errorId)
 	{
+		this.cb = cb || function() {};
 		this.domId = domId || '#avatars';
 		this.templateId = templateId || '.template';
 		this.errorId = errorId || '.errorMessage';
@@ -23,26 +24,26 @@ class AvatarEditor
 		var that = this;
 		$('body')
 			.on('click', '.avatar-add', function() {that.addAvatar()})
-			.on('click', '.avatar-upload', function() {that.uploadAvatar($(this).parents('.avatar'))})
-			.on('click', '.avatar-delete', function() {that.deleteAvatar($(this).parents('.avatar'))});
+			.on('click', '.avatar-upload', function(e) {$(e.currentTarget).parents('.avatar').find('.file-upload').trigger('click')})
+			.on('click', '.avatar-delete', function() {that.deleteAvatar($(this).parents('.avatar'))})
 		
-		// attach save function
-		$('[data-name="name"]').change(function() {onChange()}).keyup(function() {$(this).trigger('change')});
+			// attach upload
+			.on('change', '.file-upload', function(e)
+			{
+				e.preventDefault();
+				that.uploadAvatar(e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0], $(e.currentTarget).parents('.avatar'));
+			})
 		
-		// attach upload
-		$('.file-upload').on('change', function(e)
-		{
-			event.preventDefault();
-			that.uploadAvatar(event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0]);
-		});
-		$(this.domId).find(nodeId).find('.file-upload').trigger('click');
+			// attach save function
+			.on('change', '[data-name="name"]', function() {that.cb()})
+			.on('keyup', '[data-name="name"]', function() {that.cb()});
 	}
 	
 	/**
 	 * Upload new avatar.
 	 *
 	 */
-	uploadAvatar(event)
+	uploadAvatar(file, element)
 	{
 		var that = this;
 		
@@ -57,16 +58,22 @@ class AvatarEditor
 		var reader = new FileReader();
 		reader.onload = function(evt)
 		{
-			var text;
+			var img;
 			try
 			{
-				text = evt.target.result; // string has form data:;base64,TEXT==
-				that.resizeImage(text, function(result)
+				img = evt.target.result; // string has form data:;base64,TEXT==
+				
+				// validate image
+				if (img.indexOf('data:image') === -1)
 				{
-					var pictures = getPictures();
-					pictures[$('#drop-file').data('index')].base64 = result;
-					onChange();
-					showPictures(pictures);
+					$(that.errorId).removeClass('hidden').text(_('File not an image!'));
+					return false;
+				}
+				
+				// resize image
+				that.resizeImage(img, function(result)
+				{
+					that.updAvatar({base64: img}, element);
 				});
 				
 				$(that.errorId).addClass('hidden').text('');
@@ -95,7 +102,8 @@ class AvatarEditor
 		var ch     = canvas.height;
 
 		var img = new Image;
-		img.onload = function() {
+		img.onload = function()
+		{
 			var iw        = img.width;
 			var ih        = img.height;
 			var scale     = Math.min((maxW / iw), (maxH / ih));
@@ -106,11 +114,12 @@ class AvatarEditor
 			ctx.drawImage(img,0,0,iwScaled,ihScaled);
 			callback(canvas.toDataURL());
 		};
-		try {
+		
+		try
+		{
 			img.src = srcBase64;
-		} catch (e) {
-			callback(srcBase64);
 		}
+		catch(e) {callback(srcBase64)}
 	}
 	
 	/**
@@ -127,6 +136,8 @@ class AvatarEditor
 				base64: $(avatar).find('.picture > img').attr('src')
 			});
 		});
+		
+		return that.avatars;
 	}
 	
 	/**
@@ -137,6 +148,7 @@ class AvatarEditor
 	{
 		$(this.domId).find(nodeId).remove();
 		this.getAvatars();
+		this.cb();
 	}
 	
 	/**
@@ -165,34 +177,19 @@ class AvatarEditor
 		
 		$(this.domId).append(template.removeClass(this.templateId.replace(/\./gi, ' ') + ' hidden'));
 	}
-
-	
-	
 	
 	/**
-	 *
+	 * Update avatar.
 	 *
 	 */
-	setPicture(name, base64)
+	updAvatar(avatar, element)
 	{
-		var pictures = getPictures();
-		var id = 1;
-		if (!name) {
-			var found;
-			do {
-				found = false;
-				name = _('User') + ' ' + id;
-				for (var i = 0; i < pictures.length; i++) {
-					if (pictures[i].name === name) {
-						found = true;
-						id++
-					}
-				}
-			} while (found);
-		}
-
-		pictures.push({name: name, base64: base64 || ''});
-		onChange();
-		showPictures(pictures);
+		if (avatar != undefined && avatar.base64 !== undefined)
+			element.find('.picture').append('<img width="64" class="image" src="' + avatar.base64 + '" />')
+		
+		if (avatar != undefined && avatar.name !== undefined)
+			element.find('[data-name="name"]').val(avatar.name);
+		
+		this.cb();
 	}
 }

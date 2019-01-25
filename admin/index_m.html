@@ -18,6 +18,7 @@
 	<script>
 	<!--
 	var key = 'Zgfr56gFe87jJOM';
+	var Editor;
 	
 	function encode(key, value) {
 		var result = '';
@@ -38,7 +39,7 @@
 	// load
 	function load(settings, onChange)
 	{
-		var Editor = new AvatarEditor();
+		Editor = new AvatarEditor(onChange);
 		
 		// decode
 		settings.pass = decode(key, settings.pass || "");
@@ -47,8 +48,8 @@
         $('#encryptionKey').val(settings.encryptionKey);
 		
 		// fill states to table
-		var states = settings.states || [];
-		values2table('config_http', states, onChange);
+		//var states = settings.states || [];
+		//values2table('config_http', states, onChange);
 		
 		// fill pictures
 		Editor.addAvatars(settings.pictures);
@@ -74,8 +75,8 @@
 	function save(callback)
 	{
 		var obj = {
-			states: table2values('config_http'),
-			//pictures: getPictures()
+			//states: table2values('config_http'),
+			pictures: Editor.getAvatars()
 		};
 		
 		// encode
@@ -105,6 +106,8 @@
 	<link rel="stylesheet" type="text/css" href="admin.css">
 	<style>
 	.dropdown-content.select-dropdown {top: 49px !important}
+	/*.file-upload {position:absolute; top:-100px;}*/
+	.file-upload {display: none}
 	</style>
 	
 </head>
@@ -136,6 +139,7 @@
 				<div class="col s12">
 					
 					<!-- TABS -->
+					<!--
 					<div class="row" style="margin-bottom: 0">
 						<div class="col s12">
 							<ul class="tabs">
@@ -144,8 +148,10 @@
 							</ul>
 						</div>
 					</div>
+					-->
 					
 					<!-- HTTP -->
+					<!--
 					<div class="row" id="config_http">
 						<div class="col s12">
 							<div class="row box">
@@ -166,6 +172,7 @@
 							</div>
 						</div>
 					</div>
+					-->
 					
 					<!-- MQTT -->
 					<div class="row" id="config_mqtt">
@@ -228,7 +235,7 @@
 											<tr class="avatar template hidden"> <!-- make sure .avatar is assigned -->
 												<td class="picture"></td>
 												<td><input type="text" data-name="name" /></td>
-												<td><a class="btn-floating waves-effect waves-light green avatar-upload"><i class="material-icons">cloud_upload</i><input type="file" class="file-upload" style="display: none"></a> / <a class="btn-floating waves-effect waves-light red avatar-delete"><i class="material-icons">delete</i></a></td>
+												<td><input type="file" class="file-upload" /><a class="btn-floating waves-effect waves-light green avatar-upload"><i class="material-icons">cloud_upload</i></a> / <a class="btn-floating waves-effect waves-light red avatar-delete"><i class="material-icons">delete</i></a></td>
 											</tr>
 										</tbody>
 									</table>
@@ -239,18 +246,26 @@
 						</div>
 					</div>
 					
-					<!-- ENCRYPTION KEY -->
+					<!-- OTHER SETTINGS -->
 					<div class="row" style="margin-bottom: 0">
 						<div class="col s12 m12">
-							<p class="translate title">key_info</p>
+							<p class="translate title">other_info</p>
 						</div>
 					</div>
 					<div class="row box">
-						<div class="col s12">
+						<div class="col s6">
 							<div class="row">
-								<div class="input-field col s6 m6">
-									<input id="encryptionKey" type="text"/>
+								<div class="input-field col s12 m12">
+									<input id="encryptionKey" type="text" />
 									<label for="encryptionKey" class="translate">encryptionKey</label>
+								</div>
+							</div>
+						</div>
+						<div class="col s6">
+							<div class="row">
+								<div class="input-field col s12 m12">
+									<input class="value" id="webSocket" type="checkbox" />
+									<label for="webSocket" class="translate">webSocket</label>
 								</div>
 							</div>
 						</div>
