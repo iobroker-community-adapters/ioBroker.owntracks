@@ -516,10 +516,13 @@ var cltFunction = function(client)
     client.on('close', function(err) {
         adapter.log.info('Client [' + client.id + '] closed');
         delete clients[client.id];
-		
-		// set user disconnected
+	
+	// set user disconnected
+	if (client._subsID !== undefined)
+	{
 		var u = getUser(Object.keys(client._subsID).toString().split('/'));
 		if (u.ident !== false) setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
+	}
     });
 
     client.on('error', function(err) {
