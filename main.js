@@ -538,6 +538,7 @@ function initMqttServer(config) {
         emitEvents: true // default
     };
 
+	config.webSocket = true;
     config.port = parseInt(config.port, 10) || 1883;
 
     if (config.ssl) {
