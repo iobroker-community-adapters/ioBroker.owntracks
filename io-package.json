@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.5.0",
+        "version": "0.5.1",
         "title": "OwnTracks adapter",
         "desc": {
             "en": "ioBroker OwnTracks Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker OwnTracks драйвер"
         },
         "news": {
+            "0.5.1": {
+                "en": "Fixed an error when connection got closed",
+                "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird"
+            },
             "0.5.0": {
                 "en": "Added support for defined locations",
                 "de": "Unterstützung für Regionen hinzugefügt"
