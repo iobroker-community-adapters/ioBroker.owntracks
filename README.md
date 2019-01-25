@@ -81,6 +81,9 @@ The name must be equal to DeviceID in OwnTracks app.
 
 ## Changelog
 
+### 0.5.1 (2019-01-25)
+* (zefau) fixed an error when connection got closed
+
 ### 0.5.0 (2018-10-14)
 * (zefau) Added support for locations
 
