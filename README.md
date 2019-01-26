@@ -81,6 +81,10 @@ The name must be equal to DeviceID in OwnTracks app.
 
 ## Changelog
 
+### 0.6.0 (2019-01-26)
+* (zefau) Added Admin v3 / materialized support
+* (zefau) Added option for websockets in the adapter settings
+
 ### 0.5.1 (2019-01-25)
 * (zefau) fixed an error when connection got closed
 
