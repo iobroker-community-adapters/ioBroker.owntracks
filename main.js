@@ -236,7 +236,7 @@ var cltFunction = function(client)
         var isAck = true;
         var topic   = packet.topic;
         var message = packet.payload;
-        adapter.log.debug('publish "' + topic + '": ' + message);
+        adapter.log.silly('publish "' + topic + '": ' + message);
 
         if (packet.qos == 1) {
             client.puback({ messageId: packet.messageId});
@@ -308,7 +308,7 @@ var cltFunction = function(client)
 		}
 		
 		// log
-		adapter.log.info('Received '+(obj.encryption ? 'encrypted' : 'unencrypted')+' payload: '+JSON.stringify(obj));
+		adapter.log.debug('Received '+(obj.encryption ? 'encrypted' : 'unencrypted')+' payload: '+JSON.stringify(obj));
 		
 		// TYPE: transition
 		// User has entered or left a region
