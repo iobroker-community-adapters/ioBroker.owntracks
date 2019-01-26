@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.5.1",
+        "version": "0.6.0",
         "title": "OwnTracks adapter",
         "desc": {
             "en": "ioBroker OwnTracks Adapter",
@@ -9,6 +9,10 @@
             "ru": "ioBroker OwnTracks драйвер"
         },
         "news": {
+            "0.6.0": {
+                "en": "Added Admin v3 / materialized support",
+                "de": "Admin v3 support"
+            },
             "0.5.1": {
                 "en": "Fixed an error when connection got closed",
                 "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird"
