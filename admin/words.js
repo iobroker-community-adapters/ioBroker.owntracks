@@ -73,6 +73,10 @@ systemDictionary = {
 		"de": "Weitere Einstellungen"
 	},
 	"encryptionKey":	{"en": "Encryption Key for Payload Encryption",	"de": "Passphrase zur Verschlüsselung der Benachrichtigungen"},
+	"togglePassword": {
+		"en": "show / hide password",
+		"de": "Passwort zeigen / vergeben"
+	},
 	"webSocket":	{"en": "Use Websockets",	"de": "Websockets aktivieren"},
 	
 	

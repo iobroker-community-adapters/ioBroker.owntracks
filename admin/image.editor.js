@@ -187,7 +187,10 @@ class AvatarEditor
 	updAvatar(avatar, element)
 	{
 		if (avatar != undefined && avatar.base64 !== undefined)
+		{
+			element.find('.picture img').remove();
 			element.find('.picture').append('<img width="64" class="image" src="' + avatar.base64 + '" />')
+		}
 		
 		if (avatar != undefined && avatar.name !== undefined)
 			element.find('[data-name="name"]').val(avatar.name);

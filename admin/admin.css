@@ -2,7 +2,7 @@
  * Admin styles.
  *
  * @author Zefau <zefau@mailbox.org>
- * @version 0.3.0
+ * @version 0.3.1 <26/01/2019>
  *
  */
 .m select {display: block !important}
@@ -23,6 +23,9 @@
 
 img {margin: 5px}
 a.active {font-weight: bold}
+a:hover {text-decoration: underline}
+.small {font-size: 10px}
+
 p.title {margin-bottom: 0}
 p.subtitle {padding: 0 .75rem}
 p.errorMessage {

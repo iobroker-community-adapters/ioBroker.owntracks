@@ -256,8 +256,9 @@
 						<div class="col s6">
 							<div class="row">
 								<div class="input-field col s12 m12">
-									<input id="encryptionKey" type="text" />
+									<input id="encryptionKey" type="password" />
 									<label for="encryptionKey" class="translate">encryptionKey</label>
+									<a href="#" class="translate small" onClick="$('#encryptionKey').attr('type', $('#encryptionKey').attr('type') == 'password' ? 'text' : 'password');">togglePassword</a>
 								</div>
 							</div>
 						</div>
