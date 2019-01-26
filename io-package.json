@@ -54,10 +54,15 @@
         "readme": "https://github.com/ioBroker/ioBroker.owntracks/blob/master/README.md",
         "loglevel": "info",
         "type": "geoposition",
+		"materialize": true,
         "authors": [
             {
                 "name": "bluefox",
                 "email": "dogafox@gmail.com"
+            },
+            {
+                "name": "Zefau",
+                "email": "zefau@mailbox.org"
             }
         ]
     },
