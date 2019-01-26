@@ -472,17 +472,22 @@ var cltFunction = function(client)
         //Subscribe on owntracks/+/+/waypoint
 
         // send to client all images
-        if (adapter.config.pictures && adapter.config.pictures.length) {
-            setTimeout(function () {
-                for (var p = 0; p < adapter.config.pictures.length; p++) {
-                    var text = adapter.config.pictures[p].base64.split(',')[1]; // string has form data:;base64,TEXT==
-                    sendState2Client(client, 'owntracks/' + adapter.config.user + '/' + adapter.config.pictures[p].name + '/info',
-                        JSON.stringify({
-                            _type: 'card',
-                            name: adapter.config.pictures[p].name,
-                            face: text
-                        })
-                    );
+        if (adapter.config.pictures && adapter.config.pictures.length)
+		{
+            setTimeout(function() {
+                for (var p = 0; p < adapter.config.pictures.length; p++)
+				{
+					if (adapter.config.pictures[p].base64 !== undefined)
+					{
+						var text = adapter.config.pictures[p].base64.split(',')[1]; // string has form data:;base64,TEXT==
+						sendState2Client(client, 'owntracks/' + adapter.config.user + '/' + adapter.config.pictures[p].name + '/info',
+							JSON.stringify({
+								_type: 'card',
+								name: adapter.config.pictures[p].name,
+								face: text
+							})
+						);
+					}
                 }
             }, 200);
         }
