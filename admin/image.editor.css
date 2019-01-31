@@ -1,0 +1,28 @@
+/**
+ * Image editor styles.
+ *
+ * @version 0.1.0
+ *
+ */
+#drop-zone {
+	width: calc(100% - 10px);
+	height: calc(100% - 10px);
+	position: absolute;
+	opacity: 0.8;
+	top: 0;
+	left: 0;
+	background: #eee;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	z-index: 1;
+	font-size: 32px;
+	font-weight: bold;
+	text-align: center;
+	border: 5px dashed darkgray;
+}
+
+.dropZone-error {
+	background: #faa !important;
+	color: #f00;
+}

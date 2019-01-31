@@ -1,99 +1,45 @@
 {
     "common": {
-        "name": "owntracks",
-        "version": "0.5.1",
-        "title": "OwnTracks adapter",
+        "name": "nello",
+        "version": "2.0.0",
+        "title": "nello.io adapter",
         "desc": {
-            "en": "ioBroker OwnTracks Adapter",
-            "de": "ioBroker OwnTracks Adapter",
-            "ru": "ioBroker OwnTracks драйвер"
+            "en": "Conects your intercom with your ioBroker",
+            "de": "Verbindet deine Gegensprechanlage mit deinem ioBroker"
         },
         "news": {
-            "0.5.1": {
-                "en": "Fixed an error when connection got closed",
-                "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird"
-            },
-            "0.5.0": {
-                "en": "Added support for defined locations",
-                "de": "Unterstützung für Regionen hinzugefügt"
-            },
-            "0.4.0": {
-                "en": "Added support for encryption key (on Android see Preferences -> Advanced -> Encryption Key)",
-                "de": "Unterstützung zur Verschlüsselung hinzugefügt (auf Android unter Preferences -> Advanced -> Encryption Key)"
-            },
-            "0.3.0": {
-                "en": "Fix handling of publish messages",
-                "de": "Problem in der Abarbeitung von publish-Nachrichten behoben"
-            },
-            "0.2.0": {
-                "en": "added two properties timestamp and datetime",
-                "de": "Timestamp und datetime sind hinzugefügt",
-                "ru": "Добавлены время последнего сообщения в разных форматах"
-            },
-            "0.1.1": {
-                "en": "add pictures",
-                "de": "Unterstützung von Bildern",
-                "ru": "Возможность добавить иконки"
-            },
-            "0.1.0": {
-                "en": "initial checkin",
-                "de": "Erste version",
-                "ru": "первая версия"
+            "2.0.0": {
+                "en": "added visual timeline of nello events",
+                "de": "Visualierung der Timeline / Events hinzugefügt"
             }
         },
         "platform": "Javascript/Node.js",
         "mode": "daemon",
-        "icon": "owntracks.png",
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.owntracks/master/admin/owntracks.png",
+        "icon": "nello.png",
+        "extIcon": "https://raw.githubusercontent.com/Zefau/ioBroker.nello/master/admin/nello.png",
         "keywords": [
-            "owntracks",
-            "position",
-            "gps",
-            "geo"
+            "nello",
+            "door"
         ],
-        "readme": "https://github.com/ioBroker/ioBroker.owntracks/blob/master/README.md",
+        "readme": "https://github.com/Zefau/ioBroker.nello/blob/master/README.md",
         "loglevel": "info",
-        "type": "geoposition",
+        "type": "hardware",
+		"materialize": true,
+		"compact": true,
+		"enabled": true,
+		"localLink": "%web_protocol%://%ip%:%web_port%/nello/index.html",
+        "messagebox": true,
+		"subscribe": "messagebox",
         "authors": [
             {
-                "name": "bluefox",
-                "email": "dogafox@gmail.com"
+                "name": "Zefau",
+                "email": "zefau@mailbox.org"
             }
         ]
     },
     "native": {
-        "port": 1883,
-        "user": "iobroker",
-        "pass": "",
-        "secure": false,
-        "pictures": [],
-        "bind": "0.0.0.0",
-        "certPublic": "defaultPublic",
-        "certPrivate": "defaultPrivate",
-        "certChained": "",
-        "leEnabled": false,
-        "leUpdate": false,
-        "leCheckPort": 80
     },
     "objects": [],
     "instanceObjects": [
-        {
-            "_id": "users",
-            "type": "channel",
-            "common": {
-                "role": "users",
-                "name": "List of users"
-            },
-            "native": {}
-        },
-        {
-            "_id": "locations",
-            "type": "channel",
-            "common": {
-                "role": "locations",
-                "name": "List of locations with present users"
-            },
-            "native": {}
-        }
     ]
 }

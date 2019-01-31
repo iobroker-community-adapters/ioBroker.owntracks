@@ -1,0 +1,284 @@
+<html lang="en">
+<head>
+	<title>ioBroker.owntracks adapter</title>
+	
+	<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+	<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+
+	<script src="../../lib/js/jquery-3.2.1.min.js"></script>
+	<script src="../../socket.io/socket.io.js"></script>
+
+	<script src="../../js/translate.js"></script>
+	<script src="../../lib/js/materialize.js"></script>
+	<script src="../../js/adapter-settings.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="image.editor.css">
+	<script src="image.editor.js"></script>
+	
+	<script>
+	<!--
+	var key = 'Zgfr56gFe87jJOM';
+	var Editor;
+	
+	function encode(key, value) {
+		var result = '';
+		for(var i = 0; i < value.length; i++) {
+			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+		}
+		return result;
+	}
+
+	function decode(key, value) {
+		var result = '';
+		for(var i = 0; i < value.length; i++) {
+			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+		}
+		return result;
+	}
+	
+	// load
+	function load(settings, onChange)
+	{
+		Editor = new AvatarEditor(onChange);
+		
+		// decode
+		settings.pass = decode(key, settings.pass || "");
+		settings.encryptionKey = decode(key, settings.encryptionKey || "");
+        $('#pass, #passRepeat').val(settings.pass);
+        $('#encryptionKey').val(settings.encryptionKey);
+		
+		// fill states to table
+		//var states = settings.states || [];
+		//values2table('config_http', states, onChange);
+		
+		// fill pictures
+		Editor.addAvatars(settings.pictures);
+		
+		// fill IP adresses to select
+        getIPs(function(ips)
+		{
+			var id = '#bind';
+			var options = '';
+            for (var i=0; i < ips.length; i++)
+                options += '<option value="' + ips[i].address + '">' + ips[i].name + '</option>';
+			
+			$(id).html(options)
+            $(id + '.value').val(settings.bind);
+			$(id).select();
+        });
+		
+		// load settings
+		_load(settings, onChange);
+	}
+	
+	// save
+	function save(callback)
+	{
+		var obj = {
+			//states: table2values('config_http'),
+			pictures: Editor.getAvatars()
+		};
+		
+		// encode
+		if ($('#pass').val() !== $('#passRepeat').val())
+		{
+			alert('Passwords do not match!');
+			return;
+		}
+		
+		obj.pass = encode(key, $('#pass').val());
+		obj.encryptionKey = encode(key, $('#encryptionKey').val());
+		
+		_save(callback, obj);
+	}
+	
+	// page loaded
+	$(window).on('load', function()
+	{
+		// trigger change
+		$('#pass, #passRepeat, #encryptionKey').on('keyup', function() {$('#user').trigger('change')});
+		
+	});
+	// -->
+	</script>
+	<script src="admin.js"></script>
+	<script src="words.js"></script>
+	<link rel="stylesheet" type="text/css" href="admin.css">
+	<style>
+	.dropdown-content.select-dropdown {top: 49px !important}
+	/*.file-upload {position:absolute; top:-100px;}*/
+	.file-upload {display: none}
+	</style>
+	
+</head>
+<body>
+
+
+<div class="m adapter-container">
+
+	<!-- TABS -->
+	<div class="row">
+		<div class="col s12">
+			<ul class="tabs">
+				<li class="tab col s3"><a class="active translate" href="#config">tab_config</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/ioBroker/ioBroker.owntracks#setup-instructions">tab_setup</a></li>
+				<li class="tab col s3"><a target="_blank" class="translate" href="https://github.com/ioBroker/ioBroker.owntracks#iobrokerowntracks">tab_info</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- CONFIG -->
+	<div class="row" id="config">
+		<div class="col s12 m12 page">
+			<div class="row" style="margin-bottom: 0">
+				<div class="col s12 m12">
+					<p class="translate title">connection_info</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					
+					<!-- TABS -->
+					<!--
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12">
+							<ul class="tabs">
+								<li class="tab col s3"><a class="translate" href="#config_http">tab_http</a></li>
+								<li class="tab col s3"><a class="active translate" href="#config_mqtt">tab_mqtt</a></li>
+							</ul>
+						</div>
+					</div>
+					-->
+					
+					<!-- HTTP -->
+					<!--
+					<div class="row" id="config_http">
+						<div class="col s12">
+							<div class="row box">
+								
+								<div class="col s12">
+									<a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+									<table class="table-values">
+										<thead>
+											<tr>
+												<th data-name="state" style="width: 50%" class="translate">state</th>
+												<th data-name="active" style="width: 70px" data-type="checkbox" class="translate">enabled</th>
+												<th data-buttons="delete" style="width: 120px"></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					-->
+					
+					<!-- MQTT -->
+					<div class="row" id="config_mqtt">
+						<div class="col s12">
+							<div class="row box">
+								
+								<div class="col s12">
+									<!-- IP & port -->
+									<div class="row">
+										<div class="input-field col s8 m8">
+											<select class="value" id="bind"></select>
+											<label for="bind" class="translate">ip</label>
+										</div>
+										<div class="input-field col s4 m4">
+											<input class="value" type="number" id="port" size="5"  maxlength="5" />
+											<label for="port" class="translate">port</label>
+										</div>
+									</div>
+									
+									<!-- user & password -->
+									<div class="row">
+										<div class="input-field col s4 m4">
+											<input class="value" id="user" type="text"/>
+											<label for="user" class="translate">username</label>
+										</div>
+										<div class="input-field col s4 m4">
+											<input type="password" id="pass"/>
+											<label for="pass" class="translate">password</label>
+										</div>
+										<div class="input-field col s4 m4">
+											<input type="password" id="passRepeat"/>
+											<label for="passRepeat" class="translate">passRepeat</label>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							
+							<!-- PICTURES -->
+							<div class="row" style="margin-bottom: 0">
+								<div class="col s12 m12">
+									<p class="translate title">pictures_info</p>
+								</div>
+							</div>
+							<div class="row box">
+								<div class="col s12">
+									<a class="btn-floating waves-effect waves-light blue avatar-add"><i class="material-icons">add</i></a>
+									
+									<p class="errorMessage hidden"></p>
+									
+									<table>
+										<thead>
+											<tr>
+												<th style="width: 20%" class="translate">picture</th>
+												<th style="width: 70%" class="translate">name</th>
+												<th style="width: 10%"><span class="translate">upload</span> / <span class="translate">delete</span></th>
+											</tr>
+										</thead>
+										<tbody id="avatars">
+											<tr class="avatar template hidden"> <!-- make sure .avatar is assigned -->
+												<td class="picture"></td>
+												<td><input type="text" data-name="name" /></td>
+												<td><input type="file" class="file-upload" /><a class="btn-floating waves-effect waves-light green avatar-upload"><i class="material-icons">cloud_upload</i></a> / <a class="btn-floating waves-effect waves-light red avatar-delete"><i class="material-icons">delete</i></a></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+					<!-- OTHER SETTINGS -->
+					<div class="row" style="margin-bottom: 0">
+						<div class="col s12 m12">
+							<p class="translate title">other_info</p>
+						</div>
+					</div>
+					<div class="row box">
+						<div class="col s6">
+							<div class="row">
+								<div class="input-field col s12 m12">
+									<input id="encryptionKey" type="password" />
+									<label for="encryptionKey" class="translate">encryptionKey</label>
+									<a href="#" class="translate small" onClick="$('#encryptionKey').attr('type', $('#encryptionKey').attr('type') == 'password' ? 'text' : 'password');">togglePassword</a>
+								</div>
+							</div>
+						</div>
+						<div class="col s6">
+							<div class="row">
+								<div class="input-field col s12 m12">
+									<input class="value" id="webSocket" type="checkbox" />
+									<label for="webSocket" class="translate">webSocket</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			
+			</div>
+		</div>
+	</div>
+	<!-- /CONFIG -->
+	
+</div>
+
+</html>
