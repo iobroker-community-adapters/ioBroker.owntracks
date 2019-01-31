@@ -8,14 +8,15 @@
 
 [OwnTracks](http://owntracks.org/) is an app for android and iOS.
 
-Link for:
-- Andorid - [https://play.google.com/store/apps/details?id=org.owntracks.android](https://play.google.com/store/apps/details?id=org.owntracks.android)
-- iOS - [https://itunes.apple.com/de/app/owntracks/id692424691?mt=8](https://itunes.apple.com/de/app/owntracks/id692424691?mt=8)
+App sends  your position (position of device) continuously to a specific server. In our case it will be ioBroker server. Either the MQTT protocol will be used for communication or the ioBroker.cloud / ioBroker.iot adapter.
 
-App sends continuously your position (position of device) to some specific server. In our case it will be ioBroker server. The MQTT protocol will be used for communication.
+Link for:
+- Android: [https://play.google.com/store/apps/details?id=org.owntracks.android](https://play.google.com/store/apps/details?id=org.owntracks.android)
+- iOS: [https://itunes.apple.com/de/app/owntracks/id692424691?mt=8](https://itunes.apple.com/de/app/owntracks/id692424691?mt=8)
+
 
 ## Setup instructions
-
+### Connection configuration (using MQTT server)
 OwnTracks Adapter starts on port 1883 (configurable) a MQTT server to receive the messages from devices with coordinates.
 The problem is that this server must be reachable from internet. 
 Normally there is a router or firewall, that must be configured to forward traffic. 
@@ -74,6 +75,14 @@ The name must be equal to DeviceID in OwnTracks app.
 
 
 ## Changelog
+
+### 0.6.0 (2019-01-27)
+* (zefau) Added Admin v3 / materialized support
+* (zefau) Added option for websockets in the adapter settings
+* (zefau) Added support for [ioBroker compact mode](https://forum.iobroker.net/viewtopic.php?f=24&t=20387#p213466)
+
+### 0.5.1 (2019-01-25)
+* (zefau) fixed an error when connection got closed
 
 ### 0.5.0 (2018-10-14)
 * (zefau) Added support for locations
