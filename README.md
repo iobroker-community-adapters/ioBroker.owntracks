@@ -17,10 +17,6 @@ Link for:
 
 ## Setup instructions
 ### Connection configuration (using ioBroker.cloud or ioBroker.iot; recommended!)
-
-
-
-
 ### Connection configuration (using MQTT server)
 OwnTracks Adapter starts on port 1883 (configurable) a MQTT server to receive the messages from devices with coordinates.
 The problem is that this server must be reachable from internet. 
@@ -80,6 +76,11 @@ The name must be equal to DeviceID in OwnTracks app.
 
 
 ## Changelog
+
+### 0.6.0 (2019-01-27)
+* (zefau) Added Admin v3 / materialized support
+* (zefau) Added option for websockets in the adapter settings
+* (zefau) Added support for [ioBroker compact mode](https://forum.iobroker.net/viewtopic.php?f=24&t=20387#p213466)
 
 ### 0.5.1 (2019-01-25)
 * (zefau) fixed an error when connection got closed
