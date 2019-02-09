@@ -1,14 +1,18 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.6.0",
-        "title": "OwnTracks adapter",
+        "version": "0.6.1",
+        "title": "OwnTracks - Your location companion",
         "desc": {
             "en": "ioBroker OwnTracks Adapter",
             "de": "ioBroker OwnTracks Adapter",
             "ru": "ioBroker OwnTracks драйвер"
         },
         "news": {
+            "0.6.1": {
+                "en": "Added Compact mode and Gulp translations",
+                "de": "Unterstützung Compact mode und Gulp Übersetzung"
+            },
             "0.6.0": {
                 "en": "Added Admin v3 / materialized support",
                 "de": "Admin v3 support"
@@ -45,6 +49,7 @@
                 "ru": "первая версия"
             }
         },
+	"license": "MIT",
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "owntracks.png",
@@ -58,7 +63,8 @@
         "readme": "https://github.com/ioBroker/ioBroker.owntracks/blob/master/README.md",
         "loglevel": "info",
         "type": "geoposition",
-        "materialize": true,
+		"materialize": true,
+		"compact": true,
         "authors": [
             {
                 "name": "bluefox",
