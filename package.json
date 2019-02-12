@@ -1,7 +1,7 @@
 {
   "name": "iobroker.owntracks",
-  "version": "0.6.0",
-  "description": "ioBroker OwnTracks Adapter",
+  "version": "0.6.1",
+  "description": "OwnTracks - Your location companion",
   "author": {
     "name": "bluefox",
     "email": "dogafox@gmail.com"
@@ -36,14 +36,16 @@
     "mqtt-connection": "^2.1.1"
   },
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-replace": "^1.0.1",
-    "grunt-contrib-jshint": "^1.1.0",
+    "chai": "^4.2.0",
+    "grunt": "^1.0.3",
+    "grunt-contrib-jshint": "^2.0.0",
+    "grunt-http": "^2.3.1",
     "grunt-jscs": "^3.0.1",
-    "grunt-http": "^2.2.0",
-    "mocha": "^4.1.0",
-    "chai": "^4.1.2",
-    "request": "^2.75.0"
+    "grunt-replace": "^1.0.1",
+    "mocha": "^5.2.0",
+    "request": "^2.88.0",
+    "gulp": "^4.0.0",
+    "axios": "^0.18.0"
   },
   "main": "main.js",
   "scripts": {

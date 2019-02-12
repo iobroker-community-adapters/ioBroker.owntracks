@@ -1,14 +1,33 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.6.0",
-        "title": "OwnTracks adapter",
+        "version": "0.6.1",
+        "title": "OwnTracks - Your location companion",
         "desc": {
-            "en": "ioBroker OwnTracks Adapter",
-            "de": "ioBroker OwnTracks Adapter",
-            "ru": "ioBroker OwnTracks драйвер"
-        },
+			"en": "OwnTracks allows you to keep track of your own location in ioBroker",
+			"de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
+			"ru": "OwnTracks позволяет отслеживать ваше собственное местоположение в ioBroker",
+			"pt": "OwnTracks permite que você acompanhe sua própria localização no ioBroker",
+			"nl": "Met OwnTracks kunt u uw eigen locatie in ioBroker bijhouden",
+			"fr": "OwnTracks vous permet de garder une trace de votre propre emplacement dans ioBroker",
+			"it": "OwnTracks ti consente di tenere traccia della tua posizione in ioBroker",
+			"es": "OwnTracks le permite realizar un seguimiento de su propia ubicación en ioBroker",
+			"pl": "OwnTracks pozwala na śledzenie własnej lokalizacji w ioBroker",
+			"zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
+		},
         "news": {
+            "0.6.1": {
+				"en": "Added Compact mode and Gulp translations",
+				"de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
+				"ru": "Добавлены компактный режим и перевод Gulp",
+				"pt": "Adicionado modo Compact e traduções Gulp",
+				"nl": "Compact-modus en Gulp-vertalingen toegevoegd",
+				"fr": "Ajout des traductions en mode Compact et Gulp",
+				"it": "Aggiunte le modalità Compact e Gulp",
+				"es": "Agregado el modo compacto y Gulp traducciones",
+				"pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
+				"zh-cn": "增加了紧凑模式和Gulp翻译"
+			},
             "0.6.0": {
                 "en": "Added Admin v3 / materialized support",
                 "de": "Admin v3 support"
@@ -45,6 +64,7 @@
                 "ru": "первая версия"
             }
         },
+	"license": "MIT",
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "owntracks.png",
@@ -58,7 +78,8 @@
         "readme": "https://github.com/ioBroker/ioBroker.owntracks/blob/master/README.md",
         "loglevel": "info",
         "type": "geoposition",
-        "materialize": true,
+		"materialize": true,
+		"compact": true,
         "authors": [
             {
                 "name": "bluefox",
