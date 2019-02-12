@@ -37,11 +37,6 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "grunt": "^1.0.3",
-    "grunt-contrib-jshint": "^2.0.0",
-    "grunt-http": "^2.3.1",
-    "grunt-jscs": "^3.0.1",
-    "grunt-replace": "^1.0.1",
     "mocha": "^5.2.0",
     "request": "^2.88.0",
     "gulp": "^4.0.0",
