@@ -256,7 +256,6 @@ const cltFunction = function (client) {
      * EVENT: publish
      */
     client.on('publish', packet => {
-        const isAck = true;
         const topic = packet.topic;
         const message = packet.payload;
         adapter.log.silly('publish "' + topic + '": ' + message);
