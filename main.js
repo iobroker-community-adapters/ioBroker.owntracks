@@ -545,9 +545,13 @@ const cltFunction = function (client) {
         adapter.log.info('Client [' + client.id + '] disconnected');
 
         // set user disconnected
-        const u = getUser(Object.keys(client._subsID).toString().split('/'));
-        if (u.ident !== false) {
-            setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
+        if (client._subsID) {
+            const u = getUser(Object.keys(client._subsID).toString().split('/'));
+            if (u.ident !== false) {
+                setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
+            }
+        } else {
+            setValue(nodes.users.connected, {id: client.id, name: client.id, val: false});
         }
 
         // disconnect
