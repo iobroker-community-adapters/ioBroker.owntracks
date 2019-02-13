@@ -76,7 +76,7 @@ The name must be equal to DeviceID in OwnTracks app.
 
 ## Changelog
 
-### 0.6.1 (2019-02-09)
+### 0.6.2 (2019-02-14)
 * (zefau) Added support for [ioBroker compact mode](https://forum.iobroker.net/viewtopic.php?f=24&t=20387#p213466)
 * (zefau) Added support for Gulp translations
 

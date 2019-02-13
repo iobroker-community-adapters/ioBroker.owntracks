@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.6.1",
+        "version": "0.6.2",
         "title": "OwnTracks - Your location companion",
         "desc": {
 			"en": "OwnTracks allows you to keep track of your own location in ioBroker",
@@ -16,7 +16,7 @@
 			"zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
 		},
         "news": {
-            "0.6.1": {
+            "0.6.2": {
 				"en": "Added Compact mode and Gulp translations",
 				"de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
 				"ru": "Добавлены компактный режим и перевод Gulp",

@@ -3,12 +3,12 @@
 /* jslint node: true */
 'use strict';
 const adapterName = require('./io-package.json').common.name;
-const utils = require('./lib/utils'); // Get common adapter utils
+const utils       = require('./lib/utils'); // Get common adapter utils
 
-//const LE      = require(utils.controllerDir + '/lib/letsencrypt.js');
+//const LE        = require(utils.controllerDir + '/lib/letsencrypt.js');
 const createStreamServer = require('create-stream-server');
-const mqtt = require('mqtt-connection');
-const sodium = require('libsodium-wrappers');
+const mqtt        = require('mqtt-connection');
+const sodium      = require('libsodium-wrappers');
 
 let adapter;
 let server;
@@ -111,8 +111,9 @@ function decode(key, value) {
  * Convert a timestamp to datetime
  */
 function getDateTime(timestamp) {
-    if (timestamp === undefined)
+    if (timestamp === undefined) {
         return '';
+    }
 
     const date = new Date(timestamp);
     const year    = date.getFullYear();
@@ -177,9 +178,9 @@ function setValue(node, state) {
 function getUser(data) {
     return {
         namespace: data[0] || false,
-        ident: data[1] || false,
-        userName: data[2] || false,
-        userId: data[2].replace(/\s|\./g, '_').toLowerCase() || false
+        ident:     data[1] || false,
+        userName:  data[2] || false,
+        userId:    (data[2] && data[2].replace(/\s|\./g, '_').toLowerCase()) || false
     };
 }
 
@@ -221,14 +222,18 @@ const cltFunction = function (client) {
     /*
      * EVENT: connect
      */
-    client.on('connect', function (packet) {
+    client.on('connect', packet => {
         client.id = packet.clientId;
         if (adapter.config.user) {
+            const password = packet.password.toString();
+
             if (adapter.config.user !== packet.username ||
-                adapter.config.pass !== packet.password) {
-                adapter.log.warn('Client [' + packet.clientId + '] has invalid password (' + packet.password + ') or username (' + packet.username + ')');
+                adapter.config.pass !== password) {
+                adapter.log.warn('Client [' + packet.clientId + '] has invalid password (' + password + ') or username (' + packet.username + ')');
                 client.connack({returnCode: 4});
-                if (clients[client.id]) delete clients[client.id];
+                if (clients[client.id]) {
+                    delete clients[client.id];
+                }
                 client.stream.end();
                 return;
             }
@@ -239,22 +244,26 @@ const cltFunction = function (client) {
         clients[client.id] = client;
 
         // set user connected
-        const u = getUser(packet.will.topic.split('/'));
-        u.ident !== false && setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: true});
+        if (packet.will) {
+            const u = getUser(packet.will.topic.split('/'));
+            u.ident !== false && setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: true});
+        } else {
+            setValue(nodes.users.connected, {id: packet.clientId, name: packet.clientId, val: true});
+        }
     });
 
     /*
      * EVENT: publish
      */
-    client.on('publish', function (packet) {
+    client.on('publish', packet => {
         const isAck = true;
         const topic = packet.topic;
         const message = packet.payload;
         adapter.log.silly('publish "' + topic + '": ' + message);
 
-        if (packet.qos == 1) {
+        if (packet.qos === 1) {
             client.puback({messageId: packet.messageId});
-        } else if (packet.qos == 2) {
+        } else if (packet.qos === 2) {
             client.pubrec({messageId: packet.messageId});
         }
         // "owntracks/iobroker/klte":
@@ -269,7 +278,7 @@ const cltFunction = function (client) {
         // }
         const u = getUser(topic.split('/'));
         if (u.ident !== adapter.config.user) {
-            adapter.log.warn('publish "' + topic + '": invalid user name - "' + parts[1] + '"');
+            adapter.log.warn('publish "' + topic + '": invalid user name - "' + u.ident + '"');
             return;
         }
 
@@ -537,7 +546,9 @@ const cltFunction = function (client) {
 
         // set user disconnected
         const u = getUser(Object.keys(client._subsID).toString().split('/'));
-        if (u.ident !== false) setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
+        if (u.ident !== false) {
+            setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
+        }
 
         // disconnect
         client.stream.end();
@@ -554,7 +565,11 @@ const cltFunction = function (client) {
             // set user disconnected
             if (client._subsID !== undefined) {
                 const u = getUser(Object.keys(client._subsID).toString().split('/'));
-                if (u.ident !== false) setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
+                if (u.ident !== false) {
+                    setValue(nodes.users.connected, {id: u.userId, name: u.userName, val: false});
+                }
+            } else {
+                setValue(nodes.users.connected, {id: client.id, name: client.id, val: false});
             }
         }
     });
