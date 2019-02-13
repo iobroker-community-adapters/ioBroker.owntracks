@@ -22,7 +22,7 @@
 	
 	function encode(key, value) {
 		var result = '';
-		for(var i = 0; i < value.length; i++) {
+		for (var i = 0; i < value.length; i++) {
 			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
 		}
 		return result;
@@ -30,20 +30,19 @@
 
 	function decode(key, value) {
 		var result = '';
-		for(var i = 0; i < value.length; i++) {
+		for (var i = 0; i < value.length; i++) {
 			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
 		}
 		return result;
 	}
 	
 	// load
-	function load(settings, onChange)
-	{
+	function load(settings, onChange) {
 		Editor = new AvatarEditor(onChange);
 		
 		// decode
-		settings.pass = decode(key, settings.pass || "");
-		settings.encryptionKey = decode(key, settings.encryptionKey || "");
+		settings.pass = decode(key, settings.pass || '');
+		settings.encryptionKey = decode(key, settings.encryptionKey || '');
         $('#pass, #passRepeat').val(settings.pass);
         $('#encryptionKey').val(settings.encryptionKey);
 		
@@ -55,59 +54,53 @@
 		Editor.addAvatars(settings.pictures);
 		
 		// fill IP adresses to select
-        getIPs(function(ips)
-		{
+        getIPs(function (ips) {
 			var id = '#bind';
 			var options = '';
             for (var i=0; i < ips.length; i++)
                 options += '<option value="' + ips[i].address + '">' + ips[i].name + '</option>';
 			
-			$(id).html(options)
+			$(id).html(options);
             $(id + '.value').val(settings.bind);
 			$(id).select();
         });
-		
+
+		$('#pass, #passRepeat, #encryptionKey').on('keyup', function () {
+			$('#user').trigger('change');
+		});
+
 		// load settings
 		_load(settings, onChange);
 	}
 	
 	// save
-	function save(callback)
-	{
+	function save(callback) {
 		var obj = {
 			//states: table2values('config_http'),
 			pictures: Editor.getAvatars()
 		};
-		
+		var pass = $('#pass').val();
 		// encode
-		if ($('#pass').val() !== $('#passRepeat').val())
-		{
+		if (pass !== $('#passRepeat').val()) {
 			alert('Passwords do not match!');
 			return;
 		}
 		
-		obj.pass = encode(key, $('#pass').val());
+		obj.pass = encode(key, pass);
 		obj.encryptionKey = encode(key, $('#encryptionKey').val());
 		
 		_save(callback, obj);
 	}
-	
-	// page loaded
-	$(window).on('load', function()
-	{
-		// trigger change
-		$('#pass, #passRepeat, #encryptionKey').on('keyup', function() {$('#user').trigger('change')});
-		
-	});
+
 	// -->
 	</script>
 	<script src="admin.js"></script>
 	<script src="words.js"></script>
 	<link rel="stylesheet" type="text/css" href="admin.css">
 	<style>
-	.dropdown-content.select-dropdown {top: 49px !important}
-	/*.file-upload {position:absolute; top:-100px;}*/
-	.file-upload {display: none}
+		.dropdown-content.select-dropdown {top: 49px !important}
+		/*.file-upload {position:absolute; top:-100px;}*/
+		.file-upload {display: none}
 	</style>
 	
 </head>

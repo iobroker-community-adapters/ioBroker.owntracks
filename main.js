@@ -1,5 +1,6 @@
-/* jshint -W097 */// jshint strict:false
-/*jslint node: true */
+/* jshint -W097 */
+/* jshint strict:false */
+/* jslint node: true */
 'use strict';
 const adapterName = require('./io-package.json').common.name;
 const utils = require('./lib/utils'); // Get common adapter utils
@@ -609,8 +610,8 @@ function initMqttServer(config) {
 
 function main() {
     //noinspection JSUnresolvedVariable
-    adapter.config.pass = decode('Zgfr56gFe87jJOM', adapter.config.pass || "");
-    adapter.config.encryptionKey = decode('Zgfr56gFe87jJOM', adapter.config.encryptionKey || "");
+    adapter.config.pass = decode('Zgfr56gFe87jJOM', adapter.config.pass || '');
+    adapter.config.encryptionKey = decode('Zgfr56gFe87jJOM', adapter.config.encryptionKey || '');
 
     if (!adapter.config.user) {
         adapter.log.error('Empty user name not allowed!');
