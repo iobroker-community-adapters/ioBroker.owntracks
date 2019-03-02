@@ -20,7 +20,7 @@
       "email": "zefau@mailbox.org"
     }
   ],
-  "homepage": "https://github.com/ioBroker/ioBroker.owntracks",
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.owntracks",
   "license": "MIT",
   "keywords": [
     "ioBroker",
@@ -28,7 +28,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ioBroker/ioBroker.owntracks"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.owntracks"
   },
   "dependencies": {
     "libsodium-wrappers": "^0.7.3",
@@ -47,7 +47,7 @@
     "test": "node node_modules/mocha/bin/mocha --exit"
   },
   "bugs": {
-    "url": "https://github.com/ioBroker/ioBroker.owntracks/issues"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/issues"
   },
   "readmeFilename": "README.md"
 }
