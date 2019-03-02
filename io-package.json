@@ -68,14 +68,14 @@
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "owntracks.png",
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.owntracks/master/admin/owntracks.png",
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.owntracks/master/admin/owntracks.png",
         "keywords": [
             "owntracks",
             "position",
             "gps",
             "geo"
         ],
-        "readme": "https://github.com/ioBroker/ioBroker.owntracks/blob/master/README.md",
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/blob/master/README.md",
         "loglevel": "info",
         "type": "geoposition",
 		"materialize": true,
