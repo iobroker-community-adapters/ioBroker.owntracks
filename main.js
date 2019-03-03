@@ -41,8 +41,10 @@ const nodes = {
         'location': {
             'current': {'tree': 'users.%id%.location.current', 'description': 'Current location of the %name%'},
             'entered': {'tree': 'users.%id%.location.entered', 'description': 'Timestamp the user has entered the current location', 'common': {'type': 'number'}},
+            'enteredDatetime': {'tree': 'users.%id%.location.enteredDatetime', 'description': 'Datetime the user has entered the current location'},
             'last': {'tree': 'users.%id%.location.last', 'description': 'Last location of the %name%'},
             'left': {'tree': 'users.%id%.location.left', 'description': 'Timestamp the user has left the last location', 'common': {'type': 'number'}},
+            'leftDatetime': {'tree': 'users.%id%.location.leftDatetime', 'description': 'Datetime the user has left the last location'},
             'history': {'tree': 'users.%id%.location.history', 'description': 'History of the user entering / leaving locations'}
         }
     },
@@ -341,6 +343,7 @@ const cltFunction = function (client) {
                     // update user
                     setValue(nodes.users.location.current, {id: u.userId, name: u.userName, val: locationName});
                     setValue(nodes.users.location.entered, {id: u.userId, name: u.userName, val: obj.tst});
+                    setValue(nodes.users.location.enteredDatetime, {id: u.userId, name: u.userName, val: getDateTime(obj.tst * 1000)});
 
                     // write to history of user
                     adapter.getState(nodes.users.location.history.tree.replace('%id%', u.userId), (err, state) => {
@@ -398,6 +401,7 @@ const cltFunction = function (client) {
                             val: state === null ? '' : state.val
                         });
                         setValue(nodes.users.location.left, {id: u.userId, name: u.userName, val: obj.tst});
+                        setValue(nodes.users.location.leftDatetime, {id: u.userId, name: u.userName, val: getDateTime(obj.tst * 1000)});
                     });
 
                     // update user
