@@ -3,7 +3,7 @@
 /* jslint node: true */
 'use strict';
 const adapterName = require('./io-package.json').common.name;
-const utils       = require('./lib/utils'); // Get common adapter utils
+const utils = require('@iobroker/adapter-core'); // Get common adapter utils
 
 //const LE        = require(utils.controllerDir + '/lib/letsencrypt.js');
 const createStreamServer = require('create-stream-server');
