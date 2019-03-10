@@ -3,7 +3,7 @@
 ![Logo](admin/owntracks.png)
 # ioBroker.owntracks
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.owntracks.svg)](https://www.npmjs.com/package/iobroker.owntracks)
+![Number of Installations](http://iobroker.live/badges/owntracks-installed.svg) ![Number of Installations](http://iobroker.live/badges/owntracks-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.owntracks.svg)](https://www.npmjs.com/package/iobroker.owntracks)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.owntracks.svg)](https://www.npmjs.com/package/iobroker.owntracks)
 
 [![NPM](https://nodei.co/npm/iobroker.owntracks.png?downloads=true)](https://nodei.co/npm/iobroker.owntracks/)
