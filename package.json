@@ -42,7 +42,7 @@
     "request": "^2.88.0",
     "gulp": "^4.0.0",
     "axios": "^0.18.0",
-    "@iobroker/testing": "^1.1.10"
+    "@iobroker/testing": "^1.1.14"
   },
   "main": "main.js",
   "scripts": {
