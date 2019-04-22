@@ -7,57 +7,18 @@ const utils       = require('./lib/utils'); // Get common adapter utils
 
 //const LE        = require(utils.controllerDir + '/lib/letsencrypt.js');
 const createStreamServer = require('create-stream-server');
-const mqtt        = require('mqtt-connection');
+const mqtt        = require('mqtt');
 const sodium      = require('libsodium-wrappers');
+
+const nodes = require(__dirname + '/NODES.json');
 
 let adapter;
 let server;
-const clients = {};
+let client;
 
+const clients = {};
 let users = '';
 
-const nodes = {
-    /*
-     * FORMAT
-     * tree {string} ID / Name within tree
-     * description {string} Description within the tree. You may use %name% to use current value
-     * common {object} Common settings
-     * common.type {string} Typ (default is string)
-     * common.role {string} Role (default is state)
-     * native {object} Native settings
-     */
-    'users': {
-        'id': {'tree': 'users.%id%.id', 'description': 'User ID of user %name%'},
-        'name': {'tree': 'users.%id%.name', 'description': 'User name of user %name%'},
-        'connected': {'tree': 'users.%id%.connected', 'description': 'Connection status of user %name%', 'common': {'type': 'boolean'}},
-
-        'battery': {'tree': 'users.%id%.battery', 'description': 'Device battery level for %name%', 'common': {'type': 'number', 'role': 'battery', 'unit': '%', 'min': 0, 'max': 100}},
-        'latitude': {'tree': 'users.%id%.latitude', 'description': 'Latitude for %name%', 'common': {'type': 'number', 'role': 'gps.latitude'}},
-        'longitude': {'tree': 'users.%id%.longitude', 'description': 'Longitude for %name%', 'common': {'type': 'number', 'role': 'gps.longitude'}},
-        'accuracy': {'tree': 'users.%id%.accuracy', 'description': 'Accuracy for %name%', 'common': {'type': 'number', 'uni': 'm'}},
-        'encryption': {'tree': 'users.%id%.encryption', 'description': 'Encryption status for %name%', 'common': {'type': 'boolean'}},
-        'timestamp': {'tree': 'users.%id%.timestamp', 'description': 'Timestamp of last refresh for %name%', 'common': {'type': 'number'}},
-        'datetime': {'tree': 'users.%id%.datetime', 'description': 'Datetime of last refresh for %name%'},
-        'location': {
-            'current': {'tree': 'users.%id%.location.current', 'description': 'Current location of the %name%'},
-            'entered': {'tree': 'users.%id%.location.entered', 'description': 'Timestamp the user has entered the current location', 'common': {'type': 'number'}},
-            'enteredDatetime': {'tree': 'users.%id%.location.enteredDatetime', 'description': 'Datetime the user has entered the current location'},
-            'last': {'tree': 'users.%id%.location.last', 'description': 'Last location of the %name%'},
-            'left': {'tree': 'users.%id%.location.left', 'description': 'Timestamp the user has left the last location', 'common': {'type': 'number'}},
-            'leftDatetime': {'tree': 'users.%id%.location.leftDatetime', 'description': 'Datetime the user has left the last location'},
-            'history': {'tree': 'users.%id%.location.history', 'description': 'History of the user entering / leaving locations'}
-        }
-    },
-    'locations': {
-        'id': {'tree': 'locations.%id%.id', 'description': 'Location ID of location %name%'},
-        'name': {'tree': 'locations.%id%.name', 'description': 'Location name of location %name%'},
-        'users': {'tree': 'locations.%id%.users', 'description': 'Present users in location %name%'},
-        'presence': {'tree': 'locations.%id%.presence', 'description': 'Indicator whether any user is present in location %name%', 'common': {'type': 'boolean'}},
-        'history': {'tree': 'locations.%id%.history', 'description': 'History of users entering / leaving location %name%'},
-        'timestamp': {'tree': 'locations.%id%.timestamp', 'description': 'Timestamp of last change within the location %name%', 'common': {'type': 'number'}},
-        'datetime': {'tree': 'locations.%id%.datetime', 'description': 'Datetime of last change within the location %name%'}
-    }
-};
 
 /*
  * ADAPTER
@@ -82,6 +43,12 @@ function startAdapter(options) {
                 server.destroy();
                 server = null;
             }
+            
+            if (client) {
+                client.destroy();
+                client = null;
+            }
+            
             callback();
         } catch (e) {
             callback();
