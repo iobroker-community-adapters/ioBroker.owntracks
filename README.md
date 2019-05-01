@@ -76,37 +76,18 @@ The name must be equal to DeviceID in OwnTracks app.
 
 ## Changelog
 
-### 0.6.2 (2019-02-14)
-* (zefau) Added support for [ioBroker compact mode](https://forum.iobroker.net/viewtopic.php?f=24&t=20387#p213466)
-* (zefau) Added support for Gulp translations
+### 1.0.0-beta.1 (2019-05-01)
+Refactored entire code and removed all MQTT package dependencies (to avoid / fix security issues and reduce complexity). Thus, added [MQTT adapter as dependency](https://github.com/ioBroker/ioBroker.mqtt) to manage all MQTT communication.
+This major changes comes with the following advantages:
+- use both MQTT server as well as MQTT client (to use Internet MQTT server, such as [CloudMQTT](https://www.cloudmqtt.com/)) functionality (this adapter subscribes to foreign states of MQTT adapter)
+- user avatars available in both server and client variant
+- support TLS and websockets
 
-### 0.6.0 (2019-01-27)
-* (zefau) Added Admin v3 / materialized support
-* (zefau) Added option for websockets in the adapter settings
-
-### 0.5.1 (2019-01-25)
-* (zefau) fixed an error when connection got closed
-
-### 0.5.0 (2018-10-14)
-* (zefau) Added support for locations
-
-### 0.4.0 (2018-10-14)
-* (zefau) Added support for encryption key
-
-### 0.3.0 (2018-06-05)
-* (matspi) Fix handling of publish messages
-
-### 0.2.0 (2017-01-03)
-* (jp112sdl) added two properties timestamp and datetime
-
-### 0.1.1 (2016-09-05)
-* (bluefox) add pictures
-
-### 0.1.0 (2016-09-04)
-* (bluefox) initial release
 
 ## License
 The MIT License (MIT)
+
+Copyright (c) 2019 Zefau <zefau@mailbox.org>
 
 Copyright (c) 2016-2019 bluefox <dogafox@gmail.com>
 
