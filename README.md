@@ -148,7 +148,7 @@ For each user within `locations.<userId>`
 
 ### 1.0.0-beta.1 (2019-05-01)
 Refactored entire code and removed all MQTT package dependencies (to avoid / fix security issues and reduce complexity). Thus, added [MQTT adapter as dependency](https://github.com/ioBroker/ioBroker.mqtt) to manage all MQTT communication.
-This major changes comes with the following advantages:
+This major change comes with the following advantages:
 - use both MQTT server as well as MQTT client (to use Internet MQTT server, such as [CloudMQTT](https://www.cloudmqtt.com/)) functionality (this adapter subscribes to foreign states of MQTT adapter)
 - user avatars available in both server and client variant
 - support TLS and websockets
