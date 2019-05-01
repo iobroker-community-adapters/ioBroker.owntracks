@@ -26,8 +26,8 @@
     },
 	
     "locations": {
-        "id": {"node": "locations.%id%.id", "description": "Location ID of location %name%"},
-        "desc": {"node": "locations.%id%.name", "description": "Location name of location %name%"},
+        "id": {"node": "locations.%id%.locationId", "description": "Location ID of location %name%"},
+        "desc": {"node": "locations.%id%.locationName", "description": "Location name of location %name%"},
         "users": {"node": "locations.%id%.users", "description": "Present users in location %name%"},
         "presence": {"node": "locations.%id%.presence", "description": "Indicator whether any user is present in location %name%", "common": {"type": "boolean"}},
         "history": {"node": "locations.%id%.history", "description": "History of users entering / leaving location %name%", "common": {"type": "string", "role": "json"}},
