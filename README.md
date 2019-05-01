@@ -1,57 +1,48 @@
 ![Logo](admin/owntracks.png)
 # ioBroker.owntracks
+[OwnTracks](https://owntracks.org/) allows you to keep track of your own location. You can build your private location diary or share it with your family and friends. OwnTracks is open-source and uses open protocols for communication so you can be sure your data stays secure and private. You may find the respective smartphone apps in the [Apple App Store (iOS)](https://itunes.apple.com/us/app/mqttitude/id692424691?mt=8) or in the [Google Play Store (Android)](https://play.google.com/store/apps/details?id=org.owntracks.android).
 
+![Number of Installations](http://iobroker.live/badges/owntracks-installed.svg)
+![Stable version](http://iobroker.live/badges/owntracks-stable.svg)
 [![NPM version](http://img.shields.io/npm/v/iobroker.owntracks.svg)](https://www.npmjs.com/package/iobroker.owntracks)
+[![Travis CI](https://travis-ci.org/iobroker-community-adapters/ioBroker.owntracks.svg?branch=master)](https://travis-ci.org/iobroker-community-adapters/ioBroker.owntracks)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.owntracks.svg)](https://www.npmjs.com/package/iobroker.owntracks)
 
 [![NPM](https://nodei.co/npm/iobroker.owntracks.png?downloads=true)](https://nodei.co/npm/iobroker.owntracks/)
 
-[OwnTracks](http://owntracks.org/) is an app for android and iOS.
 
-App sends  your position (position of device) continuously to a specific server. In our case it will be ioBroker server. Either the MQTT protocol will be used for communication or the ioBroker.cloud / ioBroker.iot adapter.
-
-Link for:
-- Android: [https://play.google.com/store/apps/details?id=org.owntracks.android](https://play.google.com/store/apps/details?id=org.owntracks.android)
-- iOS: [https://itunes.apple.com/de/app/owntracks/id692424691?mt=8](https://itunes.apple.com/de/app/owntracks/id692424691?mt=8)
+**Table of contents**
+1. [Setup instructions](#setup-instructions)
+   1. [using MQTT server](#)
+   2. [using MQTT client](#)
+2. [Channels & States](#channels--states)
+3. [Changelog](#changelog)
+4. [Licence](#license)
 
 
 ## Setup instructions
-### Connection configuration (using MQTT server)
-OwnTracks Adapter starts on port 1883 (configurable) a MQTT server to receive the messages from devices with coordinates.
-The problem is that this server must be reachable from internet. 
-Normally there is a router or firewall, that must be configured to forward traffic. 
+You have to setup ioBroker.owntracks in connection with the [MQTT adapter](https://github.com/ioBroker/ioBroker.mqtt), which will be installed as a dependency. The MQTT adapters may be setup as either a MQTT server or as a MQTT client.
 
-### App & adapter configuration
-The following preferences have to be set in the Android / iOS app respectively in the ioBroker adapter:
-- Connection/Mode                       - MQTT private
-- Connection/Host/Host                  - IP address of your system or DynDNS domain. E.g. http://www.noip.com/ lets use domain name instead of IP address.
-- Connection/Host/Port                  - 1883 or your port on your router
-- Connection/Host/WebSockets            - false
-- Connection/Identification/Username    - iobroker
-- Connection/Identification/Password    - from adapter settings
-- Connection/Identification/DeviceID    - Name of device or person. For this device the states will be created. E.g. if deviceID is "Mark", following states will be created after first contact: 
+The following tables shows a comparision:
 
-    - owntracks.0.users.Mark.longitude
-    - owntracks.0.users.Mark.latitude   
-    
-- Connection/Identification/TrackerID   - Short name of user (up to 2 letters) to write it on map.
-- Connection/Security/TLS               - off
-- Advanced/Encryption Key               - optional, but recommended: Add passphrase for encryption
+| Method | Advantages / Disadvantages |
+| ------ | ------------- |
+| MQTT server | + fully encrypted payload possible<br>- setup of an [dynamics DNS (DynDNS)](https://en.wikipedia.org/wiki/Dynamic_DNS) required<br>- open Port in your router configuration necessary for communication ([read more here](https://owntracks.org/booklet/guide/broker/#firewall)) |
+| MQTT client | + fully encrypted payload possible<br>- usage of an Internet MQTT means all traffic is routed through an unknown provider ([read more here](https://owntracks.org/booklet/guide/scenarios/#mqtt-mode))<br>- support for TLS only possible if available at the respective provider |
 
-Please verify owntracks is connected to iobroker instance via the "Status" entry in the drawer:
-
-![Settings](img/connection.jpg)
-
-
-### IMPORTANT NOTE!
-**The states within ioBroker will be generated when the specific payload is received!! This means the locations in ioBroker will be generated the first time the user leaves or enters the location.**
+**IMPORTANT NOTE:** The states within ioBroker will be generated when the specific payload is received! This means the locations in ioBroker will be generated **the first time the user leaves or enters the location**.
 Below you will see the target structure
 
 ![Settings](img/structure.png)
 
 
+### General configuration (using either MQTT server or client)
 
-### Regions configuration
+#### Icon settings (within the ioBroker.owntracks adapter)
+You can define for every user an icon. Just upload per drag&drop or with mouse click you image. It will be automatically scaled to 64x64.
+__The name must be equal to DeviceID in OwnTracks app.__
+
+#### Regions configuration
 To setup locations within the owntracks adapter, you have to create regions in the owntracks Android / iOS app.
 To do so, go to "Regions" in the drawer
 
@@ -66,12 +57,41 @@ Use the location button in the top right corner to retrieve current location or 
 ![Settings](img/regions3.jpg)
 
 
-### Icon settings (within the ioBroker.owntracks adapter)
-You can define for every user an icon. Just upload per drag&drop or with mouse click you image. It will be automatically scaled to 64x64.
+### Connection configuration (using MQTT server)
+You have to complete the following steps in order to setup ioBroker.owntracks via MQTT server:
+1. Setup a DynDNS pointing to your IP address as well as open a port in your router
+2. Configure MQTT adapter as server with the respective port
+3. Configure all clients with the server settings
 
-The name must be equal to DeviceID in OwnTracks app.
+#### 1. Setup DynDNS and port
+tbd
 
-![Settings](img/settings1.png)
+#### 2. Configure MQTT adapter
+
+#### 3. Configure all clients
+
+The following preferences have to be set in the Android / iOS app:
+
+| Setting | Configuration |
+| ------- | ------------- |
+| Connection/Mode | MQTT private |
+| Connection/Host/Host | IP address of your system or DynDNS domain |
+| Connection/Host/Port | 1883 or your port on your router |
+| Connection/Host/WebSockets | false |
+| Connection/Identification/Username | iobroker |
+| Connection/Identification/Password | from adapter settings |
+| Connection/Identification/DeviceID | Name of device or person |
+| Connection/Identification/TrackerID | Short name of user (up to 2 letters) to write it on map. |
+| Connection/Security/TLS | off |
+| Advanced/Encryption Key | optional, but recommended: Add passphrase for encryption |
+
+Please verify owntracks is connected to iobroker instance via the "Status" entry in the drawer:
+
+![Settings](img/connection.jpg)
+
+
+### Connection configuration (using MQTT client)
+tbd
 
 
 ## Changelog
