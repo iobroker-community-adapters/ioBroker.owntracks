@@ -12,15 +12,18 @@
 
 
 **Table of contents**
-1. [Setup instructions](#setup-instructions)
-   1. [using MQTT server](#)
-   2. [using MQTT client](#)
+1. [Setup instructions](#1-setup-instructions)
+   1. [General configuration](#11-general-configuration-using-either-mqtt-server-or-client)
+   2. [using MQTT server](#12-connection-configuration-using-mqtt-server)
+   3. [using MQTT client](#13-connection-configuration-using-mqtt-client)
 2. [Channels & States](#channels--states)
+   1. [Locations](#21-locations)
+   2. [Users](#22-users)
 3. [Changelog](#changelog)
 4. [Licence](#license)
 
 
-## Setup instructions
+## 1. Setup instructions
 You have to setup ioBroker.owntracks in connection with the [MQTT adapter](https://github.com/ioBroker/ioBroker.mqtt), which will be installed as a dependency. The MQTT adapters may be setup as either a MQTT server or as a MQTT client.
 
 The following tables shows a comparision:
@@ -31,14 +34,14 @@ The following tables shows a comparision:
 | MQTT client | + fully encrypted payload possible<br>- usage of an Internet MQTT means all traffic is routed through an unknown provider ([read more here](https://owntracks.org/booklet/guide/scenarios/#mqtt-mode))<br>- support for TLS only possible if available at the respective provider |
 
 **IMPORTANT NOTE:** The states within ioBroker.owntracks will be generated when the specific payload is received! This means the locations in ioBroker will be generated **the first time the user leaves or enters the location**.
-Below you will see the target structure ([see Channels & States for detailed list](#channels--states)()):
+Below you will see the target structure ([see Channels & States for detailed list](#channels--states)):
 
-![Settings](img/structure.png)
+[![Settings](img/structure.png)](https://raw.githubusercontent.com/Zefau/ioBroker.owntracks/master/img/structure.png)
 
 
-### General configuration (using either MQTT server or client)
+### 1.1. General configuration (using either MQTT server or client)
 
-#### Icon settings (within the ioBroker.owntracks adapter)
+#### Avatar configuration (within the ioBroker.owntracks adapter)
 You can define for every user an icon. Just upload per drag&drop or with mouse click you image. It will be automatically scaled to 64x64.
 __The name must be equal to DeviceID in OwnTracks app.__
 
@@ -57,7 +60,7 @@ Use the location button in the top right corner to retrieve current location or 
 ![Settings](img/regions3.jpg)
 
 
-### Connection configuration (using MQTT server)
+### 1.2. Connection configuration (using MQTT server)
 You have to complete the following steps in order to setup ioBroker.owntracks via MQTT server:
 1. Setup a DynDNS pointing to your IP address as well as open a port in your router
 2. Configure MQTT adapter as server with the respective port
@@ -90,13 +93,13 @@ Please verify owntracks is connected to iobroker instance via the "Status" entry
 ![Settings](img/connection.jpg)
 
 
-### Connection configuration (using MQTT client)
+### 1.3. Connection configuration (using MQTT client)
 tbd
 
-## Channels & States
+## 2. Channels & States
 If you successfully setup ioBroker.owntracks, the following channels and states will be created **when the respective payload has been received**:
 
-### Locations
+### 2.1. Locations
 For each location within `locations.<locationId>`
 
 | State | Description (possbile Values) |
@@ -112,7 +115,7 @@ For each location within `locations.<locationId>`
 | ```refreshedDatetime``` | Date-Time of last change within the location |
 | ```users``` | Present users in location |
 
-### Users
+### 2.2. Users
 For each user within `locations.<userId>`
 
 | Channel | State | Description (possbile Values) |
