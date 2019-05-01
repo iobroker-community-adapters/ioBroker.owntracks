@@ -30,8 +30,8 @@ The following tables shows a comparision:
 | MQTT server | + fully encrypted payload possible<br>- setup of an [dynamics DNS (DynDNS)](https://en.wikipedia.org/wiki/Dynamic_DNS) required<br>- open Port in your router configuration necessary for communication ([read more here](https://owntracks.org/booklet/guide/broker/#firewall)) |
 | MQTT client | + fully encrypted payload possible<br>- usage of an Internet MQTT means all traffic is routed through an unknown provider ([read more here](https://owntracks.org/booklet/guide/scenarios/#mqtt-mode))<br>- support for TLS only possible if available at the respective provider |
 
-**IMPORTANT NOTE:** The states within ioBroker will be generated when the specific payload is received! This means the locations in ioBroker will be generated **the first time the user leaves or enters the location**.
-Below you will see the target structure
+**IMPORTANT NOTE:** The states within ioBroker.owntracks will be generated when the specific payload is received! This means the locations in ioBroker will be generated **the first time the user leaves or enters the location**.
+Below you will see the target structure ([see Channels & States for detailed list](#channels--states)()):
 
 ![Settings](img/structure.png)
 
@@ -92,6 +92,53 @@ Please verify owntracks is connected to iobroker instance via the "Status" entry
 
 ### Connection configuration (using MQTT client)
 tbd
+
+## Channels & States
+If you successfully setup ioBroker.owntracks, the following channels and states will be created **when the respective payload has been received**:
+
+### Locations
+For each location within `locations.<locationId>`
+
+| State | Description (possbile Values) |
+|:----- |:----------------------------- |
+| ```accuracy``` | Accuracy of the geographical coordinates of location |
+| ```creation``` | Timestamp of creation time of location |
+| ```creationDatetime``` | Date-Time of creation time of location |
+| ```history``` | History of users entering / leaving location |
+| ```locationId``` | Location ID of location |
+| ```locationName``` | Location name of location |
+| ```presence``` | Indicator whether any user is present in location [```true``` or ```false```] |
+| ```refreshed``` | Timestamp of last change within the location |
+| ```refreshedDatetime``` | Date-Time of last change within the location |
+| ```users``` | Present users in location |
+
+### Users
+For each user within `locations.<userId>`
+
+| Channel | State | Description (possbile Values) |
+|:------- |:----- |:----------------------------- |
+| ```location``` | ```current``` | Current location of the user |
+| ```location``` | ```entered``` | Timestamp the user has entered the current location |
+| ```location``` | ```enteredDatetime``` | Date-Time the user has entered the current location |
+| ```location``` | ```history``` | History of the user entering / leaving locations |
+| ```location``` | ```last``` | Last location of the user |
+| ```location``` | ```left``` | Timestamp the user has left the last location |
+| ```location``` | ```leftDatetime``` | Date-Time the user has left the last location |
+| - | ```accuracy``` | Accuracy of Latitude / Longitude |
+| - | ```alt_accuracy``` | Accuracy of Altitude |
+| - | ```altitude``` | Altitude |
+| - | ```battery``` | Device battery level for the user |
+| - | ```connection``` | Connection type of the user<br>- ```w```: phone is connected to a WiFi connection<br>- ```o```: phone is offline<br>- ```m```: mobile data |
+| - | ```encryption``` | Encryption status for the user [```true``` or ```false```] |
+| - | ```latitude``` | Latitude |
+| - | ```longitude``` | Longitude |
+| - | ```refreshed``` | Timestamp of last refresh |
+| - | ```refreshedDatetime``` | Date-Time of last refresh |
+| - | ```userConnected``` | Connection status of the user [```true``` or ```false```] |
+| - | ```userId``` | User ID of the user |
+| - | ```userName``` | User name of the user |
+| - | ```userTid``` | Tracker ID of the user |
+| - | ```velocity``` | Velocity for the user |
 
 
 ## Changelog
