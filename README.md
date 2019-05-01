@@ -16,7 +16,7 @@
    1. [General configuration](#11-general-configuration-using-either-mqtt-server-or-client)
    2. [using MQTT server](#12-connection-configuration-using-mqtt-server)
    3. [using MQTT client](#13-connection-configuration-using-mqtt-client)
-2. [Channels & States](#channels--states)
+2. [Channels & States](#2-channels--states)
    1. [Locations](#21-locations)
    2. [Users](#22-users)
 3. [Changelog](#changelog)
