@@ -18,11 +18,11 @@
 	},
 	
 	"userLocation": {
-		"current": {"node": "users.%id%.location.current", "description": "Current location of the %name%"},
+		"current": {"node": "users.%id%.location.current", "description": "Current location of the %name%", "common": {"type": "string", "role": "text"}},
 		"entered": {"node": "users.%id%.location.entered", "description": "Timestamp the user has entered the current location", "convert": "datetime", "common": {"type": "number"}},
-		"last": {"node": "users.%id%.location.last", "description": "Last location of the %name%"},
+		"last": {"node": "users.%id%.location.last", "description": "Last location of the %name%", "common": {"type": "string", "role": "text"}},
 		"left": {"node": "users.%id%.location.left", "description": "Timestamp the user has left the last location", "convert": "datetime", "common": {"type": "number"}},
-		"history": {"node": "users.%id%.location.history", "description": "History of the user entering / leaving locations"}
+		"history": {"node": "users.%id%.location.history", "description": "History of the user entering / leaving locations", "common": {"type": "string", "role": "json"}}
     },
 	
     "locations": {
