@@ -141,6 +141,11 @@
         "type": "geoposition",
         "messagebox": true,
         "subscribe": "messagebox",
+        "dependencies": [
+            {
+                "mqtt": ">=2.1.0"
+            }
+        ],
         "materialize": true,
         "compact": true,
         "enabled": true,
