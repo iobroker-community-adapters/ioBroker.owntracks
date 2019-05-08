@@ -112,7 +112,7 @@ Go to the next step by clicking _Select Region_ and select the data center near 
 
 Verify your settings by clicking _Review_ and finally _Create Instance_.
 
-#### 2. Configure MQTT adapter
+#### 2. Configure MQTT Cloud Broker
 After creating the instance, go to _SETTINGS_ and set `Use username as clientid` to `Yes`:
 
 ![Settings](img/cloudmqtt_settings.png)
@@ -132,6 +132,10 @@ Your result should look like:
 ![Settings](img/cloudmqtt_acl.png)
 
 You have successfully setup CloudMQTT, you will receive messages which can be viewed via _WEBSOCKET UI_.
+
+#### 3. Configure MQTT adapter
+tbd
+
 
 ## 2. Channels & States
 If you successfully setup ioBroker.owntracks, the following channels and states will be created **when the respective payload has been received**:
