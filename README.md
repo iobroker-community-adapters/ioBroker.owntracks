@@ -30,8 +30,8 @@ The following tables shows a comparision:
 
 | Method | Advantages / Disadvantages |
 | ------ | ------------- |
-| MQTT server | + fully encrypted payload possible<br>- setup of an [dynamics DNS (DynDNS)](https://en.wikipedia.org/wiki/Dynamic_DNS) required<br>- open Port in your router configuration necessary for communication ([read more here](https://owntracks.org/booklet/guide/broker/#firewall)) |
-| MQTT client | + fully encrypted payload possible<br>- usage of an Internet MQTT means all traffic is routed through an unknown provider ([read more here](https://owntracks.org/booklet/guide/scenarios/#mqtt-mode))<br>- support for TLS only possible if available at the respective provider |
+| MQTT server | ![#c5f015](https://placehold.it/15/c5f015/000000?text=+) fully encrypted payload possible<br>![#f03c15](https://placehold.it/15/f03c15/000000?text=+) setup of an [dynamics DNS (DynDNS)](https://en.wikipedia.org/wiki/Dynamic_DNS) required<br>![#f03c15](https://placehold.it/15/f03c15/000000?text=+) open Port in your router configuration necessary for communication ([read more here](https://owntracks.org/booklet/guide/broker/#firewall)) |
+| MQTT client | ![#c5f015](https://placehold.it/15/c5f015/000000?text=+) fully encrypted payload possible<br>![#f03c15](https://placehold.it/15/f03c15/000000?text=+) usage of an Internet MQTT means all traffic is routed through an unknown provider ([read more here](https://owntracks.org/booklet/guide/scenarios/#mqtt-mode))<br>![#f03c15](https://placehold.it/15/f03c15/000000?text=+) support for TLS only possible if available at the respective provider |
 
 **IMPORTANT NOTE:** The states within ioBroker.owntracks will be generated when the specific payload is received! This means the locations in ioBroker will be generated **the first time the user leaves or enters the location**.
 Below you will see the target structure ([see Channels & States for detailed list](#channels--states)):
@@ -70,6 +70,7 @@ You have to complete the following steps in order to setup ioBroker.owntracks vi
 tbd
 
 #### 2. Configure MQTT adapter
+tbd
 
 #### 3. Configure all clients
 
@@ -94,7 +95,26 @@ Please verify owntracks is connected to iobroker instance via the "Status" entry
 
 
 ### 1.3. Connection configuration (using MQTT client)
+You have to complete the following steps in order to setup ioBroker.owntracks via MQTT client:
+1. Setup an external MQTT server hosted online, e.g. [CloudMQTT](https://www.cloudmqtt.com/)
+2. Configure MQTT Cloud Broker and setup / authenticate clients
+3. Configure MQTT adapter as client with the respective settings (URL, Port and Authentication of ioBroker)
+
+#### 1. Setup external MQTT server
+Go to [https://www.cloudmqtt.com/](https://www.cloudmqtt.com/) and sign up with a new account.
+Create a new instance, select a plan (Free plan called _Cute Cat_ works fine) and name it _ioBroker_:
+
+![Settings](img/cloudmqtt_account.png)
+
+Go to the next step by clicking _Select Region_ and select the data center near you, e.g. _EU-West-1 (Ireland)_:
+
+![Settings](img/cloudmqtt_region.png)
+
+Verify your settings by clicking _Review_ and finally _Create Instance_.
+
+#### 2. Configure MQTT adapter
 tbd
+
 
 ## 2. Channels & States
 If you successfully setup ioBroker.owntracks, the following channels and states will be created **when the respective payload has been received**:
