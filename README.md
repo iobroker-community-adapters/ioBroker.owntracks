@@ -134,7 +134,38 @@ Your result should look like:
 You have successfully setup CloudMQTT, you will receive messages which can be viewed via _WEBSOCKET UI_.
 
 #### 3. Configure MQTT adapter
-tbd
+For this step, you will find the necessary information in the _DETAILS_ section of CloudMQTT:
+
+![Settings](img/cloudmqtt_details.png)
+
+After setting up your MQTT Cloud Broker, go to ioBroker and setup a MQTT instance.
+The following tables shows the mapping from the CloudMQTT details page to your ioBroker.mqtt configuration:
+
+| CloudMQTT setting | ioBroker.MQTT configuration | Example |
+| ----------------- | --------------------------- | ------- |
+| Server | URL | `m24.cloudmqtt.com` |
+| SSL Port | Port | `24247` |
+| - | Secure | `yes` |
+
+For _Authentication settings_ you may use any user which has been authorized on CloudMQTT via _ACL_ (see above).
+Change to _MQTT SETTINGS_ tab within ioBroker.mqtt and change the following settings:
+
+| CloudMQTT setting | ioBroker.MQTT configuration | Note |
+| ----------------- | --------------------------- | ---- |
+| Subscribe patterns | `#` | |
+| Prefix for all topics | - | |
+| Mask to publish own states | mqtt.0.* | Replace 0 with your ioBroker.mqtt instance |
+| Publish only on change | `yes` | |
+| Publish own states on connect | `yes` | |
+| Trace output for every message | `no` | |
+| Send states (ack=true) too | `no` | |
+| Use different topic names for set and get | `no` | |
+| Client ID | `iobroker` | __This user has to be authorized via _ACL_ on CloudMQTT__ |
+| Publish only on change | `yes` |
+
+Finally, go to your ioBroker.owntracks instance and select the configured MQTT instance.
+
+If everything has been setup successfully, ioBroker.owntracks will create the channels and states found below.
 
 
 ## 2. Channels & States
