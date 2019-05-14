@@ -74,27 +74,48 @@ In the popup, choose `Portfreigabe` and then
 
 Save everything and you're done with this step.
 
-#### 2.1.2. Configure MQTT adapter
-tbd
+#### 2.1.2. Configure MQTT and Owntracks adapter
+Now, go to ioBroker and create a new instance of the MQTT adapter.
+As type select `Server/Broker` and type in the port choosen above, which has been opened in your router configuration (e.g. 1987). 
+
+[![MQTT Server Connection configuration](img/mqtt_server_connection.png)](img/mqtt_server_connection.png)
+
+Choose any `User` and `Password` of your choice in the `Authentication settings` section. These are required for the next step.
+
+Change to _MQTT SETTINGS_ tab within ioBroker.mqtt and change the following settings:
+
+| Setting | Configuration | Note |
+| ------- | ------------- | ---- |
+| Prefix for all topics | _leave empty_ | |
+| Mask to publish own states | mqtt.0.* | Replace 0 with your ioBroker.mqtt instance |
+| Publish only on change | `yes` | |
+| Publish own states on connect | `yes` | |
+| Publish states on subscribe | `yes` | |
+| Trace output for every message | `no` | |
+| Send states (ack=true) too | `no` | |
+| Use different topic names for set and get | `no` | |
+
+Finally, choose the configured MQTT instance within the ioBroker.owntracks adapter and optionally (but __highly recommended__) set an encryption key of your choice:
+
+[![Owntracks Adapter settings](img/owntracks_settings.png)](img/owntracks_settings.png)
 
 #### 2.1.3. Configure all clients
-
 The following preferences have to be set in the Android / iOS app:
 
-| Setting | Configuration |
+| Android Setting | Configuration |
 | ------- | ------------- |
 | Connection/Mode | MQTT private |
-| Connection/Host/Host | IP address of your system or DynDNS domain |
-| Connection/Host/Port | 1883 or your port on your router |
-| Connection/Host/WebSockets | false |
-| Connection/Identification/Username | iobroker |
-| Connection/Identification/Password | from adapter settings |
-| Connection/Identification/DeviceID | Name of device or person |
-| Connection/Identification/TrackerID | Short name of user (up to 2 letters) to write it on map. |
+| Connection/Host/Host | DynDNS address setup in first step |
+| Connection/Host/Port | Port you have chosen (e.g. 1987) |
+| Connection/Host/WebSockets | false (unless you know what you're doing) |
+| Connection/Identification/Username | The `User` you have chosen in the previous step |
+| Connection/Identification/Password | The `Password` you have chosen in the previous step |
+| Connection/Identification/DeviceID | Name of device or person (can be anything) |
+| Connection/Identification/TrackerID | Initials of device or person to write it on map (can be anything) |
 | Connection/Security/TLS | off |
-| Advanced/Encryption Key | optional, but recommended: Add passphrase for encryption |
+| Advanced/Encryption Key | __highly recommended__: Passphrase for encryption (chosen in the previous step) |
 
-Please verify owntracks is connected to iobroker instance via the "Status" entry in the drawer:
+Finally, verify if Owntracks is connected to the ioBroker instance via the "Status" entry in the drawer:
 
 ![Connection](img/connection.jpg)
 
@@ -155,10 +176,10 @@ The following tables shows the mapping from the CloudMQTT details page to your i
 For _Authentication settings_ you may use any user which has been authorized on CloudMQTT via _ACL_ (see above).
 Change to _MQTT SETTINGS_ tab within ioBroker.mqtt and change the following settings:
 
-| CloudMQTT setting | ioBroker.MQTT configuration | Note |
-| ----------------- | --------------------------- | ---- |
+| Setting | Configuration | Note |
+| ------- | ------------- | ---- |
 | Subscribe patterns | `#` | |
-| Prefix for all topics | - | |
+| Prefix for all topics | _leave empty_ | |
 | Mask to publish own states | mqtt.0.* | Replace 0 with your ioBroker.mqtt instance |
 | Publish only on change | `yes` | |
 | Publish own states on connect | `yes` | |
