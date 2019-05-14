@@ -12,18 +12,22 @@
 
 
 **Table of contents**
-1. [Setup instructions](#1-setup-instructions)
-   1. [General configuration](#11-general-configuration-using-either-mqtt-server-or-client)
-   2. [using MQTT server](#12-connection-configuration-using-mqtt-server)
-   3. [using MQTT client](#13-connection-configuration-using-mqtt-client)
-2. [Channels & States](#2-channels--states)
-   1. [Locations](#21-locations)
-   2. [Users](#22-users)
-3. [Changelog](#changelog)
-4. [Licence](#license)
+1. [Features](#1-features)
+2. [Setup instructions](#2-setup-instructions)
+   1. [using MQTT server](#21-connection-configuration-using-mqtt-server)
+   2. [using MQTT client](#22-connection-configuration-using-mqtt-client)
+   3. [additional configuration](#23-Additional-configuration-using-either-mqtt-server-or-client)
+3. [Channels & States](#3-channels--states)
+   1. [Locations](#31-locations)
+   2. [Users](#32-users)
+4. [Changelog](#changelog)
+5. [Licence](#license)
 
 
-## 1. Setup instructions
+## 1. Features
+tbd
+
+## 2. Setup instructions
 You have to setup ioBroker.owntracks in connection with the [MQTT adapter](https://github.com/ioBroker/ioBroker.mqtt), which will be installed as a dependency. The MQTT adapters may be setup as either a MQTT server or as a MQTT client.
 
 The following tables shows a comparision:
@@ -38,41 +42,19 @@ Below you will see the target structure ([see Channels & States for detailed lis
 
 [![Settings](img/structure.png)](https://raw.githubusercontent.com/Zefau/ioBroker.owntracks/master/img/structure.png)
 
-
-### 1.1. General configuration (using either MQTT server or client)
-
-#### Avatar configuration (within the ioBroker.owntracks adapter)
-You can define for every user an icon. Just upload per drag&drop or with mouse click you image. It will be automatically scaled to 64x64.
-__The name must be equal to DeviceID in OwnTracks app.__
-
-#### Regions configuration
-To setup locations within the owntracks adapter, you have to create regions in the owntracks Android / iOS app.
-To do so, go to "Regions" in the drawer
-
-![Settings](img/regions1.jpg)
-
-Create a new region by clicking the plus (+) in the top right corner
-
-![Settings](img/regions2.jpg)
-
-Use the location button in the top right corner to retrieve current location or type them in Latitude and Longitude yourself. Furthermore, specify a radius for the location. If you share the location, your Friends (see in the drawer of the Android / iOS app) get a notification when you enter / leave a location. 
-
-![Settings](img/regions3.jpg)
-
-
-### 1.2. Connection configuration (using MQTT server)
+### 2.1. Connection configuration (using MQTT server)
 You have to complete the following steps in order to setup ioBroker.owntracks via MQTT server:
 1. Setup a DynDNS pointing to your IP address as well as open a port in your router
 2. Configure MQTT adapter as server with the respective port
 3. Configure all clients with the server settings
 
-#### 1. Setup DynDNS and port
+#### 2.1.1. Setup DynDNS and port
 tbd
 
-#### 2. Configure MQTT adapter
+#### 2.1.2. Configure MQTT adapter
 tbd
 
-#### 3. Configure all clients
+#### 2.1.3. Configure all clients
 
 The following preferences have to be set in the Android / iOS app:
 
@@ -94,13 +76,13 @@ Please verify owntracks is connected to iobroker instance via the "Status" entry
 ![Settings](img/connection.jpg)
 
 
-### 1.3. Connection configuration (using MQTT client)
+### 2.2. Connection configuration (using MQTT client)
 You have to complete the following steps in order to setup ioBroker.owntracks via MQTT client:
 1. Setup an external MQTT server hosted online, e.g. [CloudMQTT](https://www.cloudmqtt.com/)
 2. Configure MQTT Cloud Broker and setup / authenticate clients
 3. Configure MQTT adapter as client with the respective settings (URL, Port and Authentication of ioBroker)
 
-#### 1. Setup external MQTT server
+#### 2.2.1. Setup external MQTT server
 Go to [https://www.cloudmqtt.com/](https://www.cloudmqtt.com/) and sign up with a new account.
 Create a new instance, select a plan (Free plan called _Cute Cat_ works fine) and name it _ioBroker_:
 
@@ -112,7 +94,7 @@ Go to the next step by clicking _Select Region_ and select the data center near 
 
 Verify your settings by clicking _Review_ and finally _Create Instance_.
 
-#### 2. Configure MQTT Cloud Broker
+#### 2.2.2. Configure MQTT Cloud Broker
 After creating the instance, go to _SETTINGS_ and set `Use username as clientid` to `Yes`:
 
 ![Settings](img/cloudmqtt_settings.png)
@@ -133,7 +115,7 @@ Your result should look like:
 
 You have successfully setup CloudMQTT, you will receive messages which can be viewed via _WEBSOCKET UI_.
 
-#### 3. Configure MQTT adapter
+#### 2.2.3. Configure MQTT adapter
 For this step, you will find the necessary information in the _DETAILS_ section of CloudMQTT:
 
 ![Settings](img/cloudmqtt_details.png)
@@ -168,10 +150,31 @@ Finally, go to your ioBroker.owntracks instance and select the configured MQTT i
 If everything has been setup successfully, ioBroker.owntracks will create the channels and states found below.
 
 
-## 2. Channels & States
+### 2.3. Additional configuration (using either MQTT server or client)
+
+#### Avatar configuration (within the ioBroker.owntracks adapter)
+You can define for every user an icon. Just upload per drag&drop or with mouse click you image. It will be automatically scaled to 64x64.
+__The name must be equal to DeviceID in OwnTracks app.__
+
+#### Regions configuration
+To setup locations within the owntracks adapter, you have to create regions in the owntracks Android / iOS app.
+To do so, go to "Regions" in the drawer
+
+![Settings](img/regions1.jpg)
+
+Create a new region by clicking the plus (+) in the top right corner
+
+![Settings](img/regions2.jpg)
+
+Use the location button in the top right corner to retrieve current location or type them in Latitude and Longitude yourself. Furthermore, specify a radius for the location. If you share the location, your Friends (see in the drawer of the Android / iOS app) get a notification when you enter / leave a location. 
+
+![Settings](img/regions3.jpg)
+
+
+## 3. Channels & States
 If you successfully setup ioBroker.owntracks, the following channels and states will be created **when the respective payload has been received**:
 
-### 2.1. Locations
+### 3.1. Locations
 For each location within `locations.<locationId>`
 
 | State | Description (possbile Values) |
@@ -187,7 +190,7 @@ For each location within `locations.<locationId>`
 | ```refreshedDatetime``` | Date-Time of last change within the location |
 | ```users``` | Present users in location |
 
-### 2.2. Users
+### 3.2. Users
 For each user within `locations.<userId>`
 
 | Channel | State | Description (possbile Values) |
