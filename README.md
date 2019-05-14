@@ -40,7 +40,7 @@ The following tables shows a comparision:
 **IMPORTANT NOTE:** The states within ioBroker.owntracks will be generated when the specific payload is received! This means the locations in ioBroker will be generated **the first time the user leaves or enters the location**.
 Below you will see the target structure ([see Channels & States for detailed list](#channels--states)):
 
-[![Settings](img/structure.png)](https://raw.githubusercontent.com/Zefau/ioBroker.owntracks/master/img/structure.png)
+[![Structure](img/structure.png)](img/structure.png)
 
 ### 2.1. Connection configuration (using MQTT server)
 You have to complete the following steps in order to setup ioBroker.owntracks via MQTT server:
@@ -49,7 +49,30 @@ You have to complete the following steps in order to setup ioBroker.owntracks vi
 3. Configure all clients with the server settings
 
 #### 2.1.1. Setup DynDNS and port
-tbd
+When setting up a local MQTT server within ioBroker, it is necessary to setup a dynamic DNS (DynDNS) which always points to your current IP address as well as open a port in your router for communication purposes.
+
+Thus, setup a DynDNS of your choice, which points to your IP address, for example https://www.noip.com/.
+Sign up to create an account and choose a hostname of your choice, e.g. `example.ddns.net`. Please keep in mind that these hostnames will expire on the free account after 30 days, which means you have to regulary login to keep them activated.
+
+Once the DynDNS is setup, configure your router to update the DynDNS respectively.
+If you own a FRITZ!Box, navigate to `Internet` - `Freigaben` - `DynDNS` and configure it according to your credentials:
+
+[![MQTT Server - Router DynDNS configuration](img/mqtt_server_router_dyndns.png)](img/mqtt_server_router_dyndns.png)
+
+Furthermore,  open a port on your router, which points to the local IP address of your ioBroker.
+Do this by navigating to `Internet` - `Freigaben` - `Portfreigaben` and choose `Gerät für Freigaben hinzufügen`. Choose your ioBroker instance in the field `Gerät` and click `Neue Freigabe`:
+
+[![MQTT Server - Router Port configuration](img/mqtt_server_router_adddevice.png)](img/mqtt_server_router_adddevice.png)
+
+In the popup, choose `Portfreigabe` and then
+- select `Andere Anwendung`,
+- type in any name in the field `Bezeichnung`,
+- select `TCP` as protocol,
+- type in your desired port in all `port` fields (e.g. 1987).
+
+[![MQTT Server - Router Port configuration](img/mqtt_server_router_port.png)](img/mqtt_server_router_port.png)
+
+Save everything and you're done with this step.
 
 #### 2.1.2. Configure MQTT adapter
 tbd
@@ -73,7 +96,7 @@ The following preferences have to be set in the Android / iOS app:
 
 Please verify owntracks is connected to iobroker instance via the "Status" entry in the drawer:
 
-![Settings](img/connection.jpg)
+![Connection](img/connection.jpg)
 
 
 ### 2.2. Connection configuration (using MQTT client)
@@ -86,22 +109,22 @@ You have to complete the following steps in order to setup ioBroker.owntracks vi
 Go to [https://www.cloudmqtt.com/](https://www.cloudmqtt.com/) and sign up with a new account.
 Create a new instance, select a plan (Free plan called _Cute Cat_ works fine) and name it _ioBroker_:
 
-![Settings](img/cloudmqtt_account.png)
+![CloudMQTT Account](img/cloudmqtt_account.png)
 
 Go to the next step by clicking _Select Region_ and select the data center near you, e.g. _EU-West-1 (Ireland)_:
 
-![Settings](img/cloudmqtt_region.png)
+![CloudMQTT Region](img/cloudmqtt_region.png)
 
 Verify your settings by clicking _Review_ and finally _Create Instance_.
 
 #### 2.2.2. Configure MQTT Cloud Broker
 After creating the instance, go to _SETTINGS_ and set `Use username as clientid` to `Yes`:
 
-![Settings](img/cloudmqtt_settings.png)
+![CloudMQTT Settings](img/cloudmqtt_settings.png)
 
 __Most importantly__, go to _USERS & ACL_ and add your desired users for the clients you are using (e.g. smartphones) and furthermore, add a specific user for your ioBroker:
 
-![Settings](img/cloudmqtt_users.png)
+![CloudMQTT Users](img/cloudmqtt_users.png)
 
 Finally, add the necessary _ACL_ for the respective users further below on the same page. Do this by
 1. select `topic`
@@ -111,14 +134,14 @@ Finally, add the necessary _ACL_ for the respective users further below on the s
 
 Your result should look like:
 
-![Settings](img/cloudmqtt_acl.png)
+![CloudMQTT ACL](img/cloudmqtt_acl.png)
 
 You have successfully setup CloudMQTT, you will receive messages which can be viewed via _WEBSOCKET UI_.
 
 #### 2.2.3. Configure MQTT adapter
 For this step, you will find the necessary information in the _DETAILS_ section of CloudMQTT:
 
-![Settings](img/cloudmqtt_details.png)
+![CloudMQTT Details](img/cloudmqtt_details.png)
 
 After setting up your MQTT Cloud Broker, go to ioBroker and setup a MQTT instance.
 The following tables shows the mapping from the CloudMQTT details page to your ioBroker.mqtt configuration:
@@ -152,23 +175,23 @@ If everything has been setup successfully, ioBroker.owntracks will create the ch
 
 ### 2.3. Additional configuration (using either MQTT server or client)
 
-#### Avatar configuration (within the ioBroker.owntracks adapter)
+#### 2.3.1 Avatar configuration (within the ioBroker.owntracks adapter)
 You can define for every user an icon. Just upload per drag&drop or with mouse click you image. It will be automatically scaled to 64x64.
 __The name must be equal to DeviceID in OwnTracks app.__
 
-#### Regions configuration
+#### 2.3.2 Regions configuration
 To setup locations within the owntracks adapter, you have to create regions in the owntracks Android / iOS app.
 To do so, go to "Regions" in the drawer
 
-![Settings](img/regions1.jpg)
+![Regions](img/regions1.jpg)
 
 Create a new region by clicking the plus (+) in the top right corner
 
-![Settings](img/regions2.jpg)
+![Regions](img/regions2.jpg)
 
 Use the location button in the top right corner to retrieve current location or type them in Latitude and Longitude yourself. Furthermore, specify a radius for the location. If you share the location, your Friends (see in the drawer of the Android / iOS app) get a notification when you enter / leave a location. 
 
-![Settings](img/regions3.jpg)
+![Regions](img/regions3.jpg)
 
 
 ## 3. Channels & States
