@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "1.0.0-beta.1",
+        "version": "1.0.0-beta.2",
         "title": "OwnTracks - Your location companion",
         "desc": {
             "en": "OwnTracks allows you to keep track of your own location in ioBroker",
