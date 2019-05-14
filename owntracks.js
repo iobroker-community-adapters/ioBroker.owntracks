@@ -12,7 +12,7 @@ const NODES = require('./_NODES.json'); // stringify, so object can be easily co
 let code = 'Zgfr56gFe87jJOM';
 let adapter;
 let library;
-let mqtt;
+let instance, mqtt;
 
 let USERS = {};
 let AVATARS = {};
@@ -49,6 +49,10 @@ function startAdapter(options)
 		else
 			mqtt = 'mqtt.' + adapter.config.mqtt;
 		
+		// Warn about missing encryption key
+		if (!adapter.config.encryptionKey)
+			adapter.log.warn('No encryption key specified in settings! It is highly recommended to encrypt communication. See https://github.com/iobroker-community-adapters/ioBroker.owntracks#iobrokerowntracks for more information.');
+				
 		// get avatars from config
 		adapter.config.pictures.forEach(function(avatar)
 		{
@@ -65,17 +69,18 @@ function startAdapter(options)
 		});
 		
 		// get users from states
+		instance = 'owntracks.' + adapter.instance;
 		adapter.getStates('users.*', function(err, states)
 		{
 			for (let key in states)
 			{
-				key = key.replace('owntracks.0.users.', '');
+				key = key.replace(instance + '.users.', '');
 				let index = key.substr(0, key.indexOf('.'));
 				
-				if (states['owntracks.0.users.' + key])
+				if (states[instance + '.users.' + key])
 				{
 					USERS[index] = USERS[index] === undefined ? {avatar: false} : USERS[index];
-					USERS[index][key.substr(key.indexOf('.')+1)] = key.indexOf('.history') > -1 ? JSON.parse(states['owntracks.0.users.' + key].val || {}) : states['owntracks.0.users.' + key].val || '';
+					USERS[index][key.substr(key.indexOf('.')+1)] = key.indexOf('.history') > -1 ? JSON.parse(states[instance + '.users.' + key].val || {}) : states[instance + '.users.' + key].val || '';
 				}
 			}
 		});
@@ -85,13 +90,13 @@ function startAdapter(options)
 		{
 			for (let key in states)
 			{
-				key = key.replace('owntracks.0.locations.', '');
+				key = key.replace(instance + '.locations.', '');
 				let index = key.substr(0, key.indexOf('.'));
 				
-				if (states['owntracks.0.locations.' + key])
+				if (states[instance + '.locations.' + key])
 				{
 					LOCATIONS[index] = LOCATIONS[index] === undefined ? {} : LOCATIONS[index];
-					LOCATIONS[index][key.substr(key.indexOf('.')+1)] = key.indexOf('.history') > -1 ? JSON.parse(states['owntracks.0.locations.' + key].val) : states['owntracks.0.locations.' + key].val;
+					LOCATIONS[index][key.substr(key.indexOf('.')+1)] = key.indexOf('.history') > -1 ? JSON.parse(states[instance + '.locations.' + key].val) : states[instance + '.locations.' + key].val;
 				}
 			}
 		});
@@ -267,23 +272,42 @@ function getUserId([namespace, ident, userName])
 }
 
 /**
- *
+ * Broadcast user avatar.
  *
  */
 function broadcastAvatar(userId)
 {
 	const user = USERS[userId];
 	
-	if (user.avatar) return false;
+	if (user.avatar) return false; // only send avatar once
 	USERS[userId].avatar = true;
 	
 	// send avatar via MQTT adapter
-	adapter.log.debug('Broadcast avatar of user ' + user.userName);
+	adapter.log.info('Broadcast avatar of user ' + user.userName + '.');
 	adapter.sendTo(mqtt, 'sendMessage2Client', {topic: user.namespace + '/' + user.ident + '/' + user.userName + '/info', message: JSON.stringify(AVATARS[userId])});
+	
+	// save avatar within MQTT adapter
+	adapter.setForeignObject(
+		mqtt + '.' + user.namespace + '.' + user.ident + '.' + user.userName + '.info', 
+		{
+			type: 'state',
+			common: {
+				name: 'owntracks/OwnTracks/Zefau/info',
+				type: 'state',
+				role: 'variable'
+			},
+			native: {}
+		},
+		function(err, obj)
+		{
+			if (obj !== undefined)
+				adapter.setForeignState(obj.id, JSON.stringify(AVATARS[userId]));
+		}
+	);
 }
 
 /**
- *
+ * Parse received payload.
  *
  */
 function parsePayload(userId, payload)
@@ -343,6 +367,8 @@ function parsePayload(userId, payload)
 		library.set({node: 'users.' + user.userId + '.location', type: 'channel', role: 'location', description: 'Location of ' + user.userName});
 		setTransition(userId, location);
 		setLocation(userId, location);
+		
+		adapter.setForeignState(mqtt + '.' + user.namespace + '.' + user.ident + '.' + user.userName + '.event', ''); // reset MQTT state, so message will not be published multiple times via MQTT broker
 	}
 	else if (location.inregions !== undefined && inregions.inregions.length)
 		;//setTransition(userId, {desc: });
@@ -525,11 +551,14 @@ function setLocation(userId, transition)
 		location.users += USERS[userId].userName + ', ';
 		
 		// add to history
-		location.history.push(transition);
+		if (location.history)
+			location.history.push(transition);
+		else
+			location.history = [transition];
 		
 		// update location
 		library.setMultiple(
-			Object.assign(transition,
+			Object.assign({}, transition,
 			{
 				'id': locationId,
 				'users': location.users,
@@ -549,11 +578,14 @@ function setLocation(userId, transition)
 		location.users = location.users.replace(USERS[userId].userName+', ', '').replace(USERS[userId].userName, '');
 		
 		// add to history
-		location.history.push(transition);
+		if (location.history)
+			location.history.push(transition);
+		else
+			location.history = [transition];
 		
 		// update location
 		library.setMultiple(
-			Object.assign(transition,
+			Object.assign({}, transition,
 			{
 				'id': locationId,
 				'users': location.users,
