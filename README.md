@@ -104,15 +104,15 @@ The following preferences have to be set in the Android / iOS app:
 
 | Android Setting | Configuration |
 | ------- | ------------- |
-| Connection/Mode | MQTT private |
+| Connection/Mode | `MQTT private` |
 | Connection/Host/Host | DynDNS address setup in first step |
-| Connection/Host/Port | Port you have chosen (e.g. 1987) |
-| Connection/Host/WebSockets | false (unless you know what you're doing) |
+| Connection/Host/Port | Port you have chosen (e.g. `1987`) |
+| Connection/Host/WebSockets | `false` (unless you know what you're doing) |
 | Connection/Identification/Username | The `User` you have chosen in the previous step |
 | Connection/Identification/Password | The `Password` you have chosen in the previous step |
 | Connection/Identification/DeviceID | Name of device or person (can be anything) |
 | Connection/Identification/TrackerID | Initials of device or person to write it on map (can be anything) |
-| Connection/Security/TLS | off |
+| Connection/Security/TLS | `off` |
 | Advanced/Encryption Key | __highly recommended__: Passphrase for encryption (chosen in the previous step) |
 
 Finally, verify if Owntracks is connected to the ioBroker instance via the "Status" entry in the drawer:
