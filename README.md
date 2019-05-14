@@ -218,6 +218,11 @@ For each user within `locations.<userId>`
 
 ## Changelog
 
+### 1.0.0-beta.2 (2019-05-XX) [IN DEVELOPMENT]
+- (zefau) FEATURE: Regions can now be maintained through ioBroker and published / received from all connected clients
+   - (zefau) FEATURE: added possibilty to publish all regions / waypoints from Android / iOS to ioBroker
+   - (zefau) FEATURE: added possibilty to publish regions / waypoints from ioBroker to all conneced clients
+
 ### 1.0.0-beta.1 (2019-05-01)
 Refactored entire code and removed all MQTT package dependencies (to avoid / fix security issues and reduce complexity). Thus, added [MQTT adapter as dependency](https://github.com/ioBroker/ioBroker.mqtt) to manage all MQTT communication.
 This major change comes with the following advantages:
