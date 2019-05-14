@@ -97,7 +97,7 @@ Change to _MQTT SETTINGS_ tab within ioBroker.mqtt and change the following sett
 
 Finally, choose the configured MQTT instance within the ioBroker.owntracks adapter and optionally (but __highly recommended__) set an encryption key of your choice:
 
-[![Owntracks Adapter settings](img/owntracks_settings.png)](img/owntracks_settings.png)
+[![Owntracks Adapter settings](img/owntracks_server_settings.png)](img/owntracks_server_settings.png)
 
 #### 2.1.3. Configure all clients
 The following preferences have to be set in the Android / iOS app:
@@ -119,12 +119,14 @@ Finally, verify if Owntracks is connected to the ioBroker instance via the "Stat
 
 ![Connection](img/connection.jpg)
 
+If everything has been setup successfully, ioBroker.owntracks will create the channels and states found below.
 
 ### 2.2. Connection configuration (using MQTT client)
 You have to complete the following steps in order to setup ioBroker.owntracks via MQTT client:
 1. Setup an external MQTT server hosted online, e.g. [CloudMQTT](https://www.cloudmqtt.com/)
 2. Configure MQTT Cloud Broker and setup / authenticate clients
 3. Configure MQTT adapter as client with the respective settings (URL, Port and Authentication of ioBroker)
+4. Configure all clients with the server settings
 
 #### 2.2.1. Setup external MQTT server
 Go to [https://www.cloudmqtt.com/](https://www.cloudmqtt.com/) and sign up with a new account.
@@ -189,7 +191,31 @@ Change to _MQTT SETTINGS_ tab within ioBroker.mqtt and change the following sett
 | Client ID | `iobroker` | __This user has to be authorized via _ACL_ on CloudMQTT__ |
 | Publish only on change | `yes` |
 
-Finally, go to your ioBroker.owntracks instance and select the configured MQTT instance.
+Finally, go to your ioBroker.owntracks instance and select the configured MQTT instance as well 
+
+Finally, choose the configured MQTT instance within the ioBroker.owntracks adapter and optionally (but __highly recommended__) set an encryption key of your choice:
+
+[![Owntracks Adapter settings](img/owntracks_client_settings.png)](img/owntracks_client_settings.png)
+
+#### 2.2.4. Configure all clients
+The following preferences have to be set in the Android / iOS app:
+
+| Android Setting | Configuration |
+| ------- | ------------- |
+| Connection/Mode | `MQTT private` |
+| Connection/Host/Host | CloudMQTT Server addres (e.g. `m24.cloudmqtt.com`) |
+| Connection/Host/Port | CloudMQTT Sevrer port (e.g. `24247`) |
+| Connection/Host/WebSockets | `false` |
+| Connection/Identification/Username | A `User` that has been setup via _ACL_ in step 2 (see above) |
+| Connection/Identification/Password | Respective `Password` of that user |
+| Connection/Identification/DeviceID | Name of device or person (can be anything) |
+| Connection/Identification/TrackerID | Initials of device or person to write it on map (can be anything) |
+| Connection/Security/TLS | `off` (unless you have a paid plan) |
+| Advanced/Encryption Key | __highly recommended__: Passphrase for encryption (chosen in the previous step) |
+
+Finally, verify if Owntracks is connected to the ioBroker instance via the "Status" entry in the drawer:
+
+![Connection](img/connection.jpg)
 
 If everything has been setup successfully, ioBroker.owntracks will create the channels and states found below.
 
