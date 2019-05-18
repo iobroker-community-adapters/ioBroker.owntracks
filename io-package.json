@@ -1,70 +1,131 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.6.2",
+        "version": "1.0.0-beta.2",
         "title": "OwnTracks - Your location companion",
         "desc": {
-			"en": "OwnTracks allows you to keep track of your own location in ioBroker",
-			"de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
-			"ru": "OwnTracks позволяет отслеживать ваше собственное местоположение в ioBroker",
-			"pt": "OwnTracks permite que você acompanhe sua própria localização no ioBroker",
-			"nl": "Met OwnTracks kunt u uw eigen locatie in ioBroker bijhouden",
-			"fr": "OwnTracks vous permet de garder une trace de votre propre emplacement dans ioBroker",
-			"it": "OwnTracks ti consente di tenere traccia della tua posizione in ioBroker",
-			"es": "OwnTracks le permite realizar un seguimiento de su propia ubicación en ioBroker",
-			"pl": "OwnTracks pozwala na śledzenie własnej lokalizacji w ioBroker",
-			"zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
-		},
+            "en": "OwnTracks allows you to keep track of your own location in ioBroker",
+            "de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
+            "ru": "OwnTracks позволяет отслеживать ваше собственное местоположение в ioBroker",
+            "pt": "OwnTracks permite que você acompanhe sua própria localização no ioBroker",
+            "nl": "Met OwnTracks kunt u uw eigen locatie in ioBroker bijhouden",
+            "fr": "OwnTracks vous permet de garder une trace de votre propre emplacement dans ioBroker",
+            "it": "OwnTracks ti consente di tenere traccia della tua posizione in ioBroker",
+            "es": "OwnTracks le permite realizar un seguimiento de su propia ubicación en ioBroker",
+            "pl": "OwnTracks umożliwia śledzenie własnej lokalizacji w ioBroker",
+            "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
+        },
         "news": {
             "0.6.2": {
-				"en": "Added Compact mode and Gulp translations",
-				"de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
-				"ru": "Добавлены компактный режим и перевод Gulp",
-				"pt": "Adicionado modo Compact e traduções Gulp",
-				"nl": "Compact-modus en Gulp-vertalingen toegevoegd",
-				"fr": "Ajout des traductions en mode Compact et Gulp",
-				"it": "Aggiunte le modalità Compact e Gulp",
-				"es": "Agregado el modo compacto y Gulp traducciones",
-				"pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
-				"zh-cn": "增加了紧凑模式和Gulp翻译"
-			},
+                "en": "Added Compact mode and Gulp translations",
+                "de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
+                "ru": "Добавлены компактный режим и перевод Gulp",
+                "pt": "Adicionado modo Compact e traduções Gulp",
+                "nl": "Compact-modus en Gulp-vertalingen toegevoegd",
+                "fr": "Ajout des traductions en mode Compact et Gulp",
+                "it": "Aggiunte le modalità Compact e Gulp",
+                "es": "Agregado el modo compacto y Gulp traducciones",
+                "pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
+                "zh-cn": "增加了紧凑模式和Gulp翻译"
+            },
             "0.6.0": {
                 "en": "Added Admin v3 / materialized support",
-                "de": "Admin v3 support"
+                "de": "Admin v3 support",
+                "ru": "Добавлена ​​поддержка Admin v3 / материализована",
+                "pt": "Adicionado v3 Admin / suporte materializado",
+                "nl": "Admin v3 / gematerialiseerde ondersteuning toegevoegd",
+                "fr": "Ajout du support Admin v3 / matérialisé",
+                "it": "Aggiunto Admin v3 / supporto materializzato",
+                "es": "Agregado Admin v3 / soporte materializado",
+                "pl": "Dodano Admin v3 / wsparcie materializowane",
+                "zh-cn": "添加了Admin v3 /物化支持"
             },
             "0.5.1": {
                 "en": "Fixed an error when connection got closed",
-                "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird"
+                "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird",
+                "ru": "Исправлена ​​ошибка при закрытии соединения",
+                "pt": "Corrigido um erro quando a conexão foi fechada",
+                "nl": "Er is een fout opgelost toen de verbinding werd afgesloten",
+                "fr": "Correction d'une erreur lors de la fermeture de la connexion",
+                "it": "Risolto un errore quando la connessione veniva chiusa",
+                "es": "Se corrigió un error cuando la conexión se cerró.",
+                "pl": "Naprawiono błąd, gdy połączenie zostało zamknięte",
+                "zh-cn": "修复了连接关闭时的错误"
             },
             "0.5.0": {
                 "en": "Added support for defined locations",
-                "de": "Unterstützung für Regionen hinzugefügt"
+                "de": "Unterstützung für Regionen hinzugefügt",
+                "ru": "Добавлена ​​поддержка для определенных мест",
+                "pt": "Adicionado suporte para locais definidos",
+                "nl": "Ondersteuning toegevoegd voor gedefinieerde locaties",
+                "fr": "Ajout du support pour des emplacements définis",
+                "it": "Aggiunto supporto per posizioni definite",
+                "es": "Soporte añadido para ubicaciones definidas",
+                "pl": "Dodano obsługę zdefiniowanych lokalizacji",
+                "zh-cn": "添加了对定义位置的支持"
             },
             "0.4.0": {
                 "en": "Added support for encryption key (on Android see Preferences -> Advanced -> Encryption Key)",
-                "de": "Unterstützung zur Verschlüsselung hinzugefügt (auf Android unter Preferences -> Advanced -> Encryption Key)"
+                "de": "Unterstützung zur Verschlüsselung hinzugefügt (auf Android unter Preferences -> Advanced -> Encryption Key)",
+                "ru": "Добавлена ​​поддержка ключа шифрования (для Android см. Настройки -> Дополнительно -> Ключ шифрования).",
+                "pt": "Adicionado suporte para chave de criptografia (no Android, consulte Preferências -> Avançado -> Chave de Criptografia)",
+                "nl": "Ondersteuning toegevoegd voor coderingssleutel (zie Android op Voorkeuren -> Geavanceerd -> Coderingssleutel)",
+                "fr": "Ajout de la prise en charge de la clé de cryptage (sous Android, voir Préférences -> Avancé -> Clé de cryptage)",
+                "it": "Aggiunto il supporto per la chiave di crittografia (su Android vedi Preferenze -> Avanzate -> Chiave di crittografia)",
+                "es": "Se agregó soporte para la clave de cifrado (en Android vea Preferencias -> Avanzadas -> Clave de cifrado)",
+                "pl": "Dodano obsługę klucza szyfrowania (w systemie Android patrz Preferencje -> Zaawansowane -> Klucz szyfrowania)",
+                "zh-cn": "添加了对加密密钥的支持（在Android上，请参阅首选项 - >高级 - >加密密钥）"
             },
             "0.3.0": {
                 "en": "Fix handling of publish messages",
-                "de": "Problem in der Abarbeitung von publish-Nachrichten behoben"
+                "de": "Problem in der Abarbeitung von publish-Nachrichten behoben",
+                "ru": "Исправлена ​​обработка публикации сообщений",
+                "pt": "Corrigir o tratamento de mensagens de publicação",
+                "nl": "Verhelp de afhandeling van publicatieberichten",
+                "fr": "Correction du traitement des messages de publication",
+                "it": "Correggere la gestione dei messaggi di pubblicazione",
+                "es": "Arreglar el manejo de los mensajes publicados.",
+                "pl": "Napraw obsługę wiadomości publikujących",
+                "zh-cn": "修复发布消息的处理"
             },
             "0.2.0": {
                 "en": "added two properties timestamp and datetime",
                 "de": "Timestamp und datetime sind hinzugefügt",
-                "ru": "Добавлены время последнего сообщения в разных форматах"
+                "ru": "Добавлены время последнего сообщения в разных форматах",
+                "pt": "adicionou duas propriedades timestamp e datetime",
+                "nl": "twee eigenschappen timestamp en datetime toegevoegd",
+                "fr": "ajout de deux propriétés timestamp et datetime",
+                "it": "aggiunto due proprietà timestamp e datetime",
+                "es": "añadido dos propiedades de marca de tiempo y fecha y hora",
+                "pl": "dodano dwa znaczniki czasowe i datetime",
+                "zh-cn": "添加了两个属性timestamp和datetime"
             },
             "0.1.1": {
                 "en": "add pictures",
                 "de": "Unterstützung von Bildern",
-                "ru": "Возможность добавить иконки"
+                "ru": "Возможность добавить иконки",
+                "pt": "adicionar imagens",
+                "nl": "voeg afbeeldingen toe",
+                "fr": "ajouter des images",
+                "it": "aggiungi foto",
+                "es": "agregar fotos",
+                "pl": "dodaj zdjęcia",
+                "zh-cn": "添加图片"
             },
             "0.1.0": {
                 "en": "initial checkin",
                 "de": "Erste version",
-                "ru": "первая версия"
+                "ru": "первая версия",
+                "pt": "checkin inicial",
+                "nl": "eerste checkin",
+                "fr": "enregistrement initial",
+                "it": "checkin iniziale",
+                "es": "registro inicial",
+                "pl": "początkowe checkin",
+                "zh-cn": "初步登记"
             }
         },
-	"license": "MIT",
+        "license": "MIT",
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "owntracks.png",
@@ -78,33 +139,28 @@
         "readme": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/blob/master/README.md",
         "loglevel": "info",
         "type": "geoposition",
-		"materialize": true,
-		"compact": true,
-        "authors": [
+        "messagebox": true,
+        "subscribe": "messagebox",
+        "dependencies": [
             {
-                "name": "bluefox",
-                "email": "dogafox@gmail.com"
-            },
+                "mqtt": ">=2.1.0"
+            }
+        ],
+        "materialize": true,
+        "compact": true,
+        "enabled": true,
+        "authors": [
             {
                 "name": "Zefau",
                 "email": "zefau@mailbox.org"
+            },
+            {
+                "name": "bluefox",
+                "email": "dogafox@gmail.com"
             }
         ]
     },
-    "native": {
-        "port": 1883,
-        "user": "iobroker",
-        "pass": "",
-        "secure": false,
-        "pictures": [],
-        "bind": "0.0.0.0",
-        "certPublic": "defaultPublic",
-        "certPrivate": "defaultPrivate",
-        "certChained": "",
-        "leEnabled": false,
-        "leUpdate": false,
-        "leCheckPort": 80
-    },
+    "native": {},
     "objects": [],
     "instanceObjects": [
         {
@@ -121,7 +177,7 @@
             "type": "channel",
             "common": {
                 "role": "locations",
-                "name": "List of locations with present users"
+                "name": "List of locations"
             },
             "native": {}
         }

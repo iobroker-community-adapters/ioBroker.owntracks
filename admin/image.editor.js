@@ -35,8 +35,8 @@ class AvatarEditor
 			})
 		
 			// attach save function
-			.on('change', '[data-name="name"]', function() {that.cb()})
-			.on('keyup', '[data-name="name"]', function() {that.cb()});
+			.on('change', '[data-name="tid"],[data-name="name"]', function() {that.cb()})
+			.on('keyup', '[data-name="tid"],[data-name="name"]', function() {that.cb()});
 	}
 	
 	/**
@@ -134,6 +134,7 @@ class AvatarEditor
 		$(this.domId + ' .avatar').not(this.templateId).each(function(i, avatar)
 		{
 			that.avatars.push({
+				tid: $(avatar).find('[data-name="tid"]').val(),
 				name: $(avatar).find('[data-name="name"]').val(),
 				base64: $(avatar).find('.picture > img').attr('src')
 			});
@@ -174,6 +175,9 @@ class AvatarEditor
 		if (avatar != undefined && avatar.base64 !== undefined)
 			template.find('.picture').append('<img width="64" class="image" src="' + avatar.base64 + '" />')
 		
+		if (avatar != undefined && avatar.tid !== undefined)
+			template.find('[data-name="tid"]').val(avatar.tid);
+		
 		if (avatar != undefined && avatar.name !== undefined)
 			template.find('[data-name="name"]').val(avatar.name);
 		
@@ -191,6 +195,9 @@ class AvatarEditor
 			element.find('.picture img').remove();
 			element.find('.picture').append('<img width="64" class="image" src="' + avatar.base64 + '" />')
 		}
+		
+		if (avatar != undefined && avatar.tid !== undefined)
+			element.find('[data-name="tid"]').val(avatar.tid);
 		
 		if (avatar != undefined && avatar.name !== undefined)
 			element.find('[data-name="name"]').val(avatar.name);

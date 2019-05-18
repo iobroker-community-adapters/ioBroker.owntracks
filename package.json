@@ -1,12 +1,38 @@
 {
-  "name": "iobroker.owntracks",
-  "version": "0.6.2",
-  "description": "OwnTracks - Your location companion",
-  "author": {
-    "name": "bluefox",
-    "email": "dogafox@gmail.com"
+  "_from": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
+  "_id": "iobroker.owntracks@1.0.0-beta.2",
+  "_inBundle": false,
+  "_integrity": "sha512-fTmjAU87fhlLrc/aY2gAOTeRo8SlfR5DY2Fygdkk3fMKRKi3pNMJQrvRD5A2qPtVtyCJd4O/Lv23FEU8vN4W8g==",
+  "_location": "/iobroker.owntracks",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
+    "rawSpec": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
+    "saveSpec": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
+    "fetchSpec": "https://github.com/Zefau/ioBroker.owntracks/tarball/master"
   },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
+  "_shasum": "9eeeb567b7e4a8c6a18a18e26f30bb90f25e3e4b",
+  "_spec": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
+  "_where": "/opt/iobroker",
+  "author": {
+    "name": "zefau",
+    "email": "zefau@mailbox.org"
+  },
+  "bugs": {
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/issues"
+  },
+  "bundleDependencies": false,
   "contributors": [
+    {
+      "name": "zefau",
+      "email": "zefau@mailbox.org"
+    },
     {
       "name": "bluefox",
       "email": "dogafox@gmail.com"
@@ -14,45 +40,39 @@
     {
       "name": "matspi",
       "email": "matthias.spiller@fari.software"
-    },
-    {
-      "name": "zefau",
-      "email": "zefau@mailbox.org"
     }
   ],
+  "dependencies": {
+    "@iobroker/adapter-core": "^1.0.3",
+    "libsodium-wrappers": "^0.7.4"
+  },
+  "deprecated": false,
+  "description": "OwnTracks - Your location companion",
+  "devDependencies": {
+    "@iobroker/testing": "^1.2.1",
+    "axios": "^0.18.0",
+    "chai": "^4.2.0",
+    "gulp": "^4.0.2",
+    "mocha": "^6.1.4"
+  },
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.owntracks",
-  "license": "MIT",
   "keywords": [
     "ioBroker",
-    "owntracks"
+    "owntracks",
+    "location"
   ],
+  "license": "MIT",
+  "main": "owntracks.js",
+  "name": "iobroker.owntracks",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iobroker-community-adapters/ioBroker.owntracks"
+    "url": "git+https://github.com/iobroker-community-adapters/ioBroker.owntracks.git"
   },
-  "dependencies": {
-    "libsodium-wrappers": "^0.7.3",
-    "create-stream-server": "^0.1.1",
-    "mqtt-connection": "^2.1.1",
-    "@iobroker/adapter-core": "^1.0.3"
-  },
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^6.0.2",
-    "request": "^2.88.0",
-    "gulp": "^4.0.0",
-    "axios": "^0.18.0",
-    "@iobroker/testing": "^1.1.14"
-  },
-  "main": "main.js",
   "scripts": {
     "test": "npm run test:package && npm run test:unit",
+    "test:integration": "mocha test/integration --exit",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit"
+    "test:unit": "mocha test/unit --exit"
   },
-  "bugs": {
-    "url": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/issues"
-  },
-  "readmeFilename": "README.md"
+  "version": "1.0.0-beta.2"
 }
