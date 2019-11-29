@@ -1,133 +1,105 @@
-/* jshint -W097 */
-/* jshint strict:false */
-/* jslint node: true */
 'use strict';
 const adapterName = require('./io-package.json').common.name;
 const utils = require('@iobroker/adapter-core'); // Get common adapter utils
+const crypto = require('crypto');
 
-const sodium = require('libsodium-wrappers');
+
+/*
+ * internal libraries
+ */
 const Library = require(__dirname + '/lib/library.js');
-const NODES = require('./_NODES.json'); // stringify, so object can be easily copied later
+const Encryption = require(__dirname + '/lib/encryption.js');
 
-let code = 'Zgfr56gFe87jJOM';
+const _NODES = require('./_NODES.js');
+const _CIPHER = 'Zgfr56gFe87jJOM';
+
+/*
+ * variables initiation
+ */
 let adapter;
-let library;
-let instance, mqtt;
-
-let USERS = {};
-let AVATARS = {};
-let LOCATIONS = {};
+let library, encryption;
+let unloaded, mqtt;
+let USERS = {}, LOCATIONS = {}, AVATARS = {}, GEOFENCES = {};
 
 
 /*
  * ADAPTER
  *
  */
-function startAdapter(options)
-{
+function startAdapter(options) {
 	options = options || {};
-    Object.assign(options,
-	{
-        name: adapterName
-    });
+	adapter = new utils.Adapter({ ...options, name: adapterName });
 	
-    adapter = new utils.Adapter(options);
-	library = new Library(adapter);
-	
-    /*
-     * ADAPTER LOAD
+	/*
+     * ADAPTER READY
      *
      */
-    adapter.on('ready', function()
-	{
-		// MQTT not selected
-		if (!adapter.config.mqtt)
-		{
-			adapter.log.warn('Select a MQTT instance in ioBroker.owntracks settings!');
-			return;
-		}
-		else
-			mqtt = 'mqtt.' + adapter.config.mqtt;
+	adapter.on('ready', function() {
+		unloaded = false;
+		library = new Library(adapter, { 'nodes': _NODES, 'updatesInLog': adapter.config.debug || false });
+		encryption = new Encryption(adapter);
 		
-		// Warn about missing encryption key
-		if (!adapter.config.encryptionKey)
+		// Check Node.js Version
+		let version = parseInt(process.version.substr(1, process.version.indexOf('.')-1));
+		if (version <= 6) {
+			return library.terminate('This Adapter is not compatible with your Node.js Version ' + process.version + ' (must be >= Node.js v7).', true);
+		}
+		
+		
+		// MQTT not selected
+		if (!adapter.config.mqtt) {
+			return library.terminate('Select a MQTT instance in ioBroker.owntracks settings!');
+		}
+		else {
+			mqtt = 'mqtt.' + adapter.config.mqtt;
+		}
+		
+		
+		// warn about missing encryption key
+		if (!adapter.config.encryptionKey) {
 			adapter.log.warn('No encryption key specified in settings! It is highly recommended to encrypt communication. See https://github.com/iobroker-community-adapters/ioBroker.owntracks#iobrokerowntracks for more information.');
-				
+		}
+		else {
+			adapter.config.encryptionKey = library.decode(_CIPHER, adapter.config.encryptionKey);
+		}
+		
+		// get locations from config
+		LOCATIONS = adapter.config.locations;
+		
 		// get avatars from config
-		adapter.config.pictures.forEach(function(avatar)
-		{
+		adapter.config.pictures.forEach(avatar => {
 			// verify content
-			if (!avatar.name || !avatar.base64) return;
+			if (!avatar.name) {
+				return;
+			}
 			
-			// remember and do only once per session
-			avatar.id = avatar.name.replace(/\s|\./g, '_').toLowerCase();
-			AVATARS[avatar.id] = {
+			// avatar
+			let userId = avatar.name.replace(/\s|\./g, '_').toLowerCase();
+			AVATARS[userId] = {
+				'broadcast': false,
 				'_type': 'card',
 				'name': avatar.name,
-				'face': avatar.base64.substr(avatar.base64.indexOf(',')+1)
+				'face': avatar.base64 ? avatar.base64.substr(avatar.base64.indexOf(',')+1) : undefined
 			};
 		});
 		
-		// get users from states
-		instance = 'owntracks.' + adapter.instance;
-		adapter.getStates('users.*', function(err, states)
-		{
-			for (let key in states)
-			{
-				key = key.replace(instance + '.users.', '');
-				let index = key.substr(0, key.indexOf('.'));
-				
-				if (states[instance + '.users.' + key])
-				{
-					USERS[index] = USERS[index] === undefined ? {avatar: false} : USERS[index];
-					USERS[index][key.substr(key.indexOf('.')+1)] = key.indexOf('.history') > -1 ? JSON.parse(states[instance + '.users.' + key].val || {}) : states[instance + '.users.' + key].val || '';
-				}
-			}
-		});
-		
-		// get locations from states
-		adapter.getStates('locations.*', function(err, states)
-		{
-			for (let key in states)
-			{
-				key = key.replace(instance + '.locations.', '');
-				let index = key.substr(0, key.indexOf('.'));
-				
-				if (states[instance + '.locations.' + key])
-				{
-					LOCATIONS[index] = LOCATIONS[index] === undefined ? {} : LOCATIONS[index];
-					LOCATIONS[index][key.substr(key.indexOf('.')+1)] = key.indexOf('.history') > -1 ? JSON.parse(states[instance + '.locations.' + key].val) : states[instance + '.locations.' + key].val;
-				}
-			}
-		});
-		
-		// subscribe to states of MQTT adapter
-		// @see https://owntracks.org/booklet/tech/json/#topics
-		try
-		{
-			adapter.subscribeForeignStates(mqtt + '.*');
-		}
-		catch(err)
-		{
-			adapter.log.warn(err);
-		}
-		
-		// set timeout for disconnection (in min)
-		adapter.config.disconnect = adapter.config.disconnect || 5;
-		const offset = adapter.config.disconnect * 60 * 1000;
-		
-		let timeout = setTimeout(function disconnect()
-		{
-			// disconnect user after inactivity
-			for (let key in USERS)
-			{
-				if (USERS[key].lastSeen+offset < Date.now())
-				{
-					setUser(USERS[key].userId, {'userConnected': false})
-					//library.set();
-				}
+		// retrieve all values from states
+		adapter.getStates(adapterName + '.' + adapter.instance + '.*', (err, states) => {
+			library.set(Library.CONNECTION, true);
+			
+			// set current states from objects
+			for (let state in states) {
+				library.setDeviceState(state.replace(adapterName + '.' + adapter.instance + '.', ''), states[state] && states[state].val);
 			}
 			
+			// subscribe to states of MQTT adapter
+			// @see https://owntracks.org/booklet/tech/json/#topics
+			try {
+				adapter.subscribeForeignStates(mqtt + '.*');
+			}
+			catch(err) {
+				adapter.log.warn(err);
+			}
 		});
 	});
 	
@@ -135,22 +107,20 @@ function startAdapter(options)
 	 * HANDLE MESSAGES
 	 *
 	 */
-	adapter.on('message', function(msg)
-	{
+	adapter.on('message', function(msg) {
 		adapter.log.debug('Message: ' + JSON.stringify(msg));
 		
-		switch(msg.command)
-		{
-			case 'getMQTTInstances':
-				let instances = getMQTTInstances(function(err, instances)
-				{
-					if (err)
-						library.msg(msg.from, msg.command, {result: false, error: err}, msg.callback);
-						
-					else
-						library.msg(msg.from, msg.command, {result: true, instances: instances}, msg.callback);
-				});
-				break;
+		switch(msg.command) {
+		case 'getMQTTInstances':
+			library.getAdapterInstances('mqtt', function(err, instances) {
+				if (err) {
+					library.msg(msg.from, msg.command, { 'result': false, 'error': err }, msg.callback);
+				}
+				else {
+					library.msg(msg.from, msg.command, { 'result': true, 'instances': instances }, msg.callback);
+				}
+			});
+			break;
 		}
 	});
 
@@ -158,15 +128,44 @@ function startAdapter(options)
 	 * STATE CHANGE
 	 *
 	 */
-	adapter.on('stateChange', function(id, state)
-	{
-		adapter.log.silly('State of ' + id + ' has changed ' + JSON.stringify(state) + '.');
+	adapter.on('stateChange', function(id, state) {
+		adapter.log.silly('State of ' + id + ' has changed ' + JSON.stringify(state) + '.'); // output also given by MQTT adapter
 		
-		const userId = getUserId(id.split('.').slice(2));
-		if (userId && state && state.val)
-		{
-			// parse payload
-			parsePayload(userId, state.val);
+		// get current user
+		let params = id.split('.').slice(2,5);
+		if (params.length >= 3) {
+			
+			// get user details
+			let user = {
+				'userId': params[2].replace(/\s|\./g, '_').toLowerCase(),
+				'userName': params[2],
+				'userIdent': params.join('/'),
+				'tst': Math.floor(Date.now()/1000),
+				'userConnected': true
+			};
+			
+			if (user.userId && state && state.val) {
+				
+				// attach user info globally
+				user.reconnected = USERS[user.userId] && USERS[user.userId].userConnected === false;
+				USERS[user.userId] = { ...USERS[user.userId] || {}, ...user };
+				
+				// disconnect user on inactivity
+				if (USERS[user.userId].disconnect) {
+					clearTimeout(USERS[user.userId].disconnect);
+				}
+				
+				USERS[user.userId].disconnect = setTimeout(() => {
+					
+					adapter.log.info('User ' + user.userName + ' disconnected due to inactivity!');
+					USERS[user.userId].userConnected = false;
+					library.set({ ..._NODES.users.userConnected, 'node': _NODES.users.userConnected.node.replace('%id%', user.userId) }, false);
+					
+				}, 60*1000); // disconnect user after an hour of inactivity
+				
+				// process payload
+				parsePayload(user, state.val);
+			}
 		}
 	});
 	
@@ -174,154 +173,53 @@ function startAdapter(options)
 	 * ADAPTER UNLOAD
 	 *
 	 */
-	adapter.on('unload', function(callback)
-	{
-		try
-		{
+	adapter.on('unload', function(callback) {
+		try {
 			adapter.log.info('Adapter stopped und unloaded.');
-			callback();
-		}
-		catch(err)
-		{
-			callback();
-		}
-	});
-	
-    return adapter;
-}
-
-/**
- * Get MQTT instances.
- *
- */
-function getMQTTInstances(callback)
-{
-	adapter.objects.getObjectView('system', 'instance', {startkey: 'system.adapter.mqtt.', endkey: 'system.adapter.mqtt.\u9999'}, (err, instances) =>
-	{
-		if (instances && instances.rows)
-		{
-			let result = [];
-			instances.rows.forEach(row => {
-				result.push({id: row.id.replace('system.adapter.', ''), config: row.value.native.type})
-			});
 			
-			callback(null, result);
+			unloaded = true;
+			let user;
+			for (let userId in USERS) {
+				user = USERS[userId];
+				if (user.disconnect) {
+					clearTimeout(user.disconnect);
+				}
+			}
+			
+			callback();
 		}
-		else
-			callback('Could not retrieve MQTT instances!');
+		catch(err) {
+			callback();
+		}
 	});
-}
-
-/**
- * Set an attribute of a user.
- *
- */
-function setUser(userId, attributes)
-{
-	// create user
-	if (USERS[userId] === undefined)
-	{
-		adapter.log.debug('New user ' + attributes.userName || userId + ' has been registered.');
-		
-		attributes.avatar = false;
-		USERS[userId] = attributes;
-	}
 	
-	// update user attributes
-	else
-	{
-		for (let key in attributes)
-			USERS[userId][key] = attributes[key];
-	}
-	
-	// broadcast avatar
-	broadcastAvatar(userId);
-	
-	// additional attributes
-	USERS[userId].lastSeen = Date.now();
-	
-	// set node
-	library.setMultiple(USERS[userId], JSON.parse(JSON.stringify(NODES.users)), {'%id%': USERS[userId].userId, '%name%': USERS[userId].userName});
-	
-	return USERS[userId];
-}
-
-/**
- * Get an user ID.
- *
- */
-function getUserId([namespace, ident, userName])
-{
-	if (namespace && ident && userName)
-	{
-		const userId = userName.replace(/\s|\./g, '_').toLowerCase();
-		
-		// update
-		setUser(userId, {
-			'userConnected': true,
-			'namespace': namespace,
-			'ident': ident,
-			'userName': userName,
-			'userId': userId
-		});
-		
-		return userId;
-	}
-	else
-		return false;
-}
-
-/**
- * Broadcast user avatar.
- *
- */
-function broadcastAvatar(userId)
-{
-	const user = USERS[userId];
-	
-	if (user.avatar) return false; // only send avatar once
-	USERS[userId].avatar = true;
-	
-	// send avatar via MQTT adapter
-	adapter.log.info('Broadcast avatar of user ' + user.userName + '.');
-	adapter.sendTo(mqtt, 'sendMessage2Client', {topic: user.namespace + '/' + user.ident + '/' + user.userName + '/info', message: JSON.stringify(AVATARS[userId])});
-	
-	// save avatar within MQTT adapter
-	adapter.setForeignObject(
-		mqtt + '.' + user.namespace + '.' + user.ident + '.' + user.userName + '.info', 
-		{
-			type: 'state',
-			common: {
-				name: 'owntracks/OwnTracks/Zefau/info',
-				type: 'state',
-				role: 'variable'
-			},
-			native: {}
-		},
-		function(err, obj)
-		{
-			if (obj !== undefined)
-				adapter.setForeignState(obj.id, JSON.stringify(AVATARS[userId]));
-		}
-	);
+	return adapter;
 }
 
 /**
  * Parse received payload.
+ * In MQTT mode the apps publish to:
+ *		owntracks/user/device			with _type=location for location updates, and with _type=lwt
+ *		owntracks/user/device/cmd		with _type=cmd for remote commands
+ *		owntracks/user/device/event		with _type=transition for enter/leave events
+ *		owntracks/user/device/step		to report step counter
+ *		owntracks/user/device/beacon	for beacon ranging
+ *		owntracks/user/device/dump		for config dumps
+ *
+ *
+ * @param {String}		userId		User emitting the payload
+ * @param {Object}		payload		Payload emitted by user
+ * @return void
  *
  */
-function parsePayload(userId, payload)
-{
+function parsePayload(user, payload) {
+	
 	// parse payload
-	const user = USERS[userId];
-	let location;
-	try
-	{
-		location = JSON.parse(payload);
-		location.encryption = false;
+	try {
+		payload = JSON.parse(payload);
+		payload.encryption = false;
 	}
-	catch(err)
-	{
+	catch(err) {
 		adapter.log.warn('Can not parse payload: ' + payload);
 		adapter.log.debug(err);
 		return false;
@@ -332,18 +230,23 @@ function parsePayload(userId, payload)
 	 * Apps can optionally encrypt outgoing messages with a shared symmetric key. 
 	 * @see https://owntracks.org/booklet/tech/json/#_typeencrypted
 	 */
-	if (location._type === 'encrypted')
-	{
-		location = decryptPayload(location.data);
-		if (location === false) return false;
+	if (payload._type === 'encrypted') {
+		// no encryption key given
+		if (!adapter.config.encryptionKey) {
+			adapter.log.warn('Received encrypted payload, but no encryption key defined in settings! Please go to settings and set a key!');
+			return false;
+		}
+		
+		// decrypt
+		payload = decryptPayload(payload.data, adapter.config.encryptionKey);
+		
+		// decryption failed
+		if (payload === false) {
+			return false;
+		}
 	}
 	
-	// update user
-	if (location.tid)
-		setUser(userId, {'userTid': location.tid, 'userConnected': true});
-	
-	// LOG
-	adapter.log.debug('Received ' + (location.encryption ? 'encrypted' : 'unencrypted') + ' payload from ' + user.userName + ' (' + user.userId + '): ' + JSON.stringify(location));
+	adapter.log.debug('Received ' + (payload.encryption ? 'encrypted' : 'unencrypted') + ' payload from ' + user.userName + ' (' + user.userId + '): ' + JSON.stringify(payload));
 	
 	
 	/*
@@ -351,10 +254,43 @@ function parsePayload(userId, payload)
 	 * This location object describes the location of the device that reported it.
 	 * @see https://owntracks.org/booklet/tech/json/#_typelocation
 	 */
-	if (location._type === 'location')
-	{
-		library.set({node: 'users.' + user.userId, type: 'channel', role: 'user', description: 'Location data of ' + user.userName});
-		library.setMultiple(location, JSON.parse(JSON.stringify(NODES.users)), {'%id%': user.userId, '%name%': user.userName});
+	if (payload._type === 'location') {
+		
+		// brodastcast locations (only on user connection)
+		if (USERS[user.userId].locations === undefined || USERS[user.userId].reconnected === true) {
+			USERS[user.userId].locations = true;
+			broadcastLocations(adapter.config.locations, user);
+		}
+		
+		// broadcast avatar
+		if (AVATARS[user.userId]) {
+			adapter.setForeignObject(
+				mqtt + '.' + user.userIdent.replace(RegExp('/', 'g'), '.') + '.info', 
+				{
+					'type': 'state',
+					'common': {
+						'name': user.userIdent + '/info',
+						'type': 'state',
+						'role': 'variable'
+					},
+					native: {}
+				},
+				function(err, obj) {
+					if (obj !== undefined) {
+						adapter.setForeignState(obj.id, {
+							'val': JSON.stringify(adapter.config.encryptionKey ? { '_type': 'encrypted', 'data': encryption.encrypt(adapter.config.encryptionKey, JSON.stringify(AVATARS[user.userId])) } : AVATARS[user.userId]),
+							'ack': false
+						});
+					}
+				}
+			);
+		}
+		
+		// channel
+		library.set({ 'node': 'users.' + user.userId, 'type': 'channel', 'role': 'user', 'description': 'Location data of ' + user.userName });
+		
+		// datapoints
+		library.setMultiple(JSON.parse(JSON.stringify(_NODES.users)), { ...payload, ...user }, { 'placeholders': { '%id%': user.userId, '%name%': user.userName }});
 	}
 	
 	/*
@@ -362,25 +298,117 @@ function parsePayload(userId, payload)
 	 * A transition message is sent, when entering or leaving a previously configured geographical region or BLE Beacon.
 	 * @see https://owntracks.org/booklet/tech/json/#_typetransition
 	 */
-	else if (location._type === 'transition')
-	{
-		library.set({node: 'users.' + user.userId + '.location', type: 'channel', role: 'location', description: 'Location of ' + user.userName});
-		setTransition(userId, location);
-		setLocation(userId, location);
+	else if (payload._type === 'transition') {
+		// channel
+		library.set({ 'node': 'users.' + user.userId + '.location', 'type': 'channel', 'role': 'location', 'description': 'Location of ' + user.userName });
 		
-		adapter.setForeignState(mqtt + '.' + user.namespace + '.' + user.ident + '.' + user.userName + '.event', ''); // reset MQTT state, so message will not be published multiple times via MQTT broker
+		// get location
+		payload.locationId = payload.desc.replace(/\s|\./g, '_').toLowerCase();
+		payload.locationName = payload.desc;
+		delete payload.desc;
+		
+		// update user history
+		let userHistory = JSON.parse(library.getDeviceState('users.' + user.userId + '.location.history') || '[]');
+		userHistory.push(payload);
+		
+		// update location user & history
+		let locationUsers = library.getDeviceState('locations.' + payload.locationId + '.users') || '';
+		let locationHistory = JSON.parse(library.getDeviceState('locations.' + payload.locationId + '.history') || '[]');
+		locationHistory.push(payload);
+		
+		// user has entered location
+		if (payload.event === 'enter') {
+			adapter.log.info('User ' + user.userName + ' entered location ' + payload.locationName + '.');
+			
+			// set geofence active
+			payload.geofence = true;
+			if (GEOFENCES[user.userId]) {
+				clearTimeout(GEOFENCES[user.userId]);
+			}
+			
+			GEOFENCES[user.userId] = setTimeout(
+				() => {
+					library.set({ ..._NODES.locations.geofence, 'node': _NODES.locations.geofence.node.replace('%id%', payload.locationId) }, false);
+					library.set({ ..._NODES.users.geofence, 'node': _NODES.users.geofence.node.replace('%id%', user.userId) }, false);
+				},
+				(adapter.config.geofence || 15)*60*1000
+			);
+			
+			// update user
+			library.setMultiple(
+				JSON.parse(JSON.stringify(_NODES.userLocation)),
+				{
+					'geofence': payload.geofence,
+					'enteredLast': payload.locationName,
+					'entered': payload.tst,
+					'history': JSON.stringify(userHistory)
+				},
+				{ 'placeholders': { '%id%': user.userId, '%name%': user.userName }}
+			);
+			
+			// update location
+			locationUsers = locationUsers.indexOf(user.userName) === -1 ? locationUsers + user.userName + ',' : locationUsers;
+		}
+		
+		// user has left location
+		else if (payload.event === 'leave') {
+			adapter.log.info('User ' + user.userName + ' left location ' + payload.locationName + '.');
+			
+			// set geofence inactive
+			payload.geofence = false;
+			
+			// update user
+			library.setMultiple(
+				JSON.parse(JSON.stringify(_NODES.userLocation)),
+				{
+					'geofence': payload.geofence,
+					'enteredLast': '',
+					'entered': '',
+					'leftLast': payload.locationName,
+					'left': payload.tst,
+					'history': JSON.stringify(userHistory)
+				},
+				{ 'placeholders': { '%id%': user.userId, '%name%': user.userName }}
+			);
+			
+			// update location
+			locationUsers = locationUsers.replace(RegExp(user.userName + ',', 'gi'), '');
+		}
+			
+		// update location
+		// channel
+		library.set({ 'node': 'locations.' + payload.locationId, 'type': 'channel', 'role': 'location', 'description': 'Location data of ' + payload.locationName });
+		
+		// datapoints
+		library.setMultiple(
+			JSON.parse(JSON.stringify(_NODES.locations)),
+			{
+				...payload,
+				'users': locationUsers,
+				'presence': locationUsers.indexOf(',') > -1,
+				'history': JSON.stringify(locationHistory)
+			},
+			{ 'placeholders': { '%id%': payload.locationId, '%name%': payload.locationName }}
+		);
 	}
-	else if (location.inregions !== undefined && inregions.inregions.length)
-		;//setTransition(userId, {desc: });
 	
 	/*
 	 * TYPE: waypoint
 	 * Waypoints denote specific geographical regions that you want to keep track of.
 	 * @see https://owntracks.org/booklet/tech/json/#_typewaypoint
 	 */
-	else if (location._type === 'waypoint')
-	{
+	else if (payload._type === 'waypoint') {
 		
+		/*
+		 * This will cause recursion together with functionality `waypoints` and `setWaypoints`
+		 *
+		 *
+		 
+		if (adapter.config.allowClientsToDefineRegions && (!adapter.config.allowClientsToDefineRegionsWhitelist || (adapter.config.allowClientsToDefineRegionsWhitelist.split(',').indexOf(user.userId) > -1))) {
+			delete payload.encryption;
+			addLocations([payload]).then(locations => broadcastLocations(locations)).catch(() => {});
+		}
+		*/
 	}
 	
 	/*
@@ -388,9 +416,11 @@ function parsePayload(userId, payload)
 	 * The app can export a list of configured waypoints to the endpoint.
 	 * @see https://owntracks.org/booklet/tech/json/#_typewaypoints
 	 */
-	else if (location._type === 'waypoints')
-	{
+	else if (payload._type === 'waypoints') {
 		
+		if (adapter.config.allowClientsToDefineRegions && (!adapter.config.allowClientsToDefineRegionsWhitelist || (adapter.config.allowClientsToDefineRegionsWhitelist.split(',').indexOf(user.userId) > -1))) {
+			addLocations(payload.waypoints || []).then(locations => broadcastLocations(locations)).catch(() => {});
+		}
 	}
 	
 	/*
@@ -398,9 +428,9 @@ function parsePayload(userId, payload)
 	 * Apps read Card to display a name and icon for a user.
 	 * @see https://owntracks.org/booklet/tech/json/#_typecard
 	 */
-	else if (location._type === 'card')
-	{
-		
+	else if (payload._type === 'card') {
+		// not required
+		//adapter.log.debug('Requested type: CARD');
 	}
 	
 	/*
@@ -408,9 +438,9 @@ function parsePayload(userId, payload)
 	 * Command sent to device for an action to be performed by the device.
 	 * @see https://owntracks.org/booklet/tech/json/#_typecmd
 	 */
-	else if (location._type === 'cmd')
-	{
-		// supported by MQTT adapter
+	else if (payload._type === 'cmd') {
+		// supported by MQTT adapter, thus not required
+		//adapter.log.debug('Requested type: CMD');
 	}
 	
 	/*
@@ -418,184 +448,127 @@ function parsePayload(userId, payload)
 	 * A last will and testament is published automatically by the MQTT broker when it loses contact with the app. This typically looks like this:
 	 * @see https://owntracks.org/booklet/tech/json/#_typelwt
 	 */
-	else if (location._type === 'lwt')
-		setUser(userId, {'userConnected': false});
+	else if (payload._type === 'lwt') {
+		AVATARS[user.userId].broadcast = false;
+		payload.userConnected = false;
+		library.setMultiple(JSON.parse(JSON.stringify(_NODES.users)), payload, { 'placeholders': { '%id%': user.userId, '%name%': user.userName }});
+	}
+	
+	library.set(Library.CONNECTION, true);
 }
 
+
 /**
- *
+ * Broadcast locations to users.
+ * @see https://owntracks.org/booklet/features/remoteconfig/#setwaypoints
  *
  */
-function decryptPayload(payload)
-{
-	// no encryption key given
-	if (!adapter.config.encryptionKey)
-	{
-		adapter.log.warn('No encryption key defined in settings! Please go to settings and set a key!');
+function broadcastLocations(locations, user = null) {
+	
+	if (adapter.config.publishRegionsToClients) {
+		adapter.log.info('Broadcasting locations to ' + (user ? 'client ' + user.userName : 'all connected clients') + '...');
+		adapter.log.debug(JSON.stringify(LOCATIONS));
+		
+		for (let userId in user ? { [user.userId]: USERS[user.userId] } : USERS) {
+			user = USERS[userId];
+			let payload = {
+				"_type":"cmd",
+				"action":"setWaypoints",
+				"waypoints": {
+					"waypoints": LOCATIONS,
+					"_creator": "ioBroker.owntracks",
+					"_type":"waypoints"
+				}
+			};
+			
+			adapter.setForeignState(
+				mqtt + '.' + user.userIdent.replace(RegExp('/', 'g'), '.') + '.cmd',
+				JSON.stringify(adapter.config.encryptionKey ? { '_type': 'encrypted', 'data': encryption.encrypt(adapter.config.encryptionKey, JSON.stringify(payload)) } : payload)
+			);
+		}
+	}
+}
+
+
+/**
+ * Adds locations from payload to configuration.
+ *
+ */
+function addLocations(locations) {
+	
+	return new Promise((resolve, reject) => {
+		adapter.getForeignObject('system.adapter.owntracks.' + adapter.instance, (err, obj) => {
+			if (err || obj === undefined) {
+				return;
+			}
+
+			// 
+			// @see https://owntracks.org/booklet/features/waypoints/
+			obj.native.locations = obj.native.locations || [];
+			let hash = crypto.createHash('sha256').update(JSON.stringify(obj.native.locations)).digest('hex');
+			
+			//
+			obj.native.locations = obj.native.locations.map(location => {
+				let index = locations.findIndex(newLocation => newLocation.tst == location.tst);
+				
+				// region is already added, thus update
+				if (index > -1) {
+					adapter.log.debug('Found and updated location ' + location.desc + ' in configuration!');
+					return locations.splice(index, 1).shift();
+				}
+
+				// no changes
+				adapter.log.debug('Did not update location ' + location.desc + ' in configuration.');
+				return location;
+			});
+			
+			// add new locations
+			if (locations.length > 0) {
+				adapter.log.debug('Added new locations in configuration: ' + locations.map(location => location.desc).join(', '));
+				obj.native.locations = [ ...obj.native.locations, ...locations ];
+			}
+			else {
+				adapter.log.debug('No new locations added.');
+			}
+			
+			if (hash != crypto.createHash('sha256').update(JSON.stringify(obj.native.locations)).digest('hex')) {
+				adapter.log.debug('Locations: ' + JSON.stringify(obj.native.locations));
+				adapter.log.info('Locations updated. Restarting adapter...');
+				
+				LOCATIONS = obj.native.locations;
+				adapter.setForeignObject(obj._id, obj);
+				resolve(obj.native.locations);
+				return; // https://stackoverflow.com/questions/32536049/do-i-need-to-return-after-early-resolve-reject
+			}
+			else {
+				adapter.log.info('No updates occurred to the locations.');
+			}
+
+			reject('No updates occurred to the locations!');
+		});
+	});
+}
+
+
+/**
+ * Decrypts an encrypted payload.
+ *
+ */
+function decryptPayload(payload, encryptionKey) {
+	// try to encrypt message and catch error in case key is wrong
+	let obj = {};
+	let cipher = null;
+	try {
+		cipher = encryption.decrypt(encryptionKey, payload);
+		obj = JSON.parse(cipher);
+		obj.encryption = true;
+	}
+	catch(err) {
+		adapter.log.warn(err);
 		return false;
 	}
-	
-	// decrypt
-	else
-	{
-		const cypherText = new Buffer(payload, 'base64');
-		const nonce = cypherText.slice(0, 24);
-		const key = new Buffer(32);
-		
-		key.fill(0);
-		key.write(library.decode(code, adapter.config.encryptionKey));
-		
-		// try to encrypt message and catch error in case key is wrong
-		let obj = {};
-		let cipher = null;
-		try
-		{
-			cipher = sodium.crypto_secretbox_open_easy(cypherText.slice(24), nonce, key, 'text');
-			obj = JSON.parse(cipher);
-		}
-		catch(err)
-		{
-			adapter.log.warn(err);
-			return false;
-		}
 
-		obj.encryption = true;
-		return obj;
-	}
-}
-
-
-/**
- * Reads the transition (entry / leave region) of a user
- *
- */
-function setTransition(userId, transition)
-{
-	// get user
-	const user = USERS[userId];
-	
-	// get location
-	const locationId = transition.desc.replace(/\s|\./g, '_').toLowerCase();
-	const locationName = transition.desc;
-	
-	// user has entered location
-	if (transition.event === 'enter')
-	{
-		adapter.log.debug('User ' + user.userName + ' entered location ' + locationName + '.');
-		
-		// add to history
-		if (user['location.history'])
-			user['location.history'].push(transition);
-		else
-			user['location.history'] = [transition];
-		
-		// update user
-		setUser(userId, {location: locationName});
-		library.setMultiple(
-			{
-				'current': locationName,
-				'entered': transition.tst,
-				'history': JSON.stringify(user['location.history'])
-			},
-			JSON.parse(JSON.stringify(NODES.userLocation)),
-			{'%id%': user.userId, '%name%': user.userName}
-		);
-	}
-	
-	// user has left location
-	else if (transition.event === 'leave')
-	{
-		adapter.log.debug('User ' + user.userName + ' left location ' + locationName + '.');
-		
-		// add to history
-		if (user['location.history'])
-			user['location.history'].push(transition);
-		else
-			user['location.history'] = [transition];
-		
-		// update user
-		library.setMultiple(
-			{
-				'current': '',
-				'entered': '',
-				'last': user.location,
-				'left': transition.tst,
-				'history': JSON.stringify(user['location.history'])
-			},
-			JSON.parse(JSON.stringify(NODES.userLocation)),
-			{'%id%': user.userId, '%name%': user.userName}
-		);
-	}
-}
-
-
-/**
- * Reads the transition (entry / leave region) of a user
- *
- */
-function setLocation(userId, transition)
-{
-	const locationId = transition.desc.replace(/\s|\./g, '_').toLowerCase();
-	const locationName = transition.desc;
-	
-	// get location
-	if (LOCATIONS[locationId] === undefined)
-		LOCATIONS[locationId] = {'history': [], 'users': []};
-	
-	let location = LOCATIONS[locationId];
-	
-	// user has entered location
-	if (transition.event === 'enter')
-	{
-		// add user to lcoation
-		location.users += USERS[userId].userName + ', ';
-		
-		// add to history
-		if (location.history)
-			location.history.push(transition);
-		else
-			location.history = [transition];
-		
-		// update location
-		library.setMultiple(
-			Object.assign({}, transition,
-			{
-				'id': locationId,
-				'users': location.users,
-				'presence': !!location.users.length,
-				'history': JSON.stringify(location.history)
-			}),
-			JSON.parse(JSON.stringify(NODES.locations)),
-			{'%id%': locationId, '%name%': locationName}
-		);
-	}
-	
-	// user has left location
-	else if (transition.event === 'leave')
-	{
-		// add user to lcoation
-		adapter.log.debug(JSON.stringify(location))
-		location.users = location.users.replace(USERS[userId].userName+', ', '').replace(USERS[userId].userName, '');
-		
-		// add to history
-		if (location.history)
-			location.history.push(transition);
-		else
-			location.history = [transition];
-		
-		// update location
-		library.setMultiple(
-			Object.assign({}, transition,
-			{
-				'id': locationId,
-				'users': location.users,
-				'presence': !!location.users.length,
-				'history': JSON.stringify(location.history)
-			}),
-			JSON.parse(JSON.stringify(NODES.locations)),
-			{'%id%': locationId, '%name%': locationName}
-		);
-	}
+	return obj;
 }
 
 
@@ -605,7 +578,8 @@ function setLocation(userId, transition)
  *
  */
 if (module && module.parent) {
-    module.exports = startAdapter;
-} else {
-    startAdapter(); // or start the instance directly
+	module.exports = startAdapter;
 }
+else {
+	startAdapter();
+} // or start the instance directly

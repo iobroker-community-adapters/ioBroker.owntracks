@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "1.0.0-beta.2",
+        "version": "1.0.0-rc.1",
         "title": "OwnTracks - Your location companion",
         "desc": {
             "en": "OwnTracks allows you to keep track of your own location in ioBroker",
@@ -143,7 +143,7 @@
         "subscribe": "messagebox",
         "dependencies": [
             {
-                "mqtt": ">=2.1.0"
+                "mqtt": ">=2.1.1"
             }
         ],
         "materialize": true,
@@ -160,7 +160,10 @@
             }
         ]
     },
-    "native": {},
+    "native": {
+		"allowClientsToDefineRegions": true,
+		"publishRegionsToClients": true
+	},
     "objects": [],
     "instanceObjects": [
         {

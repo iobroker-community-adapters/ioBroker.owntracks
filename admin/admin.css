@@ -2,7 +2,8 @@
  * Admin styles.
  *
  * @author Zefau <zefau@mailbox.org>
- * @version 0.3.1 <26/01/2019>
+ * @version 0.4.0
+ * @date 2019-10-31
  *
  */
 .m select {display: block !important}
@@ -23,9 +24,6 @@
 
 img {margin: 5px}
 a.active {font-weight: bold}
-a:hover {text-decoration: underline}
-.small {font-size: 10px}
-
 p.title {margin-bottom: 0}
 p.subtitle {padding: 0 .75rem}
 p.errorMessage {
@@ -35,3 +33,21 @@ p.errorMessage {
 }
 
 .table-button-add {margin: 15px 5px 10px 5px}
+
+.modalMessage {
+	line-height: 20px;
+}
+
+pre {display: inline}
+
+.m [type="checkbox"] + span:not(.lever) {
+	margin-bottom: 3px;
+}
+
+.m .row {margin-bottom: 0 !important}
+.m label {color: #000}
+
+label.select {
+	top: -27px !important;
+	font-size: .8rem !important;
+}

@@ -1,25 +1,25 @@
 {
-  "_from": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
+  "_from": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/tarball/master",
   "_id": "iobroker.owntracks@1.0.0-beta.2",
   "_inBundle": false,
-  "_integrity": "sha512-fTmjAU87fhlLrc/aY2gAOTeRo8SlfR5DY2Fygdkk3fMKRKi3pNMJQrvRD5A2qPtVtyCJd4O/Lv23FEU8vN4W8g==",
+  "_integrity": "sha512-8hm6e5xpO6vzphJhTBdbXQPwL+UP9bRZ/ohRzHxpt54dVpgiKc7oEXRU+2gk/9vHFrUvpylL4oanpP3U67R5Pg==",
   "_location": "/iobroker.owntracks",
   "_phantomChildren": {},
   "_requested": {
     "type": "remote",
-    "raw": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
-    "rawSpec": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
-    "saveSpec": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
-    "fetchSpec": "https://github.com/Zefau/ioBroker.owntracks/tarball/master"
+    "raw": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/tarball/master",
+    "rawSpec": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/tarball/master",
+    "saveSpec": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/tarball/master",
+    "fetchSpec": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/tarball/master"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
-  "_shasum": "9eeeb567b7e4a8c6a18a18e26f30bb90f25e3e4b",
-  "_spec": "https://github.com/Zefau/ioBroker.owntracks/tarball/master",
-  "_where": "/opt/iobroker",
+  "_resolved": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/tarball/master",
+  "_shasum": "ed09ee79761e0f3453258e7f1918f654c173e485",
+  "_spec": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/tarball/master",
+  "_where": "/opt/iobroker/node_modules/iobroker.nuki2",
   "author": {
     "name": "zefau",
     "email": "zefau@mailbox.org"
@@ -44,16 +44,17 @@
   ],
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
-    "libsodium-wrappers": "^0.7.4"
+    "libsodium-wrappers": "^0.7.6"
   },
   "deprecated": false,
   "description": "OwnTracks - Your location companion",
   "devDependencies": {
-    "@iobroker/testing": "^1.2.1",
-    "axios": "^0.18.0",
+    "@iobroker/testing": "^1.3.0",
+    "axios": "^0.19.0",
     "chai": "^4.2.0",
+    "eslint": "^6.7.0",
     "gulp": "^4.0.2",
-    "mocha": "^6.1.4"
+    "mocha": "^6.2.2"
   },
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.owntracks",
   "keywords": [
@@ -74,5 +75,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "1.0.0-beta.2"
+  "version": "1.0.0-rc.1"
 }

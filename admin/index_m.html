@@ -19,26 +19,14 @@
 	<!--
 	var mqtt = [];
 	var key = 'Zgfr56gFe87jJOM';
+	let timer;
 	var Editor;
-	
-	function encode(key, value) {
-		var result = '';
-		for (var i = 0; i < value.length; i++) {
-			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-		}
-		return result;
-	}
-
-	function decode(key, value) {
-		var result = '';
-		for (var i = 0; i < value.length; i++) {
-			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-		}
-		return result;
-	}
 	
 	// load
 	function load(settings, onChange) {
+		// regions / locations
+		console.log(settings.locations || []);
+		values2table('locations', settings.locations || [], onChange);
 		
 		// fill pictures
 		Editor = new AvatarEditor(onChange);
@@ -56,7 +44,7 @@
 				console.log('Retrieved MQTT instances: ' + JSON.stringify(res.instances));
 				res.instances.forEach(function(instance)
 				{
-					$('#mqtt').append($('<option>', {value: instance.id.substr(-1), text: instance.id + ' (' + instance.config + ')'}));
+					$('#mqtt').append($('<option>', { 'value': instance.id.substr(-1), 'text': instance.id + ' (' + instance.config + ')'} ));
 				});
 				
 				$('#mqtt').select();
@@ -67,12 +55,25 @@
 		
 		// load settings
 		_load(settings, onChange);
+		
+		// 
+		$('input[data-name="tst"]').prop('disabled', true);
+		$('body').on('click', '.values-buttons', function() {$('input[data-name="tst"]').prop('disabled', true);});
+		$('body').on('click', '.table-button-add', function()
+		{
+			clearTimeout(timer);
+			timer = setTimeout(function() {
+				$('.table-values input[data-name="tst"]').last().prop('disabled', true).val(Math.round($.now()/1000));
+			}, 150);
+		});
 	}
 	
 	// save
 	function save(callback) {
+		let locations = table2values('locations').map(function(location) {return Object.assign(location, { '_type': 'waypoint' })});
 		var obj = {
-			pictures: Editor.getAvatars()
+			'pictures': Editor.getAvatars(),
+			'locations': locations
 		};
 		
 		// encode encryption key
@@ -170,6 +171,52 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+			</div>
+			
+			<!-- LOCATIONS -->
+			<div class="row" style="margin-bottom: 0">
+				<div class="col s12 m12">
+					<p class="translate title">locations_info</p>
+				</div>
+			</div>
+			<div class="row box">
+				<div class="input-field col s5 m5">
+					<div style="display: block">
+						<input class="value" id="allowClientsToDefineRegions" type="checkbox" />
+						<label for="allowClientsToDefineRegions" class="translate">allowClientsToDefineRegions</label>
+					</div>
+					
+					<div style="display: block">
+						<input class="value" id="allowClientsToDefineRegionsWhitelist" type="text" />
+						<label for="allowClientsToDefineRegionsWhitelist" class="translate">allowClientsToDefineRegionsWhitelist</label>
+					</div>
+				</div>
+				<div class="input-field col s1 m1"></div>
+				<div class="input-field col s6 m6">
+					<input class="value" id="publishRegionsToClients" type="checkbox" />
+					<label for="publishRegionsToClients" class="translate">publishRegionsToClients</label>
+				</div>
+			</div>
+			<div class="row box">
+				<div class="col s12" id="locations">
+					<a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+					
+					<div class="table-values-div">
+						<table class="table-values">
+							<thead>
+								<tr>
+									<th data-name="desc" style="width: 30%" class="translate">description</th>
+									<th data-name="lat" style="width: 20%" class="translate">lattitude</th>
+									<th data-name="lon" style="width: 20%" class="translate">longitude</th>
+									<th data-name="rad" data-type="number" style="width: 10%" class="translate">radius</th>
+									<th data-name="tst" style="width: 10%" class="translate">creation</th>
+									<th data-buttons="delete" style="width: 10%"><span class="translate">delete</span></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					
 				</div>
 			</div>
 			
