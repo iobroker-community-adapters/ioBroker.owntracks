@@ -1,0 +1,10 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:ws:20160920':
+    - create-stream-server > websocket-stream > ws:
+        patched: '2020-04-15T07:48:12.975Z'
+    - create-stream-server > ws:
+        patched: '2020-04-15T07:48:12.975Z'
