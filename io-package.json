@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.6.2",
+        "version": "0.6.3",
         "title": "OwnTracks - Your location companion",
         "desc": {
 			"en": "OwnTracks allows you to keep track of your own location in ioBroker",
@@ -16,18 +16,30 @@
 			"zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
 		},
         "news": {
+            "0.6.3": {
+                "en": "some issues are fixed and dependencies updated",
+                "de": "Einige Probleme wurden behoben und Abhängigkeiten aktualisiert",
+                "ru": "исправлены некоторые проблемы и обновлены зависимости",
+                "pt": "alguns problemas são corrigidos e as dependências atualizadas",
+                "nl": "sommige problemen zijn opgelost en afhankelijkheden zijn bijgewerkt",
+                "fr": "certains problèmes sont corrigés et les dépendances mises à jour",
+                "it": "alcuni problemi sono stati risolti e le dipendenze aggiornate",
+                "es": "algunos problemas son corregidos y las dependencias actualizadas",
+                "pl": "niektóre problemy zostały naprawione, a zależności zaktualizowane",
+                "zh-cn": "一些问题已修复，相关性已更新"
+            },
             "0.6.2": {
-				"en": "Added Compact mode and Gulp translations",
-				"de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
-				"ru": "Добавлены компактный режим и перевод Gulp",
-				"pt": "Adicionado modo Compact e traduções Gulp",
-				"nl": "Compact-modus en Gulp-vertalingen toegevoegd",
-				"fr": "Ajout des traductions en mode Compact et Gulp",
-				"it": "Aggiunte le modalità Compact e Gulp",
-				"es": "Agregado el modo compacto y Gulp traducciones",
-				"pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
-				"zh-cn": "增加了紧凑模式和Gulp翻译"
-			},
+                "en": "Added Compact mode and Gulp translations",
+                "de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
+                "ru": "Добавлены компактный режим и перевод Gulp",
+                "pt": "Adicionado modo Compact e traduções Gulp",
+                "nl": "Compact-modus en Gulp-vertalingen toegevoegd",
+                "fr": "Ajout des traductions en mode Compact et Gulp",
+                "it": "Aggiunte le modalità Compact e Gulp",
+                "es": "Agregado el modo compacto y Gulp traducciones",
+                "pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
+                "zh-cn": "增加了紧凑模式和Gulp翻译"
+            },
             "0.6.0": {
                 "en": "Added Admin v3 / materialized support",
                 "de": "Admin v3 support"

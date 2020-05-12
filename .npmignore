@@ -8,3 +8,4 @@ test
 tmp
 .travis.yml
 appveyor.yml
+package-lock.json
