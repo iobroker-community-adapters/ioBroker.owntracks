@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.1",
     "request": "^2.88.2",
     "gulp": "^4.0.2",
     "axios": "^0.19.2",
