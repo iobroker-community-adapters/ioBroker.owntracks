@@ -41,7 +41,7 @@
     "mocha": "^8.0.1",
     "request": "^2.88.2",
     "gulp": "^4.0.2",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "@iobroker/testing": "^2.2.0"
   },
   "main": "main.js",
