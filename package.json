@@ -31,18 +31,18 @@
     "url": "https://github.com/iobroker-community-adapters/ioBroker.owntracks"
   },
   "dependencies": {
-    "libsodium-wrappers": "^0.7.6",
+    "libsodium-wrappers": "^0.7.8",
     "create-stream-server": "^0.1.1",
     "mqtt-connection": "^4.0.0",
     "@iobroker/adapter-core": "^2.4.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.2.1",
     "request": "^2.88.2",
     "gulp": "^4.0.2",
-    "axios": "^0.19.2",
-    "@iobroker/testing": "^2.2.0"
+    "axios": "^0.21.0",
+    "@iobroker/testing": "^2.3.0"
   },
   "main": "main.js",
   "scripts": {

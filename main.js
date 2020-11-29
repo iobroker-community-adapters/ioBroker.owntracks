@@ -225,7 +225,7 @@ const cltFunction = function (client) {
     client.on('connect', packet => {
         client.id = packet.clientId;
         if (adapter.config.user) {
-            const password = packet.password.toString();
+            const password = (packet.password || '').toString();
 
             if (adapter.config.user !== packet.username ||
                 adapter.config.pass !== password) {
@@ -592,15 +592,16 @@ function initMqttServer(config) {
 
     config.port = parseInt(config.port, 10) || 1883;
 
+    const bindAddress = config.bind || '0.0.0.0';
     if (config.ssl) {
-        serverConfig.mqtts = 'ssl://0.0.0.0:' + config.port;
+        serverConfig.mqtts = 'ssl://' + bindAddress + ':' + config.port;
         if (config.webSocket) {
-            serverConfig.mqtwss = 'wss://0.0.0.0:' + (config.port + 1);
+            serverConfig.mqtwss = 'wss://' + bindAddress + ':' + (config.port + 1);
         }
     } else {
-        serverConfig.mqtts = 'tcp://0.0.0.0:' + config.port;
+        serverConfig.mqtts = 'tcp://' + bindAddress + ':' + config.port;
         if (config.webSocket) {
-            serverConfig.mqtwss = 'ws://0.0.0.0:' + (config.port + 1);
+            serverConfig.mqtwss = 'ws://' + bindAddress + ':' + (config.port + 1);
         }
     }
 

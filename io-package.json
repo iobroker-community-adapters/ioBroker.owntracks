@@ -101,6 +101,11 @@
                 "name": "Zefau",
                 "email": "zefau@mailbox.org"
             }
+        ],
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
         ]
     },
     "native": {
