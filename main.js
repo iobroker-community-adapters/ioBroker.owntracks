@@ -9,6 +9,7 @@ const utils = require('@iobroker/adapter-core'); // Get common adapter utils
 const createStreamServer = require('create-stream-server');
 const mqtt        = require('mqtt-connection');
 const sodium      = require('libsodium-wrappers');
+const net         = require('net');
 
 let adapter;
 let server;
@@ -592,7 +593,10 @@ function initMqttServer(config) {
 
     config.port = parseInt(config.port, 10) || 1883;
 
-    const bindAddress = config.bind || '0.0.0.0';
+    let bindAddress = config.bind || '0.0.0.0';
+    if (net.isIPv6(bindAddress)) {
+        bindAddress = '[' + bindAddress + ']';
+    }
     if (config.ssl) {
         serverConfig.mqtts = 'ssl://' + bindAddress + ':' + config.port;
         if (config.webSocket) {
