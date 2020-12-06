@@ -1,21 +1,33 @@
 {
     "common": {
         "name": "owntracks",
-        "version": "0.6.3",
+        "version": "1.0.0",
         "title": "OwnTracks - Your location companion",
         "desc": {
-			"en": "OwnTracks allows you to keep track of your own location in ioBroker",
-			"de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
-			"ru": "OwnTracks позволяет отслеживать ваше собственное местоположение в ioBroker",
-			"pt": "OwnTracks permite que você acompanhe sua própria localização no ioBroker",
-			"nl": "Met OwnTracks kunt u uw eigen locatie in ioBroker bijhouden",
-			"fr": "OwnTracks vous permet de garder une trace de votre propre emplacement dans ioBroker",
-			"it": "OwnTracks ti consente di tenere traccia della tua posizione in ioBroker",
-			"es": "OwnTracks le permite realizar un seguimiento de su propia ubicación en ioBroker",
-			"pl": "OwnTracks pozwala na śledzenie własnej lokalizacji w ioBroker",
-			"zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
-		},
+            "en": "OwnTracks allows you to keep track of your own location in ioBroker",
+            "de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
+            "ru": "OwnTracks позволяет отслеживать ваше собственное местоположение в ioBroker",
+            "pt": "OwnTracks permite que você acompanhe sua própria localização no ioBroker",
+            "nl": "Met OwnTracks kunt u uw eigen locatie in ioBroker bijhouden",
+            "fr": "OwnTracks vous permet de garder une trace de votre propre emplacement dans ioBroker",
+            "it": "OwnTracks ti consente di tenere traccia della tua posizione in ioBroker",
+            "es": "OwnTracks le permite realizar un seguimiento de su propia ubicación en ioBroker",
+            "pl": "OwnTracks pozwala na śledzenie własnej lokalizacji w ioBroker",
+            "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
+        },
         "news": {
+            "1.0.0": {
+                "en": "respect \"bind\" configuration, also for IPv6",
+                "de": "Beachten Sie die \"Bind\" -Konfiguration auch für IPv6",
+                "ru": "соблюдайте конфигурацию \"привязки\", в том числе и для IPv6",
+                "pt": "respeitar a configuração \"bind\", também para IPv6",
+                "nl": "respecteer de \"bind\" -configuratie, ook voor IPv6",
+                "fr": "respecter la configuration \"bind\", également pour IPv6",
+                "it": "rispettare la configurazione \"bind\", anche per IPv6",
+                "es": "respetar la configuración \"bind\", también para IPv6",
+                "pl": "przestrzegaj konfiguracji „bind”, również dla IPv6",
+                "zh-cn": "尊重“绑定”配置，也适用于IPv6"
+            },
             "0.6.3": {
                 "en": "some issues are fixed and dependencies updated",
                 "de": "Einige Probleme wurden behoben und Abhängigkeiten aktualisiert",
@@ -76,7 +88,7 @@
                 "ru": "первая версия"
             }
         },
-	"license": "MIT",
+        "license": "MIT",
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "owntracks.png",
@@ -90,8 +102,8 @@
         "readme": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/blob/master/README.md",
         "loglevel": "info",
         "type": "geoposition",
-		"materialize": true,
-		"compact": true,
+        "materialize": true,
+        "compact": true,
         "authors": [
             {
                 "name": "bluefox",
