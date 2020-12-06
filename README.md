@@ -76,7 +76,7 @@ The name must be equal to DeviceID in OwnTracks app.
 ## Changelog
 
 ### __WORK IN PROGRESS__
-* (Apollon77) respect "bind" configuration
+* (Apollon77) respect "bind" configuration, also for IPv6
 
 ### 0.6.3 (2020-05-12)
 * (Apollon77) updated dependencies
