@@ -74,6 +74,8 @@ The name must be equal to DeviceID in OwnTracks app.
 ![Settings](img/settings1.png)
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (Garfonso) fix roles for type detection
 
 ### 1.0.0 (2020-12-06)
 * (Apollon77) respect "bind" configuration, also for IPv6
