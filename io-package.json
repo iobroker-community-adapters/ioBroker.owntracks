@@ -3,6 +3,7 @@
         "name": "owntracks",
         "version": "1.0.0",
         "title": "OwnTracks - Your location companion",
+        "titleLang": { "en": "OwnTracks - Your location companion" },
         "desc": {
             "en": "OwnTracks allows you to keep track of your own location in ioBroker",
             "de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
