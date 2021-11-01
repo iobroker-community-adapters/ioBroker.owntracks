@@ -43,7 +43,7 @@
     "mocha": "^8.3.2",
     "request": "^2.88.2",
     "gulp": "^4.0.2",
-    "axios": "^0.21.1"
+    "axios": "^0.24.0"
   },
   "main": "main.js",
   "scripts": {
