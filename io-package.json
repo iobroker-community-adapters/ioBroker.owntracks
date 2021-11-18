@@ -3,6 +3,18 @@
         "name": "owntracks",
         "version": "1.0.0",
         "title": "OwnTracks - Your location companion",
+        "titleLang": {
+            "en": "OwnTracks - Your location companion",
+            "de": "OwnTracks - Ihr Standortbegleiter",
+            "ru": "OwnTracks - ваш компаньон для определения местоположения",
+            "pt": "OwnTracks - Seu companheiro de localização",
+            "nl": "OwnTracks - Uw locatiegenoot",
+            "fr": "OwnTracks - Votre compagnon de localisation",
+            "it": "OwnTracks - Il tuo compagno di posizione",
+            "es": "OwnTracks: su compañero de ubicación",
+            "pl": "OwnTracks - Twój towarzysz lokalizacji",
+            "zh-cn": "OwnTracks - 您的位置伴侣"
+        },
         "desc": {
             "en": "OwnTracks allows you to keep track of your own location in ioBroker",
             "de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
@@ -104,6 +116,7 @@
         "type": "geoposition",
         "materialize": true,
         "compact": true,
+        "tier": 2,
         "authors": [
             {
                 "name": "bluefox",
