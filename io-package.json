@@ -117,6 +117,8 @@
         "materialize": true,
         "compact": true,
         "tier": 2,
+        "dataSource": "push",
+        "connectionType": "cloud",
         "authors": [
             {
                 "name": "bluefox",
