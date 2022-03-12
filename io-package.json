@@ -1,239 +1,191 @@
 {
-    "common": {
-        "name": "owntracks",
-        "version": "1.0.0",
-        "title": "OwnTracks - Your location companion",
-        "titleLang": {
-            "en": "OwnTracks - Your location companion",
-            "de": "OwnTracks - Ihr Standortbegleiter",
-            "ru": "OwnTracks - ваш компаньон для определения местоположения",
-            "pt": "OwnTracks - Seu companheiro de localização",
-            "nl": "OwnTracks - Uw locatiegenoot",
-            "fr": "OwnTracks - Votre compagnon de localisation",
-            "it": "OwnTracks - Il tuo compagno di posizione",
-            "es": "OwnTracks: su compañero de ubicación",
-            "pl": "OwnTracks - Twój towarzysz lokalizacji",
-            "zh-cn": "OwnTracks - 您的位置伴侣"
-        },
-        "desc": {
-            "en": "OwnTracks allows you to keep track of your own location in ioBroker",
-            "de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
-            "ru": "OwnTracks позволяет отслеживать ваше собственное местоположение в ioBroker",
-            "pt": "OwnTracks permite que você acompanhe sua própria localização no ioBroker",
-            "nl": "Met OwnTracks kunt u uw eigen locatie in ioBroker bijhouden",
-            "fr": "OwnTracks vous permet de garder une trace de votre propre emplacement dans ioBroker",
-            "it": "OwnTracks ti consente di tenere traccia della tua posizione in ioBroker",
-            "es": "OwnTracks le permite realizar un seguimiento de su propia ubicación en ioBroker",
-            "pl": "OwnTracks pozwala na śledzenie własnej lokalizacji w ioBroker",
-            "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
-        },
-        "news": {
-            "1.0.0": {
-                "en": "respect \"bind\" configuration, also for IPv6",
-                "de": "Beachten Sie die \"Bind\" -Konfiguration auch für IPv6",
-                "ru": "соблюдайте конфигурацию \"привязки\", в том числе и для IPv6",
-                "pt": "respeitar a configuração \"bind\", também para IPv6",
-                "nl": "respecteer de \"bind\" -configuratie, ook voor IPv6",
-                "fr": "respecter la configuration \"bind\", également pour IPv6",
-                "it": "rispettare la configurazione \"bind\", anche per IPv6",
-                "es": "respetar la configuración \"bind\", también para IPv6",
-                "pl": "przestrzegaj konfiguracji „bind”, również dla IPv6",
-                "zh-cn": "尊重“绑定”配置，也适用于IPv6"
-            },
-            "0.6.3": {
-                "en": "some issues are fixed and dependencies updated",
-                "de": "Einige Probleme wurden behoben und Abhängigkeiten aktualisiert",
-                "ru": "исправлены некоторые проблемы и обновлены зависимости",
-                "pt": "alguns problemas são corrigidos e as dependências atualizadas",
-                "nl": "sommige problemen zijn opgelost en afhankelijkheden zijn bijgewerkt",
-                "fr": "certains problèmes sont corrigés et les dépendances mises à jour",
-                "it": "alcuni problemi sono stati risolti e le dipendenze aggiornate",
-                "es": "algunos problemas son corregidos y las dependencias actualizadas",
-                "pl": "niektóre problemy zostały naprawione, a zależności zaktualizowane",
-                "zh-cn": "一些问题已修复，相关性已更新"
-            },
-            "0.6.2": {
-                "en": "Added Compact mode and Gulp translations",
-                "de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
-                "ru": "Добавлены компактный режим и перевод Gulp",
-                "pt": "Adicionado modo Compact e traduções Gulp",
-                "nl": "Compact-modus en Gulp-vertalingen toegevoegd",
-                "fr": "Ajout des traductions en mode Compact et Gulp",
-                "it": "Aggiunte le modalità Compact e Gulp",
-                "es": "Agregado el modo compacto y Gulp traducciones",
-                "pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
-                "zh-cn": "增加了紧凑模式和Gulp翻译"
-            },
-            "0.6.0": {
-                "en": "Added Admin v3 / materialized support",
-                "de": "Admin v3 support",
-                "ru": "Добавлена ​​поддержка Admin v3 / материализованная поддержка",
-                "pt": "Adicionado Admin v3 / suporte materializado",
-                "nl": "Toegevoegd Admin v3 / gematerialiseerde ondersteuning",
-                "fr": "Ajout du support Admin v3 / matérialisé",
-                "it": "Aggiunto Admin v3 / supporto materializzato",
-                "es": "Se agregó Admin v3 / soporte materializado",
-                "pl": "Dodano wsparcie Admin v3 / zmaterializowane wsparcie",
-                "zh-cn": "添加了 Admin v3 /物化支持"
-            },
-            "0.5.1": {
-                "en": "Fixed an error when connection got closed",
-                "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird",
-                "ru": "Исправлена ​​ошибка при закрытии соединения",
-                "pt": "Corrigido um erro quando a conexão era fechada",
-                "nl": "Een fout verholpen toen de verbinding werd verbroken",
-                "fr": "Correction d'une erreur lors de la fermeture de la connexion",
-                "it": "Risolto un errore quando la connessione veniva chiusa",
-                "es": "Se corrigió un error cuando se cerraba la conexión.",
-                "pl": "Naprawiono błąd, gdy połączenie zostało zamknięte",
-                "zh-cn": "修复了连接关闭时的错误"
-            },
-            "0.5.0": {
-                "en": "Added support for defined locations",
-                "de": "Unterstützung für Regionen hinzugefügt",
-                "ru": "Добавлена ​​поддержка определенных местоположений",
-                "pt": "Adicionado suporte para locais definidos",
-                "nl": "Ondersteuning toegevoegd voor gedefinieerde locaties",
-                "fr": "Ajout de la prise en charge des emplacements définis",
-                "it": "Aggiunto supporto per posizioni definite",
-                "es": "Soporte agregado para ubicaciones definidas",
-                "pl": "Dodano wsparcie dla zdefiniowanych lokalizacji",
-                "zh-cn": "添加了对已定义位置的支持"
-            },
-            "0.4.0": {
-                "en": "Added support for encryption key (on Android see Preferences -> Advanced -> Encryption Key)",
-                "de": "Unterstützung zur Verschlüsselung hinzugefügt (auf Android unter Preferences -> Advanced -> Encryption Key)",
-                "ru": "Добавлена ​​поддержка ключа шифрования (на Android см. «Настройки» -> «Дополнительно» -> «Ключ шифрования»).",
-                "pt": "Adicionado suporte para chave de criptografia (no Android, consulte Preferências -> Avançado -> Chave de criptografia)",
-                "nl": "Ondersteuning toegevoegd voor coderingssleutel (zie voor Android Voorkeuren -> Geavanceerd -> Encryptiesleutel)",
-                "fr": "Ajout de la prise en charge de la clé de cryptage (sur Android, voir Préférences -> Avancé -> Clé de cryptage)",
-                "it": "Aggiunto supporto per chiave di crittografia (su Android vedi Preferenze -> Avanzate -> Chiave di crittografia)",
-                "es": "Se agregó compatibilidad con la clave de cifrado (en Android, consulte Preferencias -> Avanzado -> Clave de cifrado)",
-                "pl": "Dodano obsługę klucza szyfrowania (w systemie Android patrz Preferencje -> Zaawansowane -> Klucz szyfrowania)",
-                "zh-cn": "添加了对加密密钥的支持（在 Android 上，请参阅 Preferences -> Advanced -> Encryption Key）"
-            },
-            "0.3.0": {
-                "en": "Fix handling of publish messages",
-                "de": "Problem in der Abarbeitung von publish-Nachrichten behoben",
-                "ru": "Исправить обработку сообщений публикации",
-                "pt": "Corrigir o tratamento de mensagens de publicação",
-                "nl": "Afhandeling van publicatieberichten repareren",
-                "fr": "Correction de la gestion des messages de publication",
-                "it": "Risolto il problema con la gestione dei messaggi di pubblicazione",
-                "es": "Arreglar el manejo de los mensajes de publicación.",
-                "pl": "Napraw obsługę publikowanych wiadomości",
-                "zh-cn": "修复发布消息的处理"
-            },
-            "0.2.0": {
-                "en": "added two properties timestamp and datetime",
-                "de": "Timestamp und datetime sind hinzugefügt",
-                "ru": "Добавлены время последнего сообщения в разных форматах",
-                "pt": "adicionou duas propriedades timestamp e datetime",
-                "nl": "twee eigenschappen tijdstempel en datetime toegevoegd",
-                "fr": "ajout de deux propriétés timestamp et datetime",
-                "it": "aggiunte due proprietà timestamp e datetime",
-                "es": "agregó dos propiedades de marca de tiempo y fecha y hora",
-                "pl": "dodano dwie właściwości timestamp i datetime",
-                "zh-cn": "添加了两个属性时间戳和日期时间"
-            },
-            "0.1.1": {
-                "en": "add pictures",
-                "de": "Unterstützung von Bildern",
-                "ru": "Возможность добавить иконки",
-                "pt": "adicionar fotos",
-                "nl": "foto's toevoegen",
-                "fr": "ajouter des images",
-                "it": "aggiungi immagini",
-                "es": "añadir fotos",
-                "pl": "dodaj zdjęcia",
-                "zh-cn": "添加图片"
-            },
-            "0.1.0": {
-                "en": "initial checkin",
-                "de": "Erste version",
-                "ru": "первая версия",
-                "pt": "check-in inicial",
-                "nl": "eerste check-in",
-                "fr": "enregistrement initial",
-                "it": "check-in iniziale",
-                "es": "registro inicial",
-                "pl": "wstępna kontrola",
-                "zh-cn": "初次签到"
-            }
-        },
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "icon": "owntracks.png",
-        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.owntracks/master/admin/owntracks.png",
-        "keywords": [
-            "owntracks",
-            "position",
-            "gps",
-            "geo"
-        ],
-        "readme": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/blob/master/README.md",
-        "loglevel": "info",
-        "type": "geoposition",
-        "materialize": true,
-        "compact": true,
-        "tier": 2,
-        "dataSource": "push",
-        "connectionType": "cloud",
-        "authors": [
-            {
-                "name": "bluefox",
-                "email": "dogafox@gmail.com"
-            },
-            {
-                "name": "Zefau",
-                "email": "zefau@mailbox.org"
-            }
-        ],
-        "dependencies": [
-            {
-                "js-controller": ">=2.0.0"
-            }
-        ],
-        "plugins": {
-            "sentry": {
-                "dsn": "https://87e1931027184bc1a84bdbb885031754@sentry.iobroker.net/177"
-            }
-        }
+  "common": {
+    "name": "owntracks",
+    "version": "1.0.1",
+    "title": "OwnTracks - Your location companion",
+    "titleLang": {
+      "en": "OwnTracks - Your location companion",
+      "de": "OwnTracks - Ihr Standortbegleiter",
+      "ru": "OwnTracks - ваш компаньон для определения местоположения",
+      "pt": "OwnTracks - Seu companheiro de localização",
+      "nl": "OwnTracks - Uw locatiegenoot",
+      "fr": "OwnTracks - Votre compagnon de localisation",
+      "it": "OwnTracks - Il tuo compagno di posizione",
+      "es": "OwnTracks: su compañero de ubicación",
+      "pl": "OwnTracks - Twój towarzysz lokalizacji",
+      "zh-cn": "OwnTracks - 您的位置伴侣"
     },
-    "native": {
-        "port": 1883,
-        "user": "iobroker",
-        "pass": "",
-        "secure": false,
-        "pictures": [],
-        "bind": "0.0.0.0",
-        "certPublic": "defaultPublic",
-        "certPrivate": "defaultPrivate",
-        "certChained": "",
-        "leEnabled": false,
-        "leUpdate": false,
-        "leCheckPort": 80
+    "desc": {
+      "en": "OwnTracks allows you to keep track of your own location in ioBroker",
+      "de": "Mit OwnTracks können Sie Ihren eigenen Standort in ioBroker verfolgen",
+      "ru": "OwnTracks позволяет отслеживать ваше собственное местоположение в ioBroker",
+      "pt": "OwnTracks permite que você acompanhe sua própria localização no ioBroker",
+      "nl": "Met OwnTracks kunt u uw eigen locatie in ioBroker bijhouden",
+      "fr": "OwnTracks vous permet de garder une trace de votre propre emplacement dans ioBroker",
+      "it": "OwnTracks ti consente di tenere traccia della tua posizione in ioBroker",
+      "es": "OwnTracks le permite realizar un seguimiento de su propia ubicación en ioBroker",
+      "pl": "OwnTracks pozwala na śledzenie własnej lokalizacji w ioBroker",
+      "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "users",
-            "type": "channel",
-            "common": {
-                "role": "users",
-                "name": "List of users"
-            },
-            "native": {}
-        },
-        {
-            "_id": "locations",
-            "type": "channel",
-            "common": {
-                "role": "locations",
-                "name": "List of locations with present users"
-            },
-            "native": {}
-        }
-    ]
+    "news": {
+      "1.0.1": {
+        "en": "fix roles for type detection\nAdd Sentry for crash reporting",
+        "de": "Rollen für die Typerkennung behoben\nFügen Sie Sentry für Absturzberichte hinzu",
+        "ru": "исправить роли для определения типа\nДобавьте Sentry для отчетов о сбоях",
+        "pt": "corrigir funções para detecção de tipo\nAdicionar Sentinela para relatórios de falhas",
+        "nl": "repareer rollen voor typedetectie\nSentry toevoegen voor crashrapportage",
+        "fr": "corriger les rôles pour la détection de type\nAjouter Sentry pour les rapports de plantage",
+        "it": "correggere i ruoli per il rilevamento del tipo\nAggiungi Sentinella per la segnalazione degli arresti anomali",
+        "es": "corregir roles para la detección de tipos\nAgregar Sentry para informes de fallas",
+        "pl": "naprawić role do wykrywania typu\nDodaj Sentry do zgłaszania awarii",
+        "zh-cn": "修复类型检测的角色\n添加 Sentry 以进行崩溃报告"
+      },
+      "1.0.0": {
+        "en": "respect \"bind\" configuration, also for IPv6",
+        "de": "Beachten Sie die \"Bind\" -Konfiguration auch für IPv6",
+        "ru": "соблюдайте конфигурацию \"привязки\", в том числе и для IPv6",
+        "pt": "respeitar a configuração \"bind\", também para IPv6",
+        "nl": "respecteer de \"bind\" -configuratie, ook voor IPv6",
+        "fr": "respecter la configuration \"bind\", également pour IPv6",
+        "it": "rispettare la configurazione \"bind\", anche per IPv6",
+        "es": "respetar la configuración \"bind\", también para IPv6",
+        "pl": "przestrzegaj konfiguracji „bind”, również dla IPv6",
+        "zh-cn": "尊重“绑定”配置，也适用于IPv6"
+      },
+      "0.6.3": {
+        "en": "some issues are fixed and dependencies updated",
+        "de": "Einige Probleme wurden behoben und Abhängigkeiten aktualisiert",
+        "ru": "исправлены некоторые проблемы и обновлены зависимости",
+        "pt": "alguns problemas são corrigidos e as dependências atualizadas",
+        "nl": "sommige problemen zijn opgelost en afhankelijkheden zijn bijgewerkt",
+        "fr": "certains problèmes sont corrigés et les dépendances mises à jour",
+        "it": "alcuni problemi sono stati risolti e le dipendenze aggiornate",
+        "es": "algunos problemas son corregidos y las dependencias actualizadas",
+        "pl": "niektóre problemy zostały naprawione, a zależności zaktualizowane",
+        "zh-cn": "一些问题已修复，相关性已更新"
+      },
+      "0.6.2": {
+        "en": "Added Compact mode and Gulp translations",
+        "de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
+        "ru": "Добавлены компактный режим и перевод Gulp",
+        "pt": "Adicionado modo Compact e traduções Gulp",
+        "nl": "Compact-modus en Gulp-vertalingen toegevoegd",
+        "fr": "Ajout des traductions en mode Compact et Gulp",
+        "it": "Aggiunte le modalità Compact e Gulp",
+        "es": "Agregado el modo compacto y Gulp traducciones",
+        "pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
+        "zh-cn": "增加了紧凑模式和Gulp翻译"
+      },
+      "0.6.0": {
+        "en": "Added Admin v3 / materialized support",
+        "de": "Admin v3 support",
+        "ru": "Добавлена ​​поддержка Admin v3 / материализованная поддержка",
+        "pt": "Adicionado Admin v3 / suporte materializado",
+        "nl": "Toegevoegd Admin v3 / gematerialiseerde ondersteuning",
+        "fr": "Ajout du support Admin v3 / matérialisé",
+        "it": "Aggiunto Admin v3 / supporto materializzato",
+        "es": "Se agregó Admin v3 / soporte materializado",
+        "pl": "Dodano wsparcie Admin v3 / zmaterializowane wsparcie",
+        "zh-cn": "添加了 Admin v3 /物化支持"
+      },
+      "0.5.1": {
+        "en": "Fixed an error when connection got closed",
+        "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird",
+        "ru": "Исправлена ​​ошибка при закрытии соединения",
+        "pt": "Corrigido um erro quando a conexão era fechada",
+        "nl": "Een fout verholpen toen de verbinding werd verbroken",
+        "fr": "Correction d'une erreur lors de la fermeture de la connexion",
+        "it": "Risolto un errore quando la connessione veniva chiusa",
+        "es": "Se corrigió un error cuando se cerraba la conexión.",
+        "pl": "Naprawiono błąd, gdy połączenie zostało zamknięte",
+        "zh-cn": "修复了连接关闭时的错误"
+      },
+      "0.5.0": {
+        "en": "Added support for defined locations",
+        "de": "Unterstützung für Regionen hinzugefügt",
+        "ru": "Добавлена ​​поддержка определенных местоположений",
+        "pt": "Adicionado suporte para locais definidos",
+        "nl": "Ondersteuning toegevoegd voor gedefinieerde locaties",
+        "fr": "Ajout de la prise en charge des emplacements définis",
+        "it": "Aggiunto supporto per posizioni definite",
+        "es": "Soporte agregado para ubicaciones definidas",
+        "pl": "Dodano wsparcie dla zdefiniowanych lokalizacji",
+        "zh-cn": "添加了对已定义位置的支持"
+      }
+    },
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "owntracks.png",
+    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.owntracks/master/admin/owntracks.png",
+    "keywords": [
+      "owntracks",
+      "position",
+      "gps",
+      "geo"
+    ],
+    "readme": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/blob/master/README.md",
+    "loglevel": "info",
+    "type": "geoposition",
+    "materialize": true,
+    "compact": true,
+    "tier": 2,
+    "dataSource": "push",
+    "connectionType": "cloud",
+    "authors": [
+      {
+        "name": "bluefox",
+        "email": "dogafox@gmail.com"
+      },
+      {
+        "name": "Zefau",
+        "email": "zefau@mailbox.org"
+      }
+    ],
+    "dependencies": [
+      {
+        "js-controller": ">=2.0.0"
+      }
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://87e1931027184bc1a84bdbb885031754@sentry.iobroker.net/177"
+      }
+    }
+  },
+  "native": {
+    "port": 1883,
+    "user": "iobroker",
+    "pass": "",
+    "secure": false,
+    "pictures": [],
+    "bind": "0.0.0.0",
+    "certPublic": "defaultPublic",
+    "certPrivate": "defaultPrivate",
+    "certChained": "",
+    "leEnabled": false,
+    "leUpdate": false,
+    "leCheckPort": 80
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "users",
+      "type": "channel",
+      "common": {
+        "role": "users",
+        "name": "List of users"
+      },
+      "native": {}
+    },
+    {
+      "_id": "locations",
+      "type": "channel",
+      "common": {
+        "role": "locations",
+        "name": "List of locations with present users"
+      },
+      "native": {}
+    }
+  ]
 }
