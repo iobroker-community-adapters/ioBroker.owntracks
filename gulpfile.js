@@ -342,7 +342,7 @@ async function translateNotExisting(obj, baseText, yandex) {
 
     if (t) {
         for (let l in languages) {
-            if (!obj[l]) {                
+            if (!obj[l]) {
                 const time = new Date().getTime();
                 obj[l] = await translate(t, l, yandex);
                 console.log('en -> ' + l + ' ' + (new Date().getTime() - time) + ' ms');
@@ -429,7 +429,7 @@ gulp.task('translate', async function (done) {
     if (i > -1) {
         yandex = process.argv[i + 1];
     }
-    
+
     if (iopackage && iopackage.common) {
         if (iopackage.common.news) {
             console.log('Translate News');
@@ -447,6 +447,7 @@ gulp.task('translate', async function (done) {
             console.log('Translate Description');
             await translateNotExisting(iopackage.common.desc, null, yandex);
         }
+        fs.writeFileSync('io-package.json', JSON.stringify(iopackage, null, 4));
 
         if (fs.existsSync('./admin/i18n/en/translations.json')) {
             let enTranslations = require('./admin/i18n/en/translations.json');
@@ -469,7 +470,6 @@ gulp.task('translate', async function (done) {
         }
 
     }
-    fs.writeFileSync('io-package.json', JSON.stringify(iopackage, null, 4));
 });
 
 gulp.task('translateAndUpdateWordsJS', gulp.series('translate', 'adminLanguages2words', 'adminWords2languages'));

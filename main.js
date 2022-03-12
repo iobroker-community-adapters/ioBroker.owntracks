@@ -33,9 +33,9 @@ const nodes = {
         'connected': {'tree': 'users.%id%.connected', 'description': 'Connection status of user %name%', 'common': {'type': 'boolean'}},
 
         'battery': {'tree': 'users.%id%.battery', 'description': 'Device battery level for %name%', 'common': {'type': 'number', 'role': 'battery', 'unit': '%', 'min': 0, 'max': 100}},
-        'latitude': {'tree': 'users.%id%.latitude', 'description': 'Latitude for %name%', 'common': {'type': 'number', 'role': 'gps.latitude'}},
-        'longitude': {'tree': 'users.%id%.longitude', 'description': 'Longitude for %name%', 'common': {'type': 'number', 'role': 'gps.longitude'}},
-        'accuracy': {'tree': 'users.%id%.accuracy', 'description': 'Accuracy for %name%', 'common': {'type': 'number', 'uni': 'm'}},
+        'latitude': {'tree': 'users.%id%.latitude', 'description': 'Latitude for %name%', 'common': {'type': 'number', 'role': 'value.gps.latitude'}},
+        'longitude': {'tree': 'users.%id%.longitude', 'description': 'Longitude for %name%', 'common': {'type': 'number', 'role': 'value.gps.longitude'}},
+        'accuracy': {'tree': 'users.%id%.accuracy', 'description': 'Accuracy for %name%', 'common': {'type': 'number', 'uni': 'm', 'role': 'value.gps.accuracy'}},
         'encryption': {'tree': 'users.%id%.encryption', 'description': 'Encryption status for %name%', 'common': {'type': 'boolean'}},
         'timestamp': {'tree': 'users.%id%.timestamp', 'description': 'Timestamp of last refresh for %name%', 'common': {'type': 'number'}},
         'datetime': {'tree': 'users.%id%.datetime', 'description': 'Datetime of last refresh for %name%'},

@@ -1,5 +1,5 @@
 {
-    "Authentication:": "",
+    "Authentication:": "authenticatie",
     "Cannot read file!": "Kan bestand niet lezen!",
     "Chained certificate:": "Geketend certificaat:",
     "Drop the files here": "Zet de bestanden hier neer",
@@ -11,7 +11,7 @@
     "Port to check the domain:": "Poort om het domein te controleren:",
     "Private certificate:": "Privé certificaat:",
     "Public certificate:": "Openbaar certificaat:",
-    "Secure(HTTPS):": "",
+    "Secure(HTTPS):": "Veilig (HTTPS):",
     "Server settings": "Server instellingen",
     "Unknown file format!": "Onbekend bestandsformaat!",
     "Use Lets Encrypt certificates:": "Gebruik Let's Encrypt-certificaten:",

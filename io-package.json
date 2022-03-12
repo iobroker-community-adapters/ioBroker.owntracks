@@ -66,38 +66,99 @@
             },
             "0.6.0": {
                 "en": "Added Admin v3 / materialized support",
-                "de": "Admin v3 support"
+                "de": "Admin v3 support",
+                "ru": "Добавлена ​​поддержка Admin v3 / материализованная поддержка",
+                "pt": "Adicionado Admin v3 / suporte materializado",
+                "nl": "Toegevoegd Admin v3 / gematerialiseerde ondersteuning",
+                "fr": "Ajout du support Admin v3 / matérialisé",
+                "it": "Aggiunto Admin v3 / supporto materializzato",
+                "es": "Se agregó Admin v3 / soporte materializado",
+                "pl": "Dodano wsparcie Admin v3 / zmaterializowane wsparcie",
+                "zh-cn": "添加了 Admin v3 /物化支持"
             },
             "0.5.1": {
                 "en": "Fixed an error when connection got closed",
-                "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird"
+                "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird",
+                "ru": "Исправлена ​​ошибка при закрытии соединения",
+                "pt": "Corrigido um erro quando a conexão era fechada",
+                "nl": "Een fout verholpen toen de verbinding werd verbroken",
+                "fr": "Correction d'une erreur lors de la fermeture de la connexion",
+                "it": "Risolto un errore quando la connessione veniva chiusa",
+                "es": "Se corrigió un error cuando se cerraba la conexión.",
+                "pl": "Naprawiono błąd, gdy połączenie zostało zamknięte",
+                "zh-cn": "修复了连接关闭时的错误"
             },
             "0.5.0": {
                 "en": "Added support for defined locations",
-                "de": "Unterstützung für Regionen hinzugefügt"
+                "de": "Unterstützung für Regionen hinzugefügt",
+                "ru": "Добавлена ​​поддержка определенных местоположений",
+                "pt": "Adicionado suporte para locais definidos",
+                "nl": "Ondersteuning toegevoegd voor gedefinieerde locaties",
+                "fr": "Ajout de la prise en charge des emplacements définis",
+                "it": "Aggiunto supporto per posizioni definite",
+                "es": "Soporte agregado para ubicaciones definidas",
+                "pl": "Dodano wsparcie dla zdefiniowanych lokalizacji",
+                "zh-cn": "添加了对已定义位置的支持"
             },
             "0.4.0": {
                 "en": "Added support for encryption key (on Android see Preferences -> Advanced -> Encryption Key)",
-                "de": "Unterstützung zur Verschlüsselung hinzugefügt (auf Android unter Preferences -> Advanced -> Encryption Key)"
+                "de": "Unterstützung zur Verschlüsselung hinzugefügt (auf Android unter Preferences -> Advanced -> Encryption Key)",
+                "ru": "Добавлена ​​поддержка ключа шифрования (на Android см. «Настройки» -> «Дополнительно» -> «Ключ шифрования»).",
+                "pt": "Adicionado suporte para chave de criptografia (no Android, consulte Preferências -> Avançado -> Chave de criptografia)",
+                "nl": "Ondersteuning toegevoegd voor coderingssleutel (zie voor Android Voorkeuren -> Geavanceerd -> Encryptiesleutel)",
+                "fr": "Ajout de la prise en charge de la clé de cryptage (sur Android, voir Préférences -> Avancé -> Clé de cryptage)",
+                "it": "Aggiunto supporto per chiave di crittografia (su Android vedi Preferenze -> Avanzate -> Chiave di crittografia)",
+                "es": "Se agregó compatibilidad con la clave de cifrado (en Android, consulte Preferencias -> Avanzado -> Clave de cifrado)",
+                "pl": "Dodano obsługę klucza szyfrowania (w systemie Android patrz Preferencje -> Zaawansowane -> Klucz szyfrowania)",
+                "zh-cn": "添加了对加密密钥的支持（在 Android 上，请参阅 Preferences -> Advanced -> Encryption Key）"
             },
             "0.3.0": {
                 "en": "Fix handling of publish messages",
-                "de": "Problem in der Abarbeitung von publish-Nachrichten behoben"
+                "de": "Problem in der Abarbeitung von publish-Nachrichten behoben",
+                "ru": "Исправить обработку сообщений публикации",
+                "pt": "Corrigir o tratamento de mensagens de publicação",
+                "nl": "Afhandeling van publicatieberichten repareren",
+                "fr": "Correction de la gestion des messages de publication",
+                "it": "Risolto il problema con la gestione dei messaggi di pubblicazione",
+                "es": "Arreglar el manejo de los mensajes de publicación.",
+                "pl": "Napraw obsługę publikowanych wiadomości",
+                "zh-cn": "修复发布消息的处理"
             },
             "0.2.0": {
                 "en": "added two properties timestamp and datetime",
                 "de": "Timestamp und datetime sind hinzugefügt",
-                "ru": "Добавлены время последнего сообщения в разных форматах"
+                "ru": "Добавлены время последнего сообщения в разных форматах",
+                "pt": "adicionou duas propriedades timestamp e datetime",
+                "nl": "twee eigenschappen tijdstempel en datetime toegevoegd",
+                "fr": "ajout de deux propriétés timestamp et datetime",
+                "it": "aggiunte due proprietà timestamp e datetime",
+                "es": "agregó dos propiedades de marca de tiempo y fecha y hora",
+                "pl": "dodano dwie właściwości timestamp i datetime",
+                "zh-cn": "添加了两个属性时间戳和日期时间"
             },
             "0.1.1": {
                 "en": "add pictures",
                 "de": "Unterstützung von Bildern",
-                "ru": "Возможность добавить иконки"
+                "ru": "Возможность добавить иконки",
+                "pt": "adicionar fotos",
+                "nl": "foto's toevoegen",
+                "fr": "ajouter des images",
+                "it": "aggiungi immagini",
+                "es": "añadir fotos",
+                "pl": "dodaj zdjęcia",
+                "zh-cn": "添加图片"
             },
             "0.1.0": {
                 "en": "initial checkin",
                 "de": "Erste version",
-                "ru": "первая версия"
+                "ru": "первая версия",
+                "pt": "check-in inicial",
+                "nl": "eerste check-in",
+                "fr": "enregistrement initial",
+                "it": "check-in iniziale",
+                "es": "registro inicial",
+                "pl": "wstępna kontrola",
+                "zh-cn": "初次签到"
             }
         },
         "license": "MIT",
@@ -133,7 +194,12 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ]
+        ],
+        "plugins": {
+            "sentry": {
+                "dsn": "https://87e1931027184bc1a84bdbb885031754@sentry.iobroker.net/177"
+            }
+        }
     },
     "native": {
         "port": 1883,

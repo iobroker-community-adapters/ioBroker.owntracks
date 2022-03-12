@@ -1,5 +1,5 @@
 {
-    "Authentication:": "",
+    "Authentication:": "Authentification",
     "Cannot read file!": "Impossible de lire le fichier!",
     "Chained certificate:": "Certificat chaîné:",
     "Drop the files here": "Déposer les fichiers ici",
@@ -11,7 +11,7 @@
     "Port to check the domain:": "Port pour vérifier le domaine:",
     "Private certificate:": "Certificat privé:",
     "Public certificate:": "Certificat public:",
-    "Secure(HTTPS):": "",
+    "Secure(HTTPS):": "Sécurisé (HTTPS):",
     "Server settings": "Paramètres du serveur",
     "Unknown file format!": "Format de fichier inconnu!",
     "Use Lets Encrypt certificates:": "Utilisez les certificats Let's Encrypt:",
