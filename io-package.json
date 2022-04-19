@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "owntracks",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "title": "OwnTracks - Your location companion",
     "titleLang": {
       "en": "OwnTracks - Your location companion",
@@ -28,6 +28,18 @@
       "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
     },
     "news": {
+      "1.0.2": {
+        "en": "Optimize handling for cases with invalid history state values",
+        "de": "Optimieren Sie die Handhabung von Fällen mit ungültigen Verlaufsstatuswerten",
+        "ru": "Оптимизация обработки случаев с недопустимыми значениями состояния истории",
+        "pt": "Otimize o tratamento de casos com valores de estado de histórico inválidos",
+        "nl": "Optimaliseer de afhandeling van zaken met ongeldige waarden voor de geschiedenisstatus",
+        "fr": "Optimiser la gestion des cas avec des valeurs d'état d'historique non valides",
+        "it": "Ottimizza la gestione dei casi con valori di stato della cronologia non validi",
+        "es": "Optimice el manejo de casos con valores de estado de historial no válidos",
+        "pl": "Zoptymalizuj obsługę przypadków z nieprawidłowymi wartościami stanu historii",
+        "zh-cn": "优化历史状态值无效的情况处理"
+      },
       "1.0.1": {
         "en": "fix roles for type detection\nAdd Sentry for crash reporting",
         "de": "Rollen für die Typerkennung behoben\nFügen Sie Sentry für Absturzberichte hinzu",
@@ -99,18 +111,6 @@
         "es": "Se corrigió un error cuando se cerraba la conexión.",
         "pl": "Naprawiono błąd, gdy połączenie zostało zamknięte",
         "zh-cn": "修复了连接关闭时的错误"
-      },
-      "0.5.0": {
-        "en": "Added support for defined locations",
-        "de": "Unterstützung für Regionen hinzugefügt",
-        "ru": "Добавлена ​​поддержка определенных местоположений",
-        "pt": "Adicionado suporte para locais definidos",
-        "nl": "Ondersteuning toegevoegd voor gedefinieerde locaties",
-        "fr": "Ajout de la prise en charge des emplacements définis",
-        "it": "Aggiunto supporto per posizioni definite",
-        "es": "Soporte agregado para ubicaciones definidas",
-        "pl": "Dodano wsparcie dla zdefiniowanych lokalizacji",
-        "zh-cn": "添加了对已定义位置的支持"
       }
     },
     "license": "MIT",
