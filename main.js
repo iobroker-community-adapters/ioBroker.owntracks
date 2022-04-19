@@ -141,7 +141,7 @@ function createNode(node, state) {
             type: 'state',
             native: node.native || {}
         },
-        set(node.node, state.val)
+        () => set(node.node, state.val)
     );
 }
 
@@ -345,7 +345,10 @@ const cltFunction = function (client) {
 
                     // write to history of user
                     adapter.getState(nodes.users.location.history.tree.replace('%id%', u.userId), (err, state) => {
-                        const history = state === null ? [] : JSON.parse(state.val);
+                        let history = state === null ? [] : JSON.parse(state.val);
+                        if (!Array.isArray(history)) {
+                            history = [];
+                        }
                         setValue(nodes.users.location.history, {
                             id: u.userId,
                             name: u.userName,
@@ -376,7 +379,10 @@ const cltFunction = function (client) {
 
                             // write to history
                             adapter.getState(nodes.locations.history.tree.replace('%id%', locationId), (err, state) => {
-                                const history = state === null ? [] : JSON.parse(state.val);
+                                let history = state === null ? [] : JSON.parse(state.val.toString());
+                                if (!Array.isArray(history)) {
+                                    history = [];
+                                }
                                 setValue(nodes.locations.history, {
                                     id: locationId,
                                     name: locationName,
@@ -407,7 +413,10 @@ const cltFunction = function (client) {
 
                     // write to history of user
                     adapter.getState(nodes.users.location.history.tree.replace('%id%', u.userId), (err, state) => {
-                        const history = state === null ? [] : JSON.parse(state.val);
+                        let history = state === null ? [] : JSON.parse(state.val.toString());
+                        if (!Array.isArray(history)) {
+                            history = [];
+                        }
                         setValue(nodes.users.location.history, {
                             id: u.userId,
                             name: u.userName,
@@ -437,7 +446,10 @@ const cltFunction = function (client) {
 
                             // write to history
                             adapter.getState(nodes.locations.history.tree.replace('%id%', locationId), (err, state) => {
-                                const history = state === null ? [] : JSON.parse(state.val);
+                                let history = state === null ? [] : JSON.parse(state.val);
+                                if (!Array.isArray(history)) {
+                                    history = [];
+                                }
                                 setValue(nodes.locations.history, {
                                     id: locationId,
                                     name: locationName,
