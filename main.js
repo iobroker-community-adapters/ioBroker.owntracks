@@ -413,7 +413,7 @@ const cltFunction = function (client) {
 
                     // write to history of user
                     adapter.getState(nodes.users.location.history.tree.replace('%id%', u.userId), (err, state) => {
-                        let history = state === null ? [] : JSON.parse(state.val.toString());
+                        let history = (state === null || state.val === null) ? [] : JSON.parse(state.val.toString());
                         if (!Array.isArray(history)) {
                             history = [];
                         }
@@ -426,7 +426,7 @@ const cltFunction = function (client) {
 
                     // update location (remove user if present)
                     adapter.getState(nodes.locations.users.tree.replace('%id%', locationId), (err, state) => {
-                        users = (state === null ? '' : state.val);
+                        users = (state === null ? '' : state.val || '');
                         adapter.log.debug(users === '' ? 'No users are currently in location ' + locationName + '.' : 'Users currently in location ' + locationName + ': ' + users);
 
                         if (users.indexOf(u.userId) > -1) {
@@ -649,8 +649,8 @@ function main() {
     adapter.config.encryptionKey = decode('Zgfr56gFe87jJOM', adapter.config.encryptionKey || '');
 
     if (!adapter.config.user) {
-        adapter.log.error('Empty user name not allowed!');
-        process.stop(-1);
+        adapter.log.error('Empty user name not allowed! Please check your configuration.');
+        adapter.stop();
         return;
     }
 
