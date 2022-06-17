@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "owntracks",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "title": "OwnTracks - Your location companion",
     "titleLang": {
       "en": "OwnTracks - Your location companion",
@@ -28,6 +28,18 @@
       "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
     },
     "news": {
+      "1.0.3": {
+        "en": "Fix several crash cases reported by Sentry",
+        "de": "Beheben Sie mehrere Crashfälle gemeldet von Sentry",
+        "ru": "Исправление нескольких случаев сбоя, сообщенных Sentry",
+        "pt": "Corrigir vários casos de acidente relatados por Sentry",
+        "nl": "Vertaling:",
+        "fr": "Correction de plusieurs cas de crash signalés par Sentry",
+        "it": "Fissa diversi casi di crash segnalati da Sentry",
+        "es": "Arreglar varios casos de accidentes reportados por Sentry",
+        "pl": "Fix kilka przypadków zachorowania przez Sentry'a",
+        "zh-cn": "Sentry所报告的几起事故"
+      },
       "1.0.2": {
         "en": "Optimize handling for cases with invalid history state values",
         "de": "Optimieren Sie die Handhabung von Fällen mit ungültigen Verlaufsstatuswerten",
@@ -99,18 +111,6 @@
         "es": "Se agregó Admin v3 / soporte materializado",
         "pl": "Dodano wsparcie Admin v3 / zmaterializowane wsparcie",
         "zh-cn": "添加了 Admin v3 /物化支持"
-      },
-      "0.5.1": {
-        "en": "Fixed an error when connection got closed",
-        "de": "Fehler beseitigt, wenn die Verbindung geschlossen wird",
-        "ru": "Исправлена ​​ошибка при закрытии соединения",
-        "pt": "Corrigido um erro quando a conexão era fechada",
-        "nl": "Een fout verholpen toen de verbinding werd verbroken",
-        "fr": "Correction d'une erreur lors de la fermeture de la connexion",
-        "it": "Risolto un errore quando la connessione veniva chiusa",
-        "es": "Se corrigió un error cuando se cerraba la conexión.",
-        "pl": "Naprawiono błąd, gdy połączenie zostało zamknięte",
-        "zh-cn": "修复了连接关闭时的错误"
       }
     },
     "license": "MIT",

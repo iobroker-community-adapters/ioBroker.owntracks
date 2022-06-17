@@ -79,8 +79,7 @@ The name must be equal to DeviceID in OwnTracks app.
 ![Settings](img/settings1.png)
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 1.0.3 (2022-06-17)
 * (Apollon77) Fix several crash cases reported by Sentry
 
 ### 1.0.2 (2022-04-19)
