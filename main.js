@@ -358,7 +358,7 @@ const cltFunction = function (client) {
 
                     // update location (add user if not present yet for some reason)
                     adapter.getState(nodes.locations.users.tree.replace('%id%', locationId), (err, state) => {
-                        users = (state === null ? '' : state.val);
+                        users = (state === null ? '' : state.val) || '';
                         adapter.log.debug(users === '' ? 'No users are currently in location ' + locationName + '.' : 'Users currently in location ' + locationName + ': ' + users);
 
                         if (users.indexOf(u.userId) === -1) {
