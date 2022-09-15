@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "owntracks",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "title": "OwnTracks - Your location companion",
     "titleLang": {
       "en": "OwnTracks - Your location companion",
@@ -28,6 +28,18 @@
       "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
     },
     "news": {
+      "1.0.4": {
+        "en": "Fix crash case reported by Sentry",
+        "de": "Reparieren Crashfall berichtet von Sentry",
+        "ru": "Исправление случай аварии сообщается в Sentry",
+        "pt": "Corrigir caso de acidente relatado por Sentry",
+        "nl": "Vertaling:",
+        "fr": "Correction de l'accident rapporté par Sentry",
+        "it": "Correzione caso di crash segnalato da Sentry",
+        "es": "Caso de accidente fijo reportado por Sentry",
+        "pl": "Sprawa rozbicia Fixa doniesiona przez firmę Sentry",
+        "zh-cn": "Sentry所报告的六例事故"
+      },
       "1.0.3": {
         "en": "Fix several crash cases reported by Sentry",
         "de": "Beheben Sie mehrere Crashfälle gemeldet von Sentry",
@@ -99,18 +111,6 @@
         "es": "Agregado el modo compacto y Gulp traducciones",
         "pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
         "zh-cn": "增加了紧凑模式和Gulp翻译"
-      },
-      "0.6.0": {
-        "en": "Added Admin v3 / materialized support",
-        "de": "Admin v3 support",
-        "ru": "Добавлена ​​поддержка Admin v3 / материализованная поддержка",
-        "pt": "Adicionado Admin v3 / suporte materializado",
-        "nl": "Toegevoegd Admin v3 / gematerialiseerde ondersteuning",
-        "fr": "Ajout du support Admin v3 / matérialisé",
-        "it": "Aggiunto Admin v3 / supporto materializzato",
-        "es": "Se agregó Admin v3 / soporte materializado",
-        "pl": "Dodano wsparcie Admin v3 / zmaterializowane wsparcie",
-        "zh-cn": "添加了 Admin v3 /物化支持"
       }
     },
     "license": "MIT",
