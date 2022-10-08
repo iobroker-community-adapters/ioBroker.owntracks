@@ -5,7 +5,7 @@
 const adapterName = require('./io-package.json').common.name;
 const utils = require('@iobroker/adapter-core'); // Get common adapter utils
 
-//const LE        = require(utils.controllerDir + '/lib/letsencrypt.js');
+//const LE        = utils.commonTools.letsEncrypt;
 const createStreamServer = require('create-stream-server');
 const mqtt        = require('mqtt-connection');
 const sodium      = require('libsodium-wrappers');

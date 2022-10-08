@@ -79,6 +79,10 @@ The name must be equal to DeviceID in OwnTracks app.
 ![Settings](img/settings1.png)
 
 ## Changelog
+
+### __WORK IN PROGRESS__
+* (Apollon77) Prepare for future js-controller versions
+
 ### 1.0.4 (2022-09-15)
 * (Apollon77) Fix crash case reported by Sentry
 
