@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "owntracks",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "title": "OwnTracks - Your location companion",
     "titleLang": {
       "en": "OwnTracks - Your location companion",
@@ -28,6 +28,18 @@
       "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
     },
     "news": {
+      "1.0.5": {
+        "en": "Prepare for future js-controller versions",
+        "de": "Bereiten Sie sich auf zukünftige js-Controller-Versionen",
+        "ru": "Подготовьтесь к будущим версиям js-controller",
+        "pt": "Prepare-se para futuras versões js-controller",
+        "nl": "Bereid je voor op toekomstige Js-controller versie",
+        "fr": "Préparez-vous pour les versions futures de js-controller",
+        "it": "Prepararsi per le future versioni js-controller",
+        "es": "Prepararse para futuras versiones js-controller",
+        "pl": "Prepare for future js-controller version",
+        "zh-cn": "今后防污版本的编制"
+      },
       "1.0.4": {
         "en": "Fix crash case reported by Sentry",
         "de": "Reparieren Crashfall berichtet von Sentry",
@@ -99,18 +111,6 @@
         "es": "algunos problemas son corregidos y las dependencias actualizadas",
         "pl": "niektóre problemy zostały naprawione, a zależności zaktualizowane",
         "zh-cn": "一些问题已修复，相关性已更新"
-      },
-      "0.6.2": {
-        "en": "Added Compact mode and Gulp translations",
-        "de": "Kompakter Modus und Gulp-Übersetzungen hinzugefügt",
-        "ru": "Добавлены компактный режим и перевод Gulp",
-        "pt": "Adicionado modo Compact e traduções Gulp",
-        "nl": "Compact-modus en Gulp-vertalingen toegevoegd",
-        "fr": "Ajout des traductions en mode Compact et Gulp",
-        "it": "Aggiunte le modalità Compact e Gulp",
-        "es": "Agregado el modo compacto y Gulp traducciones",
-        "pl": "Dodano tryb kompaktowy i tłumaczenia Gulp",
-        "zh-cn": "增加了紧凑模式和Gulp翻译"
       }
     },
     "license": "MIT",
