@@ -30,7 +30,7 @@
     "pictures_info": "Benutzer-Avatare",
     "port": "Port",
     "state": "State",
-    "tab_config": "Konfiguration",
+    "tab_config": "Einstellungen",
     "tab_http": "Option 1: ioBroker.cloud / iot (empfohlen)",
     "tab_info": "Informationen",
     "tab_mqtt": "Option 2: MQTT Server",
