@@ -17,7 +17,7 @@
     "Use Lets Encrypt certificates:": "Let's Encrypt Zertifikate benutzen:",
     "Use this instance for automatic update:": "Benutze diese Instanz für automatische Updates:",
     "connection_info": "Verbindungseinstellungen",
-    "delete": "löschen",
+    "delete": "Löschen",
     "enabled": "aktiviert",
     "encryptionKey": "Passphrase zur Verschlüsselung der Benachrichtigungen",
     "help_tip": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
