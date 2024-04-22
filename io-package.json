@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "owntracks",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "titleLang": {
       "en": "OwnTracks - Your location companion",
       "de": "OwnTracks - Ihr Standortbegleiter",
@@ -27,6 +27,19 @@
       "zh-cn": "OwnTracks允许您在ioBroker中跟踪自己的位置"
     },
     "news": {
+      "1.1.0": {
+        "en": "Adapter requires node.js >= 18 and js-controller >= 5 now\nDependencies have been updated",
+        "de": "Adapter benötigt node.js >= 18 und js-controller >= 5 jetzt\nAbhängigkeiten wurden aktualisiert",
+        "ru": "Адаптер требует node.js >= 18 и js-контроллер >= 5 сейчас\nЗависимость обновлена",
+        "pt": "Adapter requer node.js >= 18 e js-controller >= 5 agora\nAs dependências foram atualizadas",
+        "nl": "Voor adaptor zijn node.js < 18 en js-controller > Nu 5\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "L'adaptateur nécessite node.js >= 18 et js-controller >= 5 maintenant\nLes dépendances ont été actualisées",
+        "it": "Adattatore richiede node.js >= 18 e js-controller >= 5 ora\nLe dipendenze sono state aggiornate",
+        "es": "Adaptador requiere node.js √≥= 18 y js-controller 5 ahora\nSe han actualizado las dependencias",
+        "pl": "Adapter wymaga node.js > = 18 i kontroler js- > = 5 teraz\nZaktualizowano zależności",
+        "uk": "Адаптер вимагає node.js >= 18 і js-controller >= 5 тепер\nЗалежність було оновлено",
+        "zh-cn": "适配器需要节点.js QQ18和js控制器 QQ 现在5号\n依赖关系已更新"
+      },
       "1.0.5": {
         "en": "Prepare for future js-controller versions",
         "de": "Bereiten Sie sich auf zukünftige js-Controller-Versionen",
@@ -98,18 +111,6 @@
         "es": "respetar la configuración \"bind\", también para IPv6",
         "pl": "przestrzegaj konfiguracji „bind”, również dla IPv6",
         "zh-cn": "尊重“绑定”配置，也适用于IPv6"
-      },
-      "0.6.3": {
-        "en": "some issues are fixed and dependencies updated",
-        "de": "Einige Probleme wurden behoben und Abhängigkeiten aktualisiert",
-        "ru": "исправлены некоторые проблемы и обновлены зависимости",
-        "pt": "alguns problemas são corrigidos e as dependências atualizadas",
-        "nl": "sommige problemen zijn opgelost en afhankelijkheden zijn bijgewerkt",
-        "fr": "certains problèmes sont corrigés et les dépendances mises à jour",
-        "it": "alcuni problemi sono stati risolti e le dipendenze aggiornate",
-        "es": "algunos problemas son corregidos y las dependencias actualizadas",
-        "pl": "niektóre problemy zostały naprawione, a zależności zaktualizowane",
-        "zh-cn": "一些问题已修复，相关性已更新"
       }
     },
     "licenseInformation": {
