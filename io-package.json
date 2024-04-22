@@ -2,7 +2,6 @@
   "common": {
     "name": "owntracks",
     "version": "1.0.5",
-    "title": "OwnTracks - Your location companion",
     "titleLang": {
       "en": "OwnTracks - Your location companion",
       "de": "OwnTracks - Ihr Standortbegleiter",
@@ -113,7 +112,10 @@
         "zh-cn": "一些问题已修复，相关性已更新"
       }
     },
-    "license": "MIT",
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "owntracks.png",
@@ -144,7 +146,12 @@
     ],
     "dependencies": [
       {
-        "js-controller": ">=2.0.0"
+        "js-controller": ">=5.0.19"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.13.16"
       }
     ],
     "plugins": {
