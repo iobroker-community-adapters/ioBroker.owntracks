@@ -1,3 +1,6 @@
 /node_modules
 /.idea
 /tmp
+
+#ignore .commitinfo created by ioBroker release script
+.commitinfo
