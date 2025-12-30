@@ -2,23 +2,12 @@
   "name": "iobroker.owntracks",
   "version": "1.1.0",
   "description": "OwnTracks - Your location companion",
-  "author": {
-    "name": "bluefox",
-    "email": "dogafox@gmail.com"
-  },
+  "author": "bluefox <dogafox@gmail.com>",
   "contributors": [
-    {
-      "name": "bluefox",
-      "email": "dogafox@gmail.com"
-    },
-    {
-      "name": "matspi",
-      "email": "matthias.spiller@fari.software"
-    },
-    {
-      "name": "zefau",
-      "email": "zefau@mailbox.org"
-    }
+    "bluefox <dogafox@gmail.com>",
+    "matspi <matthias.spiller@fari.software>",
+    "zefau <zefau@mailbox.org>",
+    "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
   ],
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.owntracks",
   "license": "MIT",
