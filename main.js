@@ -9,7 +9,7 @@ const utils = require('@iobroker/adapter-core'); // Get common adapter utils
 const createStreamServer = require('create-stream-server');
 const mqtt        = require('mqtt-connection');
 const sodium      = require('libsodium-wrappers');
-const net         = require('net');
+const net         = require('node:net');
 
 let adapter;
 let server;
