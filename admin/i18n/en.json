@@ -1,0 +1,15 @@
+{
+    "connection_info": "Connection settings",
+    "encryptionKey": "Encryption Key for Payload Encryption",
+    "ip": "IP address",
+    "name": "User",
+    "other_info": "Other Settings",
+    "password": "Password",
+    "picture": "Picture",
+    "pictures_info": "User Pictures",
+    "port": "Port",
+    "tab_config": "Configuration",
+    "tab_pictures": "User Pictures",
+    "username": "User",
+    "webSocket": "Use Websockets"
+}

@@ -98,17 +98,6 @@ function startAdapter(options) {
 
 
 /*
- * Decode
- */
-function decode(key, value) {
-    let result = '';
-    for (let i = 0; i < value.length; ++i) {
-        result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-    }
-    return result;
-}
-
-/*
  * Convert a timestamp to datetime
  */
 function getDateTime(timestamp) {
@@ -644,10 +633,6 @@ function initMqttServer(config) {
 }
 
 function main() {
-    //noinspection JSUnresolvedVariable
-    adapter.config.pass = decode('Zgfr56gFe87jJOM', adapter.config.pass || '');
-    adapter.config.encryptionKey = decode('Zgfr56gFe87jJOM', adapter.config.encryptionKey || '');
-
     if (!adapter.config.user) {
         adapter.log.error('Empty user name not allowed! Please check your configuration.');
         adapter.stop();

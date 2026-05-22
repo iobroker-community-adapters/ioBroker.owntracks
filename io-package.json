@@ -130,7 +130,9 @@
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/blob/master/README.md",
     "loglevel": "info",
     "type": "geoposition",
-    "materialize": true,
+    "adminUI": {
+      "config": "json"
+    },
     "compact": true,
     "tier": 2,
     "dataSource": "push",
@@ -170,6 +172,7 @@
     "leUpdate": false,
     "leCheckPort": 80
   },
+  "encryptedNative": ["pass", "encryptionKey"],
   "objects": [],
   "instanceObjects": [
     {

@@ -1,0 +1,15 @@
+{
+    "connection_info": "Paramètres de connexion",
+    "encryptionKey": "Clé de chiffrement pour le chiffrement Payload",
+    "ip": "adresse IP",
+    "name": "Utilisateur",
+    "other_info": "Autres réglages",
+    "password": "Mot de passe",
+    "picture": "Image",
+    "pictures_info": "Photos de l'utilisateur",
+    "port": "Port",
+    "tab_config": "Configuration",
+    "tab_pictures": "Photos de l'utilisateur",
+    "username": "Utilisateur",
+    "webSocket": "Utiliser des Websockets"
+}

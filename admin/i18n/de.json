@@ -1,0 +1,15 @@
+{
+    "connection_info": "Verbindungseinstellungen",
+    "encryptionKey": "Passphrase zur Verschlüsselung der Benachrichtigungen",
+    "ip": "IP-Adresse",
+    "name": "Benutzer",
+    "other_info": "Weitere Einstellungen",
+    "password": "Passwort",
+    "picture": "Avatar",
+    "pictures_info": "Benutzer-Avatare",
+    "port": "Port",
+    "tab_config": "Einstellungen",
+    "tab_pictures": "Benutzer-Avatare",
+    "username": "Benutzer",
+    "webSocket": "Websockets aktivieren"
+}
