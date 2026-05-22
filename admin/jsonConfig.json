@@ -1,0 +1,101 @@
+{
+    "type": "tabs",
+    "items": {
+        "tabGeneral": {
+            "type": "tab",
+            "label": "tab_config",
+            "items": {
+                "serverHeader": {
+                    "type": "header",
+                    "text": "connection_info",
+                    "size": 5
+                },
+                "bind": {
+                    "type": "selectIP",
+                    "label": "ip",
+                    "xs": 12,
+                    "sm": 8,
+                    "md": 6,
+                    "lg": 4
+                },
+                "port": {
+                    "type": "number",
+                    "label": "port",
+                    "min": 1,
+                    "max": 65535,
+                    "xs": 12,
+                    "sm": 4,
+                    "md": 3,
+                    "lg": 2
+                },
+                "user": {
+                    "type": "text",
+                    "label": "username",
+                    "newLine": true,
+                    "xs": 12,
+                    "sm": 4,
+                    "md": 4,
+                    "lg": 3
+                },
+                "pass": {
+                    "type": "password",
+                    "label": "password",
+                    "xs": 12,
+                    "sm": 4,
+                    "md": 4,
+                    "lg": 3
+                },
+                "otherHeader": {
+                    "type": "header",
+                    "text": "other_info",
+                    "size": 5,
+                    "newLine": true
+                },
+                "encryptionKey": {
+                    "type": "password",
+                    "label": "encryptionKey",
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 4
+                },
+                "webSocket": {
+                    "type": "checkbox",
+                    "label": "webSocket",
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 3
+                }
+            }
+        },
+        "tabPictures": {
+            "type": "tab",
+            "label": "tab_pictures",
+            "items": {
+                "pictures": {
+                    "type": "table",
+                    "label": "pictures_info",
+                    "showHeader": true,
+                    "xs": 12,
+                    "items": [
+                        {
+                            "attr": "name",
+                            "type": "text",
+                            "title": "name",
+                            "xs": 4,
+                            "sm": 4
+                        },
+                        {
+                            "attr": "base64",
+                            "type": "image",
+                            "title": "picture",
+                            "xs": 6,
+                            "sm": 6
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

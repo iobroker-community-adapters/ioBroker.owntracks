@@ -1,0 +1,15 @@
+{
+    "connection_info": "Verbindingsinstellingen",
+    "encryptionKey": "Coderingssleutel voor payload-codering",
+    "ip": "IP adres",
+    "name": "Gebruiker",
+    "other_info": "Andere instellingen",
+    "password": "Wachtwoord",
+    "picture": "afbeelding",
+    "pictures_info": "Gebruikersfoto's",
+    "port": "Poort",
+    "tab_config": "Configuratie",
+    "tab_pictures": "Gebruikersfoto's",
+    "username": "Gebruiker",
+    "webSocket": "Gebruik Websockets"
+}

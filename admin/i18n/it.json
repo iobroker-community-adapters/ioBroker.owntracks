@@ -1,0 +1,15 @@
+{
+    "connection_info": "Impostazioni di connessione",
+    "encryptionKey": "Chiave di crittografia per crittografia payload",
+    "ip": "indirizzo IP",
+    "name": "Utente",
+    "other_info": "Altre impostazioni",
+    "password": "Parola d'ordine",
+    "picture": "Immagine",
+    "pictures_info": "Immagini dell'utente",
+    "port": "Porta",
+    "tab_config": "Configurazione",
+    "tab_pictures": "Immagini dell'utente",
+    "username": "Utente",
+    "webSocket": "Usa Websockets"
+}

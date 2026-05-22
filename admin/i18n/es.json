@@ -1,0 +1,15 @@
+{
+    "connection_info": "Ajustes de conexión",
+    "encryptionKey": "Clave de cifrado para el cifrado de carga útil",
+    "ip": "dirección IP",
+    "name": "Usuario",
+    "other_info": "Otros ajustes",
+    "password": "Contraseña",
+    "picture": "Imagen",
+    "pictures_info": "Fotos del usuario",
+    "port": "Puerto",
+    "tab_config": "Configuración",
+    "tab_pictures": "Fotos del usuario",
+    "username": "Usuario",
+    "webSocket": "Utilizar websockets"
+}

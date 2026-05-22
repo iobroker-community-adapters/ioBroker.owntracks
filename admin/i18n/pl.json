@@ -1,0 +1,15 @@
+{
+    "connection_info": "Ustawienia połączenia",
+    "encryptionKey": "Klucz szyfrowania dla szyfrowania ładunku",
+    "ip": "adres IP",
+    "name": "Użytkownik",
+    "other_info": "Inne ustawienia",
+    "password": "Hasło",
+    "picture": "Obrazek",
+    "pictures_info": "Zdjęcia użytkownika",
+    "port": "Port",
+    "tab_config": "Konfiguracja",
+    "tab_pictures": "Zdjęcia użytkownika",
+    "username": "Użytkownik",
+    "webSocket": "Użyj Websockets"
+}
