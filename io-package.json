@@ -130,7 +130,6 @@
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.owntracks/blob/master/README.md",
     "loglevel": "info",
     "type": "geoposition",
-    "materialize": true,
     "compact": true,
     "tier": 2,
     "dataSource": "push",
@@ -154,6 +153,9 @@
       "sentry": {
         "dsn": "https://87e1931027184bc1a84bdbb885031754@sentry.iobroker.net/177"
       }
+    },
+    "adminUI": {
+      "config": "materialize"
     }
   },
   "native": {
