@@ -18,7 +18,7 @@
     "Use this instance for automatic update:": "Use esta instância para atualização automática:",
     "connection_info": "Configurações de conexão",
     "delete": "excluir",
-    "enabled": "ativado",
+    "enabled": "habilitado",
     "encryptionKey": "Chave de Criptografia para Criptografia de Payload",
     "help_tip": "Ao salvar, o adaptador é reiniciado com a nova configuração imediatamente",
     "ip": "endereço de IP",
