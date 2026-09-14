@@ -18,7 +18,7 @@
     "Use this instance for automatic update:": "Utilisez cette instance pour la mise à jour automatique:",
     "connection_info": "Paramètres de connexion",
     "delete": "effacer",
-    "enabled": "activée",
+    "enabled": "activé",
     "encryptionKey": "Clé de chiffrement pour le chiffrement Payload",
     "help_tip": "Lors de l'enregistrement, l'adaptateur redémarre immédiatement avec la nouvelle configuration.",
     "ip": "adresse IP",
